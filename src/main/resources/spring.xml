@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+       default-lazy-init="false">
+
+    <!-- 排除注解扫描 -->
+    <context:component-scan base-package="com.crm">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+    <!-- MyBatis -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource"     ref="dataSource"/>
+        <property name="configLocation" value="classpath:/mybatis.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+        <property name="basePackage"     value="com.crm.**.dao.mapper"/>
+    </bean>
+
+    <!-- 事务配置 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!-- aspectj -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- 数据源 -->
+    <beans profile="production">
+        <context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="true" location="classpath:/properties/dataSource.properties"/>
+
+        <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+            <property name="url"                           value="${jdbc.url}"/>
+            <property name="username"                      value="${jdbc.username}"/>
+            <property name="password"                      value="${jdbc.password}"/>
+            <property name="driverClassName"               value="${jdbc.driverClassName}"/>
+            <property name="maxActive"                     value="${druid.maxActive}"/>
+            <property name="initialSize"                   value="${druid.initialSize}"/>
+            <property name="maxWait"                       value="${druid.maxWait}"/>
+            <property name="minIdle"                       value="${druid.minIdle}"/>
+            <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}"/>
+            <property name="testWhileIdle"                 value="${druid.testWhileIdle}"/>
+            <property name="poolPreparedStatements"        value="${druid.poolPreparedStatements}"/>
+            <property name="maxOpenPreparedStatements"     value="${druid.maxOpenPreparedStatements}"/>
+            <property name="defaultAutoCommit"             value="${druid.defaultAutoCommit}"/>
+            <property name="connectionInitSqls"            value="set names utf8mb4;"/>
+        </bean>
+    </beans>
+
+    <beans profile="development">
+        <context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="true" location="classpath:/properties/dataSource.properties"/>
+
+        <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+            <property name="driverClassName"   value="${jdbc.driverClassName}"/>
+            <property name="url"               value="${jdbc.url}"/>
+            <property name="username"          value="${jdbc.username}"/>
+            <property name="password"          value="${jdbc.password}"/>
+            <property name="defaultAutoCommit" value="false"/>
+        </bean>
+    </beans>
+
+    <beans profile="test">
+        <context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="true" location="classpath:/properties/dataSource.properties"/>
+
+        <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+            <property name="driverClass" value="${jdbc.driverClassName}"/>
+            <property name="url"         value="${jdbc.url}"/>
+            <property name="username"    value="${jdbc.username}"/>
+            <property name="password"    value="${jdbc.password}"/>
+        </bean>
+    </beans>
+
+    <!-- 初始化数据结构与默认数据 -->
+    <!--jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+        <jdbc:script location="classpath:sql/mysql/schema.sql"/>
+        <jdbc:script location="classpath:sql/mysql/cleanup-data.sql" encoding="UTF-8"/>
+        <jdbc:script location="classpath:sql/mysql/import-data.sql" encoding="UTF-8"/>
+    </jdbc:initialize-database-->
+</beans>
