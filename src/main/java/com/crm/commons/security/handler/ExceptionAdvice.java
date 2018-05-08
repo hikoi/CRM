@@ -1,5 +1,6 @@
 package com.crm.commons.security.handler;
 
+import com.crm.commons.security.exception.DuplicateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -50,6 +51,16 @@ public class ExceptionAdvice{
         return new Responsed(e.getMessage(), ResponseCode.AUTHENTICATION_FAIL, false);
     }
 
+    /**
+     * 记录重复异常
+     */
+    @ExceptionHandler(value = DuplicateException.class)
+    @ResponseBody
+    public Responsed duplicate(DuplicateException e){
+        logger.error(e.getMessage(), e);
+
+        return new Responsed(e.getMessage(), ResponseCode.DUPLICATE_DATA, false);
+    }
 
     /**
      * 不支持的客户端类型

@@ -1,0 +1,30 @@
+package com.crm.core.wechat.utils.handler;
+
+import com.crm.core.wechat.consts.WechatMessageType;
+import org.apache.ibatis.type.BaseTypeHandler;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.TypeHandler;
+
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class WechatMessageTypeHandler extends BaseTypeHandler<WechatMessageType> implements TypeHandler<WechatMessageType>{
+
+    public void setNonNullParameter(PreparedStatement ps, int i, WechatMessageType parameter, JdbcType jdbcType) throws SQLException{
+        ps.setInt(i, parameter.getId());
+    }
+
+    public WechatMessageType getNullableResult(ResultSet rs, String columnName) throws SQLException{
+        return WechatMessageType.getById(rs.getInt(columnName));
+    }
+
+    public WechatMessageType getNullableResult(ResultSet rs, int columnIndex) throws SQLException{
+        return WechatMessageType.getById(rs.getInt(columnIndex));
+    }
+
+    public WechatMessageType getNullableResult(CallableStatement cs, int columnIndex) throws SQLException{
+        return WechatMessageType.getById(cs.getInt(columnIndex));
+    }
+}

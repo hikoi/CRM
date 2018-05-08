@@ -13,8 +13,11 @@
     </settings>
 
     <typeAliases>
-        <typeAlias type="org.wah.doraemon.utils.mybatis.handler.AccountStateHandler" alias="AccountStateHandler"/>
-        <typeAlias type="org.wah.doraemon.utils.mybatis.handler.SexHandler"          alias="SexHandler"/>
-        <typeAlias type="org.wah.doraemon.utils.mybatis.handler.UsingStateHandler"   alias="UsingStateHandler"/>
+        <typeAlias type="org.wah.doraemon.utils.mybatis.handler.AccountStateHandler"   alias="AccountStateHandler"/>
+        <typeAlias type="org.wah.doraemon.utils.mybatis.handler.SexHandler"            alias="SexHandler"/>
+        <typeAlias type="org.wah.doraemon.utils.mybatis.handler.UsingStateHandler"     alias="UsingStateHandler"/>
+        <typeAlias type="com.crm.core.wechat.utils.handler.WechatMessageTypeHandler"   alias="WechatMessageTypeHandler"/>
+        <typeAlias type="com.crm.core.wechat.utils.handler.WechatMessageStatusHandler" alias="WechatMessageStatusHandler"/>
+        <typeAlias type="com.crm.core.device.utils.handler.DeviceTypeHandler"          alias="DeviceTypeHandler"/>
     </typeAliases>
 </configuration>
