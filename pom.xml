@@ -38,6 +38,7 @@
     <spring.version>4.1.5.RELEASE</spring.version>
     <slf4j.version>1.7.6</slf4j.version>
     <tomcat-jdbc.version>7.0.52</tomcat-jdbc.version>
+    <userAgent.version>1.17</userAgent.version>
     <velocity.version>1.7</velocity.version>
   </properties>
 
