@@ -84,7 +84,7 @@
             <bean class="com.crm.commons.security.interceptor.PageInterceptor">
                 <property name="excludes">
                     <list>
-                        <value>/browserNotSupport</value>
+                        <value>/page/browserNotSupport</value>
                     </list>
                 </property>
             </bean>

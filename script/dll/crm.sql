@@ -37,8 +37,9 @@ CREATE TABLE `wechat_message` (
   `wechat_id` varchar(32) NOT NULL,
   `wxid` varchar(50) DEFAULT NULL,
   `content` text,
+  `extract` text,
   `type` tinyint(1) NOT NULL,
-  `conversation_time` datetime NOT NULL,
+  `status` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

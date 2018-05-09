@@ -21,7 +21,7 @@ public class PageController{
     /**
      * 客户端不支持提示页
      */
-    @RequestMapping(value = "/browserNotSupport", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    @RequestMapping(value = "/page/browserNotSupport", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView browserNotSupport(){
         return new ModelAndView("browserNotSupport");
     }

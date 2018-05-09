@@ -156,6 +156,7 @@
         <result column="content"           property="content"          javaType="java.lang.String"/>
         <result column="type"              property="type"             typeHandler="WechatMessageTypeHandler"/>
         <result column="status"            property="status"           typeHandler="WechatMessageStatusHandler"/>
+        <result column="extract"           property="extract"          javaType="java.lang.String"/>
         <result column="conversation_time" property="conversationTime" javaType="java.util.Date"/>
         <result column="create_time"       property="createTime"       javaType="java.util.Date"/>
         <result column="update_time"       property="updateTime"       javaType="java.util.Date"/>
@@ -171,6 +172,7 @@
              content,
              type,
              status,
+             extract,
              conversation_time,
              create_time
         ) VALUE (
@@ -181,6 +183,7 @@
              #{content,          jdbcType=VARCHAR},
              #{type,             typeHandler=WechatMessageTypeHandler},
              #{status,           typeHandler=WechatMessageStatusHandler},
+             #{extract,          jdbcType=VARCHAR},
              #{conversationTime, jdbcType=TIMESTAMP},
              #{createTime,       jdbcType=TIMESTAMP}
         )
@@ -196,6 +199,7 @@
              content,
              type,
              status,
+             extract,
              conversation_time,
              create_time
         ) VALUES
@@ -208,6 +212,7 @@
               #{message.content,          jdbcType=VARCHAR},
               #{message.type,             typeHandler=WechatMessageTypeHandler},
               #{message.status,           typeHandler=WechatMessageStatusHandler},
+              #{message.extract,          jdbcType=VARCHAR},
               #{message.conversationTime, jdbcType=TIMESTAMP},
               #{message.createTime,       jdbcType=TIMESTAMP}
         )
@@ -225,6 +230,9 @@
           </if>
           <if test="status != null">
             status = #{status, typeHandler=WechatMessageStatusHandler},
+          </if>
+          <if test="extract != null">
+            extract = #{extract, jdbcType=VARCHAR},
           </if>
           <if test="conversationTime != null">
               conversation_time = #{conversationTime, jdbcType=TIMESTAMP},

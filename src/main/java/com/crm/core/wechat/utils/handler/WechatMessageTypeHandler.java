@@ -13,18 +13,18 @@ import java.sql.SQLException;
 public class WechatMessageTypeHandler extends BaseTypeHandler<WechatMessageType> implements TypeHandler<WechatMessageType>{
 
     public void setNonNullParameter(PreparedStatement ps, int i, WechatMessageType parameter, JdbcType jdbcType) throws SQLException{
-        ps.setInt(i, parameter.getId());
+        ps.setString(i, parameter.getId());
     }
 
     public WechatMessageType getNullableResult(ResultSet rs, String columnName) throws SQLException{
-        return WechatMessageType.getById(rs.getInt(columnName));
+        return WechatMessageType.getById(rs.getString(columnName));
     }
 
     public WechatMessageType getNullableResult(ResultSet rs, int columnIndex) throws SQLException{
-        return WechatMessageType.getById(rs.getInt(columnIndex));
+        return WechatMessageType.getById(rs.getString(columnIndex));
     }
 
     public WechatMessageType getNullableResult(CallableStatement cs, int columnIndex) throws SQLException{
-        return WechatMessageType.getById(cs.getInt(columnIndex));
+        return WechatMessageType.getById(cs.getString(columnIndex));
     }
 }
