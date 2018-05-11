@@ -222,7 +222,7 @@
       <foreach collection="sensitiveIds" item="sensitiveId" separator=",">
         (
               #{sensitiveId, jdbcType=VARCHAR},
-              #{wechatId,    jdbcType=VARCHAR}s
+              #{wechatId,    jdbcType=VARCHAR}
         )
       </foreach>
     </insert>
@@ -252,7 +252,7 @@
           ON sw.sensitive_id = s.id
    LEFT JOIN wechat_group wg
           ON wg.group_id = sg.group_id
-         AND wg.wechat_id = sw.wechat_id
+          OR wg.wechat_id = sw.wechat_id
    LEFT JOIN wechat w
           ON w.id = wg.wechat_id
       <if test="params != null">
