@@ -17,7 +17,7 @@ public class WechatFriend extends Entity implements Createable, Updateable{
     private String wxid;
     private String wxno;
     private String nickname;
-    private String remark;
+    private String remarkname;
     private Date   createTime;
     private Date   updateTime;
 

@@ -25,7 +25,7 @@ CREATE TABLE `wechat_friend` (
   `wxid` varchar(50) DEFAULT NULL,
   `wxno` varchar(50) DEFAULT NULL,
   `nickname` varchar(50) DEFAULT NULL,
-  `remark` varchar(60) DEFAULT NULL,
+  `remarkname` varchar(60) DEFAULT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

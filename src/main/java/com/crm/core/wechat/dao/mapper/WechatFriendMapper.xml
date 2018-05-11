@@ -154,6 +154,7 @@
         <result column="wxid"        property="wxid"       javaType="java.lang.String"/>
         <result column="wxno"        property="wxno"       javaType="java.lang.String"/>
         <result column="nickname"    property="nickname"   javaType="java.lang.String"/>
+        <result column="remarkname"  property="remarkname" javaType="java.lang.String"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTime" javaType="java.util.Date"/>
     </resultMap>
@@ -166,7 +167,7 @@
              wxid,
              wxno,
              nickname,
-             remark,
+             remarkname,
              create_time
         ) VALUE (
              #{id,         jdbcType=VARCHAR},
@@ -174,7 +175,7 @@
              #{wxid,       jdbcType=VARCHAR},
              #{wxno,       jdbcType=VARCHAR},
              #{nickname,   jdbcType=VARCHAR},
-             #{remark,     jdbcType=VARCHAR},
+             #{remarkname, jdbcType=VARCHAR},
              #{createTime, jdbcType=TIMESTAMP}
         )
     </insert>
@@ -187,7 +188,7 @@
              wxid,
              wxno,
              nickname,
-             remark,
+             remarkname,
              create_time
         ) VALUES
       <foreach collection="friends" item="friend" separator=",">
@@ -197,7 +198,7 @@
              #{friend.wxid,       jdbcType=VARCHAR},
              #{friend.wxno,       jdbcType=VARCHAR},
              #{friend.nickname,   jdbcType=VARCHAR},
-             #{friend.remark,     jdbcType=VARCHAR},
+             #{friend.remarkname, jdbcType=VARCHAR},
              #{friend.createTime, jdbcType=TIMESTAMP}
         )
       </foreach>
@@ -212,8 +213,8 @@
           <if test="nickname != null">
             nickname = #{nickname, jdbcType=VARCHAR},
           </if>
-          <if test="remark != null">
-            remark = #{remark, jdbcType=VARCHAR},
+          <if test="remarkname != null">
+            remarkname = #{remarkname, jdbcType=VARCHAR},
           </if>
           <if test="updateTime != null">
             update_time = #{updateTime, jdbcType=TIMESTAMP},
@@ -232,8 +233,8 @@
             <if test="friend.nickname != null">
               nickname = #{friend.nickname, jdbcType=VARCHAR},
             </if>
-            <if test="friend.remark != null">
-              remark = #{friend.remark, jdbcType=VARCHAR},
+            <if test="friend.remarkname != null">
+              remarkname = #{friend.remarkname, jdbcType=VARCHAR},
             </if>
             <if test="friend.updateTime != null">
               update_time = #{friend.updateTime, jdbcType=TIMESTAMP},

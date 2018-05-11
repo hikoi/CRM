@@ -76,7 +76,7 @@ public class WechatMessageDao{
 
             Criteria criteria = new Criteria();
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
-            criteria.sort(Restrictions.asc("createTime"));
+            criteria.sort(Restrictions.asc("conversationTime"));
 
             if(StringUtils.isNotBlank(accountId)){
                 criteria.and(Restrictions.eq("accountId", accountId));
