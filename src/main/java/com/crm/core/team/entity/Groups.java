@@ -1,6 +1,6 @@
 package com.crm.core.team.entity;
 
-import com.crm.core.sensitive.entity.Sensitive;
+import com.crm.core.sensitive.entity.SensitiveWord;
 import com.crm.core.wechat.entity.Wechat;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,11 +14,11 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Group extends Entity implements Createable, Updateable{
+public class Groups extends Entity implements Createable, Updateable{
 
     private String          name;
     private List<Wechat>    wechats;
-    private List<Sensitive> sensitives;
+    private List<SensitiveWord> sensitiveWords;
     private UsingState      state;
     private Date            createTime;
     private Date            updateTime;

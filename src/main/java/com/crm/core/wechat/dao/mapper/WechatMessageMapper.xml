@@ -203,10 +203,10 @@
              conversation_time,
              create_time
         ) VALUES
-      <foreach collection="messages" item="message" separator=";">
+      <foreach collection="messages" item="message" separator=",">
         (
               #{message.id,               jdbcType=VARCHAR},
-              SELECT account_id FROM wechat WHERE id = #{message.wechatId},
+              (SELECT account_id FROM wechat WHERE id = #{message.wechatId}),
               #{message.wechatId,         jdbcType=VARCHAR},
               #{message.wxid,             jdbcType=VARCHAR},
               #{message.content,          jdbcType=VARCHAR},

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.crm.core.team.dao.mapper.GroupMapper">
+<mapper namespace="com.crm.core.sensitive.dao.mapper.SensitiveWordMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,9 +148,9 @@
         </where>
     </sql>
 
-    <resultMap id="group" type="com.crm.core.team.entity.Group">
+    <resultMap id="sensitiveWord" type="com.crm.core.sensitive.entity.SensitiveWord">
         <id     column="id"          property="id"         javaType="java.lang.String"/>
-        <result column="name"        property="name"       javaType="java.lang.String"/>
+        <result column="content"     property="content"    javaType="java.lang.String"/>
         <result column="state"       property="state"      typeHandler="UsingStateHandler"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTime" javaType="java.util.Date"/>
@@ -158,24 +158,24 @@
 
     <insert id="save">
       INSERT
-        INTO group (
+        INTO sensitive_word (
              id,
-             name,
+             content,
              state,
              create_time
         ) VALUE (
              #{id,         jdbcType=VARCHAR},
-             #{name,       jdbcType=VARCHAR},
+             #{content,    jdbcType=VARCHAR},
              #{state,      typeHandler=UsingStateHandler},
              #{createTime, jdbcType=VARCHAR}
         )
     </insert>
 
     <update id="update">
-      UPDATE group
+      UPDATE sensitive_word
        <set>
-          <if test="name != null">
-            name = #{name, jdbcType=VARCHAR},
+          <if test="content != null">
+            content = #{content, jdbcType=VARCHAR},
           </if>
           <if test="state != null">
             state = #{state, typeHandler=UsingStateHandler},
@@ -187,36 +187,74 @@
         WHERE id = #{id}
     </update>
 
-    <select id="get" resultMap="group">
+    <delete id="dissolveByGroupId">
+      DELETE
+        FROM sensitive_group
+       WHERE group_id = #{groupId}
+    </delete>
+
+    <delete id="dissolveByWechatId">
+      DELETE
+        FROM sensitive_wechat
+       WHERE wechat_id = #{wechatId}
+    </delete>
+
+    <insert id="establishByGroupId">
+      INSERT
+        INTO sensitive_group (
+             sensitive_id,
+             group_id
+        ) VALUES
+      <foreach collection="sensitiveIds" item="sensitiveId" separator=",">
+        (
+             #{sensitiveId, jdbcType=VARCHAR},
+             #{groupId,     jdbcType=VARCHAR}
+        )
+      </foreach>
+    </insert>
+
+    <insert id="establishByWechatId">
+      INSERT
+        INTO sensitive_wechat (
+             sensitive_id,
+             wechat_id
+        ) VALUES
+      <foreach collection="sensitiveIds" item="sensitiveId" separator=",">
+        (
+              #{sensitiveId, jdbcType=VARCHAR},
+              #{wechatId,    jdbcType=VARCHAR}s
+        )
+      </foreach>
+    </insert>
+
+    <select id="get" resultMap="sensitiveWord">
       SELECT *
-        FROM group
+        FROM sensitive_word
       <if test="params != null">
         <include refid="WHERE_SQL"/>
-      </if>
-    </select>
-
-    <select id="find" resultMap="group">
-      SELECT *
-        FROM group
-      <if test="params != null">
-        <include refid="WHERE_SQL"/>
-
-        <if test="params.sorts != null and params.sorts.size > 0">
-          ORDER BY
-          <foreach collection="params.sorts" item="sort" separator=",">
-            ${sort.property} ${sort.operator}
-          </foreach>
-        </if>
-
-        <if test="params.limit != null">
-          ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
-        </if>
       </if>
     </select>
 
     <select id="count" resultType="java.lang.Long">
-      SELECT *
-        FROM group
+      SELECT COUNT(*)
+        FROM sensitive_word
+      <if test="params != null">
+        <include refid="WHERE_SQL"/>
+      </if>
+    </select>
+
+    <select id="find" resultMap="sensitiveWord">
+      SELECT s.*
+        FROM sensitive_word s
+   LEFT JOIN sensitive_group sg
+          ON sg.sensitive_id = s.id
+   LEFT JOIN sensitive_wechat sw
+          ON sw.sensitive_id = s.id
+   LEFT JOIN wechat_group wg
+          ON wg.group_id = sg.group_id
+         AND wg.wechat_id = sw.wechat_id
+   LEFT JOIN wechat w
+          ON w.id = wg.wechat_id
       <if test="params != null">
         <include refid="WHERE_SQL"/>
       </if>

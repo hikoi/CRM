@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.crm.core.sensitive.dao.mapper.SensitiveMapper">
+<mapper namespace="com.crm.core.team.dao.mapper.GroupsMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,9 +148,9 @@
         </where>
     </sql>
 
-    <resultMap id="sensitive" type="com.crm.core.sensitive.entity.Sensitive">
+    <resultMap id="group" type="com.crm.core.team.entity.Groups">
         <id     column="id"          property="id"         javaType="java.lang.String"/>
-        <result column="content"     property="content"    javaType="java.lang.String"/>
+        <result column="name"        property="name"       javaType="java.lang.String"/>
         <result column="state"       property="state"      typeHandler="UsingStateHandler"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTime" javaType="java.util.Date"/>
@@ -158,24 +158,24 @@
 
     <insert id="save">
       INSERT
-        INTO sensitive (
+        INTO groups (
              id,
-             content,
+             name,
              state,
              create_time
         ) VALUE (
              #{id,         jdbcType=VARCHAR},
-             #{content,    jdbcType=VARCHAR},
+             #{name,       jdbcType=VARCHAR},
              #{state,      typeHandler=UsingStateHandler},
              #{createTime, jdbcType=VARCHAR}
         )
     </insert>
 
     <update id="update">
-      UPDATE sensitive
+      UPDATE groups
        <set>
-          <if test="content != null">
-            content = #{content, jdbcType=VARCHAR},
+          <if test="name != null">
+            name = #{name, jdbcType=VARCHAR},
           </if>
           <if test="state != null">
             state = #{state, typeHandler=UsingStateHandler},
@@ -187,22 +187,58 @@
         WHERE id = #{id}
     </update>
 
-    <select id="get" resultMap="sensitive">
+    <insert id="establishByGroupId">
+      INSERT
+        INTO wechat_group (
+             wechat_id,
+             group_id
+        ) VALUES
+      <foreach collection="wechatIds" item="wechatId" separator=",">
+        (
+             #{wechatId, jdbcType=VARCHAR},
+             #{groupId,  jdbcType=VARCHAR}
+        )
+      </foreach>
+    </insert>
+
+    <insert id="establishByWechatId">
+      INSERT
+        INTO wechat_group (
+             wechat_id,
+             group_id
+        ) VALUES
+      <foreach collection="groupIds" item="groupId" separator=",">
+        (
+             #{wechatId, jdbcType=VARCHAR},
+             #{groupId,  jdbcType=VARCHAR}
+        )
+      </foreach>
+    </insert>
+
+    <delete id="dissolve">
+      DELETE
+        FROM wechat_group
+      <if test="params != null">
+        <include refid="WHERE_SQL"/>
+      </if>
+    </delete>
+
+    <select id="get" resultMap="group">
       SELECT *
-        FROM sensitive
+        FROM groups
       <if test="params != null">
         <include refid="WHERE_SQL"/>
       </if>
     </select>
 
-    <select id="find" resultMap="sensitive">
+    <select id="find" resultMap="group">
       SELECT *
-        FROM sensitive
+        FROM groups
       <if test="params != null">
         <include refid="WHERE_SQL"/>
 
         <if test="params.sorts != null and params.sorts.size > 0">
-            ORDER BY
+          ORDER BY
           <foreach collection="params.sorts" item="sort" separator=",">
             ${sort.property} ${sort.operator}
           </foreach>
@@ -215,8 +251,8 @@
     </select>
 
     <select id="count" resultType="java.lang.Long">
-      SELECT COUNT(*)
-        FROM sensitive
+      SELECT *
+        FROM groups
       <if test="params != null">
         <include refid="WHERE_SQL"/>
       </if>

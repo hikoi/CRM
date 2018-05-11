@@ -1,7 +1,7 @@
 package com.crm.core.team.dao;
 
-import com.crm.core.team.dao.mapper.GroupMapper;
-import com.crm.core.team.entity.Group;
+import com.crm.core.team.dao.mapper.GroupsMapper;
+import com.crm.core.team.entity.Groups;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +25,9 @@ public class GroupDao{
     private Logger logger = LoggerFactory.getLogger(GroupDao.class);
 
     @Autowired
-    private GroupMapper mapper;
+    private GroupsMapper mapper;
 
-    public void saveOrUpdate(Group group){
+    public void saveOrUpdate(Groups group){
         try{
             Assert.notNull(group, "分组信息不能为空");
 
@@ -45,7 +45,7 @@ public class GroupDao{
         }
     }
 
-    public Group getById(String id){
+    public Groups getById(String id){
         try{
             Assert.hasText(id, "分组ID不能为空");
 
@@ -59,7 +59,7 @@ public class GroupDao{
         }
     }
 
-    public Page<Group> page(PageRequest pageRequest, String id, String name, UsingState state){
+    public Page<Groups> page(PageRequest pageRequest, String id, String name, UsingState state){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -77,17 +77,17 @@ public class GroupDao{
                 criteria.and(Restrictions.eq("state", state.getId()));
             }
 
-            List<Group> list = mapper.find(criteria);
+            List<Groups> list = mapper.find(criteria);
             Long total = mapper.count(criteria);
 
-            return new Page<Group>(list, total, pageRequest);
+            return new Page<Groups>(list, total, pageRequest);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);
         }
     }
 
-    public List<Group> find(List<String> ids, String name, UsingState state){
+    public List<Groups> find(List<String> ids, String name, UsingState state){
         try{
             Criteria criteria = new Criteria();
 
@@ -102,6 +102,44 @@ public class GroupDao{
             }
 
             return mapper.find(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public void updateRelationByGroupId(String groupId, List<String> wechatIds){
+        try{
+            Assert.hasText(groupId, "分组ID不能为空");
+
+            //删除原有关系
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("groupId", groupId));
+            mapper.dissolve(criteria);
+
+            //保存新关系
+            if(wechatIds != null && !wechatIds.isEmpty()){
+                mapper.establishByGroupId(groupId, wechatIds);
+            }
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public void updateRelationByWechatId(String wechatId, List<String> groupIds){
+        try{
+            Assert.hasText(wechatId, "微信ID不能为空");
+
+            //删除原有关系
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("wechatId", wechatId));
+            mapper.dissolve(criteria);
+
+            //保存新关系
+            if(groupIds != null && !groupIds.isEmpty()){
+                mapper.establishByWechatId(wechatId, groupIds);
+            }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

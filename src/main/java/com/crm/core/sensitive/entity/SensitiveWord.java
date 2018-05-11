@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class Sensitive extends Entity implements Createable, Updateable{
+public class SensitiveWord extends Entity implements Createable, Updateable{
 
     private String     content;
     private UsingState state;

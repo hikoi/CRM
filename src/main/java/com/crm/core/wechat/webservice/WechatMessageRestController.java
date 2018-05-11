@@ -36,8 +36,8 @@ public class WechatMessageRestController{
     }
 
     @RequestMapping(value = "/synchronize", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed saveList(@RequestBody List<WechatMessage> messages){
-        wechatMessageService.saveList(messages);
+    public Responsed synchronize(@RequestBody List<WechatMessage> messages){
+        wechatMessageService.synchronize(messages);
 
         return new Responsed("保存成功");
     }

@@ -31,7 +31,7 @@ public class WechatMessageServiceImpl implements WechatMessageService{
 
     @Override
     @Transactional(readOnly = false)
-    public void saveList(List<WechatMessage> messages){
+    public void synchronize(List<WechatMessage> messages){
         Assert.notEmpty(messages, "微信信息列表不能为空");
 
         wechatMessageDao.saveList(messages);

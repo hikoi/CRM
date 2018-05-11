@@ -33,7 +33,7 @@ CREATE TABLE `wechat_friend` (
 
 CREATE TABLE `wechat_message` (
   `id` varchar(32) NOT NULL,
-  `account_id` varchar(32) NOT NULL,
+  `account_id` varchar(32) DEFAULT NULL,
   `wechat_id` varchar(32) NOT NULL,
   `wxid` varchar(50) DEFAULT NULL,
   `content` text,
@@ -42,6 +42,7 @@ CREATE TABLE `wechat_message` (
   `status` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
+  `conversation_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -54,6 +55,39 @@ CREATE TABLE `device` (
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `sensitive_word` (
+  `id` varchar(32) NOT NULL,
+  `content` varchar(20) NOT NULL,
+  `state` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `sensitive_group` (
+  `sensitive_id` varchar(32) NOT NULL,
+  `group_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `sensitive_wechat` (
+  `sensitive_id` varchar(32) NOT NULL,
+  `wechat_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `state` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `wechat_group` (
+  `wechat_id` varchar(32) NOT NULL,
+  `group_id` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

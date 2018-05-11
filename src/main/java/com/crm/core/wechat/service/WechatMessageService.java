@@ -12,7 +12,7 @@ public interface WechatMessageService{
 
     void save(WechatMessage message);
 
-    void saveList(List<WechatMessage> messages);
+    void synchronize(List<WechatMessage> messages);
 
     Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wechatId,
                              String wxid, WechatMessageType type, WechatMessageStatus status);

@@ -1,7 +1,7 @@
 package com.crm.core.team.service;
 
 import com.crm.core.team.dao.GroupDao;
-import com.crm.core.team.entity.Group;
+import com.crm.core.team.entity.Groups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,14 +12,14 @@ import org.wah.doraemon.security.request.PageRequest;
 
 @Service
 @Transactional(readOnly = true)
-public class GroupServiceImpl implements GroupService{
+public class GroupsServiceImpl implements GroupsService{
 
     @Autowired
     private GroupDao groupDao;
 
     @Override
     @Transactional(readOnly = false)
-    public void save(Group group){
+    public void save(Groups group){
         Assert.notNull(group, "分组信息不能为空");
 
         groupDao.saveOrUpdate(group);
@@ -27,7 +27,7 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     @Transactional(readOnly = false)
-    public void update(Group group){
+    public void update(Groups group){
         Assert.notNull(group, "分组信息不能为空");
         Assert.hasText(group.getId(), "分组ID不能为空");
 
@@ -35,14 +35,14 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public Group getById(String id){
+    public Groups getById(String id){
         Assert.hasText(id, "分组ID不能为空");
 
         return groupDao.getById(id);
     }
 
     @Override
-    public Page<Group> page(PageRequest pageRequest, String id, String name, UsingState state){
+    public Page<Groups> page(PageRequest pageRequest, String id, String name, UsingState state){
         Assert.notNull(pageRequest, "分组信息不能为空");
 
         return groupDao.page(pageRequest, id, name, state);
