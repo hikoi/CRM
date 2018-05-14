@@ -10,6 +10,8 @@ import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/1.0/sensitive")
 public class SensitiveWordRestController{
@@ -39,10 +41,24 @@ public class SensitiveWordRestController{
         return new Responsed<Page<SensitiveWord>>("查询成功", page);
     }
 
-    @RequestMapping(value = "/{wxno}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/regex/{wxno}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Responsed<String> getRegEx(@PathVariable("wxno") String wxno){
         String regEx = sensitiveService.getRegEx(wxno);
 
         return new Responsed<String>("查询成功", regEx);
+    }
+
+    @RequestMapping(value = "/relation/group/{groupId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed updateRelationByGroupId(@PathVariable("groupId") String groupId, List<String> sensitiveIds){
+        sensitiveService.updateRelationByGroupId(groupId, sensitiveIds);
+
+        return new Responsed("更新成功");
+    }
+
+    @RequestMapping(value = "/relation/wechat/{wechatId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed updateRelationByWechatId(@PathVariable("wechatId") String wechatId, List<String> sensitiveIds){
+        sensitiveService.updateRelationByWechatId(wechatId, sensitiveIds);
+
+        return new Responsed("更新成功");
     }
 }

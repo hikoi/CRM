@@ -10,6 +10,8 @@ import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/1.0/groups")
 public class GroupsRestController{
@@ -44,5 +46,19 @@ public class GroupsRestController{
         Page<Groups> page = groupsService.page(pageRequest, id, name, state);
 
         return new Responsed<Page<Groups>>("查询成功", page);
+    }
+
+    @RequestMapping(value = "/relation/group/{groupId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed updateRelationByGroupId(@PathVariable("groupId") String groupId, List<String> wechatIds){
+        groupsService.updateRelationByGroupId(groupId, wechatIds);
+
+        return new Responsed("更新成功");
+    }
+
+    @RequestMapping(value = "/relation/wechat/{wechatId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed updateRelationByWechatId(@PathVariable("wechatId") String wechatId, List<String> groupIds){
+        groupsService.updateRelationByWechatId(wechatId, groupIds);
+
+        return new Responsed("更新成功");
     }
 }

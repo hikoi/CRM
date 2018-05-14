@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.wah.doraemon.security.request.Page;
+import org.wah.doraemon.security.request.PageRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,5 +81,12 @@ public class WechatFriendServiceImpl implements WechatFriendService{
                 wechatFriendDao.saveList(saveList);
             }
         }
+    }
+
+    @Override
+    public Page<WechatFriend> page(PageRequest pageRequest, String id, String wechatId, String wxid, String wxno, String nickname){
+        Assert.notNull(pageRequest, "分页信息不能为空");
+
+        return wechatFriendDao.page(pageRequest, id, wechatId, wxid, wxno, nickname);
     }
 }

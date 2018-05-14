@@ -10,6 +10,8 @@ import org.wah.doraemon.entity.consts.UsingState;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class GroupsServiceImpl implements GroupsService{
@@ -46,5 +48,21 @@ public class GroupsServiceImpl implements GroupsService{
         Assert.notNull(pageRequest, "分组信息不能为空");
 
         return groupDao.page(pageRequest, id, name, state);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updateRelationByGroupId(String groupId, List<String> wechatIds){
+        Assert.hasText(groupId, "分组ID不能为空");
+
+        groupDao.updateRelationByGroupId(groupId, wechatIds);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updateRelationByWechatId(String wechatId, List<String> groupIds){
+        Assert.hasText(wechatId, "微信ID不能为空");
+
+        groupDao.updateRelationByWechatId(wechatId, groupIds);
     }
 }
