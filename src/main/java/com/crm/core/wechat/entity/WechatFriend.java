@@ -32,8 +32,11 @@ public class WechatFriend extends Entity implements Createable, Updateable{
 
             if(StringUtils.isNotBlank(this.getId()) && StringUtils.isNotBlank(entity.getId())){
                 return this.getId().equals(entity.getId());
-            }else if(StringUtils.isNotBlank(this.wxid) && StringUtils.isNotBlank(entity.wxid)){
-                return this.wxid.equals(entity.wxid);
+            }else if(StringUtils.isNotBlank(this.wxid) &&
+                    StringUtils.isNotBlank(entity.wxid) &&
+                    StringUtils.isNotBlank(this.wechatId) &&
+                    StringUtils.isNotBlank(entity.wechatId)){
+                return this.wxid.equals(entity.wxid) && this.wechatId.equals(entity.wechatId);
             }
         }
 
