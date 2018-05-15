@@ -177,7 +177,7 @@
              create_time
         ) VALUE (
              #{id,               jdbcType=VARCHAR},
-             SELECT account_id FROM wechat WHERE id = #{wechatId},
+             (SELECT account_id FROM wechat WHERE id = #{wechatId}),
              #{wechatId,         jdbcType=VARCHAR},
              #{wxid,             jdbcType=VARCHAR},
              #{content,          jdbcType=VARCHAR},

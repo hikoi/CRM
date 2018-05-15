@@ -25,4 +25,6 @@ public interface GroupsMapper{
     List<Groups> find(@Param("params") Criteria criteria);
 
     Long count(@Param("params") Criteria criteria);
+
+    List<String> findWxnoByGroupId(String groupId);
 }

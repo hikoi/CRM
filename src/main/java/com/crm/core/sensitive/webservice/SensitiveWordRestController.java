@@ -34,9 +34,9 @@ public class SensitiveWordRestController{
     }
 
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<SensitiveWord>> page(Long pageNum, Long pageSize, String content, UsingState state){
+    public Responsed<Page<SensitiveWord>> page(Long pageNum, Long pageSize, String content, UsingState state, String groupId){
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page page = sensitiveService.page(pageRequest, content, state);
+        Page page = sensitiveService.page(pageRequest, content, state, groupId);
 
         return new Responsed<Page<SensitiveWord>>("查询成功", page);
     }

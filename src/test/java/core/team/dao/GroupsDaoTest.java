@@ -1,6 +1,6 @@
 package core.team.dao;
 
-import com.crm.core.team.dao.GroupDao;
+import com.crm.core.team.dao.GroupsDao;
 import com.crm.core.team.entity.Groups;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,19 +20,19 @@ import java.util.List;
 public class GroupsDaoTest{
 
     @Autowired
-    private GroupDao groupDao;
+    private GroupsDao groupsDao;
 
     @Test
     public void save(){
         Groups group_1 = new Groups();
         group_1.setName("舒敏");
         group_1.setState(UsingState.USABLE);
-        groupDao.saveOrUpdate(group_1);
+        groupsDao.saveOrUpdate(group_1);
 
         Groups group_2 = new Groups();
         group_2.setName("丰胸");
         group_2.setState(UsingState.USABLE);
-        groupDao.saveOrUpdate(group_2);
+        groupsDao.saveOrUpdate(group_2);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class GroupsDaoTest{
         String groupId = "24754195a7a54aa88a671156f3c91ab8";
         List<String> wechatIds = new ArrayList<String>(Arrays.asList("3a96fff95e6c4f41b930ffb48b688a75"));
 
-        groupDao.updateRelationByGroupId(groupId, wechatIds);
+        groupsDao.updateRelationByGroupId(groupId, wechatIds);
     }
 
     @Test
@@ -48,6 +48,6 @@ public class GroupsDaoTest{
         String wechatId = "3a96fff95e6c4f41b930ffb48b688a75";
         List<String> groupIds = new ArrayList<String>(Arrays.asList("fffeaa1420ec4f848847a1d0c6bf2209", "24754195a7a54aa88a671156f3c91ab8"));
 
-        groupDao.updateRelationByWechatId(wechatId, groupIds);
+        groupsDao.updateRelationByWechatId(wechatId, groupIds);
     }
 }

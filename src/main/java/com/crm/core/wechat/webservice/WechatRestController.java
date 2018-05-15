@@ -39,8 +39,8 @@ public class WechatRestController{
     }
 
     @RequestMapping(value = "/{wxno}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Wechat> getByWxno(@PathVariable("wxno") String wxno){
-        Wechat wechat = wechatService.getByWxno(wxno);
+    public Responsed<Wechat> getByWxno(@PathVariable("wxno") String wxno, String registrationId){
+        Wechat wechat = wechatService.getByWxno(wxno, registrationId);
 
         return new Responsed<Wechat>("查询成功", wechat);
     }

@@ -257,4 +257,10 @@
         <include refid="WHERE_SQL"/>
       </if>
     </select>
+
+    <select id="findWxnoByGroupId" resultType="java.lang.String">
+      SELECT wg.wxno
+        FROM wechat_group wg
+       WHERE wg.group_id = #{groupId}
+    </select>
 </mapper>

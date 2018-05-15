@@ -38,7 +38,7 @@ CREATE TABLE `wechat_message` (
   `wxid` varchar(50) DEFAULT NULL,
   `content` text,
   `extract` text,
-  `type` tinyint(1) NOT NULL,
+  `type` int(10) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
@@ -88,6 +88,15 @@ CREATE TABLE `groups` (
 CREATE TABLE `wechat_group` (
   `wechat_id` varchar(32) NOT NULL,
   `group_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `jpush` (
+  `id` varchar(32) NOT NULL,
+  `registration_id` varchar(32) NOT NULL,
+  `wxno` varchar(60) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

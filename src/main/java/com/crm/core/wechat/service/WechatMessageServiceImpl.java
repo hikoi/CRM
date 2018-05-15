@@ -5,11 +5,13 @@ import com.crm.core.wechat.consts.WechatMessageType;
 import com.crm.core.wechat.dao.WechatMessageDao;
 import com.crm.core.wechat.entity.WechatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
+import org.wah.doraemon.utils.GsonUtils;
 
 import java.util.List;
 
@@ -20,13 +22,17 @@ public class WechatMessageServiceImpl implements WechatMessageService{
     @Autowired
     private WechatMessageDao wechatMessageDao;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Override
     @Transactional(readOnly = false)
     public void save(WechatMessage message){
         Assert.notNull(message, "微信信息不能为空");
         Assert.hasText(message.getWechatId(), "微信ID不能为空");
 
-        wechatMessageDao.saveOrUpdate(message);
+        //消息队列处理
+        redisTemplate.convertAndSend("save_wechat_message_queue", GsonUtils.serialize(message));
     }
 
     @Override
@@ -34,7 +40,8 @@ public class WechatMessageServiceImpl implements WechatMessageService{
     public void synchronize(List<WechatMessage> messages){
         Assert.notEmpty(messages, "微信信息列表不能为空");
 
-        wechatMessageDao.saveList(messages);
+        //消息队列处理
+        redisTemplate.convertAndSend("synchronize_wechat_message_queue", GsonUtils.serialize(messages));
     }
 
     @Override

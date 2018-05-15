@@ -1,6 +1,7 @@
 package com.crm.commons.security.handler;
 
 import com.crm.commons.security.exception.DuplicateException;
+import com.crm.commons.security.exception.QueueServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,6 +28,14 @@ public class ExceptionAdvice{
         logger.error(e.getMessage(), e);
 
         return new Responsed(e.getMessage(), ResponseCode.INTERNAL_SERVER_ERROR, false);
+    }
+
+    /**
+     * 消息队列异常
+     */
+    @ExceptionHandler(value = QueueServiceException.class)
+    public void queueService(QueueServiceException e){
+        logger.error(e.getMessage(), e);
     }
 
     /**

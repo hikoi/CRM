@@ -1,6 +1,8 @@
 package com.crm.core.wechat.service;
 
 import com.crm.commons.security.exception.DuplicateException;
+import com.crm.core.jpush.dao.JPushDao;
+import com.crm.core.jpush.entity.JPush;
 import com.crm.core.wechat.dao.WechatDao;
 import com.crm.core.wechat.entity.Wechat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class WechatServiceImpl implements WechatService{
 
     @Autowired
     private WechatDao wechatDao;
+
+    @Autowired
+    private JPushDao jPushDao;
 
     @Override
     @Transactional(readOnly = false)
@@ -45,9 +50,20 @@ public class WechatServiceImpl implements WechatService{
     }
 
     @Override
-    public Wechat getByWxno(String wxno){
+    public Wechat getByWxno(String wxno, String registrationId){
         Assert.hasText(wxno, "微信号不能为空");
+        Assert.hasText(registrationId, "极光推送账号ID不能为空");
 
+        //保存极光账号
+        JPush jPush = jPushDao.getByRegistrationId(registrationId);
+        if(jPush == null){
+            jPush = new JPush();
+            jPush.setRegistrationId(registrationId);
+        }
+        jPush.setWxno(wxno);
+        jPushDao.saveOrUpdate(jPush);
+
+        //查询微信
         return wechatDao.getByWxno(wxno);
     }
 

@@ -34,8 +34,8 @@ public enum WechatMessageType{
     @SerializedName("10000")
     SYSTEM("10000", "系统消息"),
 
-    @SerializedName(" 436207665")
-    LUCK_PACKAGE("436207665", "红包"),
+    @SerializedName("436207665")
+    LUCKY_PACKAGE("436207665", "红包"),
 
     @SerializedName("419430449")
     TRANSFER("419430449", "转账"),

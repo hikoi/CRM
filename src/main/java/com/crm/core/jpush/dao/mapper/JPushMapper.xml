@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.crm.core.sensitive.dao.mapper.SensitiveWordMapper">
+<mapper namespace="com.crm.core.jpush.dao.mapper.JPushMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,37 +148,37 @@
         </where>
     </sql>
 
-    <resultMap id="sensitiveWord" type="com.crm.core.sensitive.entity.SensitiveWord">
-        <id     column="id"          property="id"         javaType="java.lang.String"/>
-        <result column="content"     property="content"    javaType="java.lang.String"/>
-        <result column="state"       property="state"      typeHandler="UsingStateHandler"/>
-        <result column="create_time" property="createTime" javaType="java.util.Date"/>
-        <result column="update_time" property="updateTime" javaType="java.util.Date"/>
+    <resultMap id="jpush" type="com.crm.core.jpush.entity.JPush">
+        <id     column="id"              property="id"             javaType="java.lang.String"/>
+        <result column="registration_id" property="registrationId" javaType="java.lang.String"/>
+        <result column="wxno"            property="wxno"           javaType="java.lang.String"/>
+        <result column="create_time"     property="createTime"     javaType="java.util.Date"/>
+        <result column="update_time"     property="updateTime"     javaType="java.util.Date"/>
     </resultMap>
 
     <insert id="save">
       INSERT
-        INTO sensitive_word (
+        INTO jpush (
              id,
-             content,
-             state,
+             registration_id,
+             wxno,
              create_time
         ) VALUE (
-             #{id,         jdbcType=VARCHAR},
-             #{content,    jdbcType=VARCHAR},
-             #{state,      typeHandler=UsingStateHandler},
-             #{createTime, jdbcType=VARCHAR}
+             #{id,             jdbcType=VARCHAR},
+             #{registrationId, jdbcType=VARCHAR},
+             #{wxno,           jdbcType=VARCHAR},
+             #{createTime,     jdbcType=TIMESTAMP}
         )
     </insert>
 
     <update id="update">
-      UPDATE sensitive_word
+      UPDATE jpush
        <set>
-          <if test="content != null">
-            content = #{content, jdbcType=VARCHAR},
+          <if test="registrationId != null and registrationId != ''">
+            registration_id = #{registrationId, jdbcType=VARCHAR},
           </if>
-          <if test="state != null">
-            state = #{state, typeHandler=UsingStateHandler},
+          <if test="wxno != null and wxno != ''">
+            wxno = #{wxno, jdbcType=VARCHAR},
           </if>
           <if test="updateTime != null">
             update_time = #{updateTime, jdbcType=TIMESTAMP},
@@ -187,74 +187,17 @@
         WHERE id = #{id}
     </update>
 
-    <delete id="dissolveByGroupId">
-      DELETE
-        FROM sensitive_group
-       WHERE group_id = #{groupId}
-    </delete>
-
-    <delete id="dissolveByWechatId">
-      DELETE
-        FROM sensitive_wechat
-       WHERE wechat_id = #{wechatId}
-    </delete>
-
-    <insert id="establishByGroupId">
-      INSERT
-        INTO sensitive_group (
-             sensitive_id,
-             group_id
-        ) VALUES
-      <foreach collection="sensitiveIds" item="sensitiveId" separator=",">
-        (
-             #{sensitiveId, jdbcType=VARCHAR},
-             #{groupId,     jdbcType=VARCHAR}
-        )
-      </foreach>
-    </insert>
-
-    <insert id="establishByWechatId">
-      INSERT
-        INTO sensitive_wechat (
-             sensitive_id,
-             wechat_id
-        ) VALUES
-      <foreach collection="sensitiveIds" item="sensitiveId" separator=",">
-        (
-              #{sensitiveId, jdbcType=VARCHAR},
-              #{wechatId,    jdbcType=VARCHAR}
-        )
-      </foreach>
-    </insert>
-
-    <select id="get" resultMap="sensitiveWord">
+    <select id="get" resultMap="jpush">
       SELECT *
-        FROM sensitive_word
+        FROM jpush
       <if test="params != null">
         <include refid="WHERE_SQL"/>
       </if>
     </select>
 
-    <select id="count" resultType="java.lang.Long">
-      SELECT COUNT(*)
-        FROM sensitive_word
-      <if test="params != null">
-        <include refid="WHERE_SQL"/>
-      </if>
-    </select>
-
-    <select id="find" resultMap="sensitiveWord">
-      SELECT s.*
-        FROM sensitive_word s
-   LEFT JOIN sensitive_group sg
-          ON sg.sensitive_id = s.id
-   LEFT JOIN sensitive_wechat sw
-          ON sw.sensitive_id = s.id
-   LEFT JOIN wechat_group wg
-          ON wg.group_id = sg.group_id
-          OR wg.wechat_id = sw.wechat_id
-   LEFT JOIN wechat w
-          ON w.id = wg.wechat_id
+    <select id="find" resultMap="jpush">
+      SELECT *
+        FROM jpush
       <if test="params != null">
         <include refid="WHERE_SQL"/>
 

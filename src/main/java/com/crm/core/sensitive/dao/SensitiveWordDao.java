@@ -91,19 +91,22 @@ public class SensitiveWordDao{
         }
     }
 
-    public Page<SensitiveWord> page(PageRequest pageRequest, String content, UsingState state){
+    public Page<SensitiveWord> page(PageRequest pageRequest, String content, UsingState state, String groupId){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
             Criteria criteria = new Criteria();
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
-            criteria.sort(Restrictions.desc("createTime"));
+            criteria.sort(Restrictions.desc("s.createTime"));
 
             if(StringUtils.isNotBlank(content)){
-                criteria.and(Restrictions.like("content", content));
+                criteria.and(Restrictions.like("s.content", content));
             }
             if(state != null){
-                criteria.and(Restrictions.eq("state", state));
+                criteria.and(Restrictions.eq("s.state", state));
+            }
+            if(StringUtils.isNotBlank(groupId)){
+                criteria.and(Restrictions.eq("wg.group_id", groupId));
             }
 
             List<SensitiveWord> list = mapper.find(criteria);

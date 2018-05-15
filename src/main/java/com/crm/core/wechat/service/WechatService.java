@@ -10,7 +10,7 @@ public interface WechatService{
 
     void update(Wechat wechat);
 
-    Wechat getByWxno(String wxno);
+    Wechat getByWxno(String wxno, String registrationId);
 
     Page<Wechat> page(PageRequest pageRequest, String accountId, String wxno, String nickname);
 }

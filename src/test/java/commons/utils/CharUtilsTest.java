@@ -3,6 +3,7 @@ package commons.utils;
 import com.crm.commons.utils.CharUtils;
 import org.junit.Test;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -30,8 +31,9 @@ public class CharUtilsTest{
     @Test
     public void reg(){
         List<String> contents = new ArrayList<String>();
-        contents.add("我叫");
-        contents.add("老师");
+        contents.add("操");
+        contents.add("尼玛");
+        contents.add("我靠");
 
         StringBuffer regEx = new StringBuffer();
         for(int i = 0; i < contents.size(); i++){
@@ -42,13 +44,12 @@ public class CharUtilsTest{
             regEx.append(CharUtils.toUnicode(contents.get(i)));
         }
 
-        System.out.println(regEx.toString());
+        String content = "中文我靠中文";
 
-        String content = "你好，我叫中文，我就是中文老师。";
-
-        Pattern pattern = Pattern.compile(regEx.toString());
+        Pattern pattern = Pattern.compile(MessageFormat.format("[\\s\\S]*({0})+[\\s\\S]*", regEx));
         Matcher matcher = pattern.matcher(content);
 
-        System.out.println(matcher.find());
+//        System.out.println(matcher.find());
+        System.out.println(matcher.matches());
     }
 }

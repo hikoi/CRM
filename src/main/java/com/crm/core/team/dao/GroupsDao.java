@@ -20,9 +20,9 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public class GroupDao{
+public class GroupsDao{
 
-    private Logger logger = LoggerFactory.getLogger(GroupDao.class);
+    private Logger logger = LoggerFactory.getLogger(GroupsDao.class);
 
     @Autowired
     private GroupsMapper mapper;
@@ -140,6 +140,17 @@ public class GroupDao{
             if(groupIds != null && !groupIds.isEmpty()){
                 mapper.establishByWechatId(wechatId, groupIds);
             }
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<String> findWxnoByGroupId(String groupId){
+        try{
+            Assert.hasText(groupId, "分组ID不能为空");
+
+            return mapper.findWxnoByGroupId(groupId);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

@@ -15,7 +15,7 @@ public interface SensitiveWordService{
 
     SensitiveWord getById(String id);
 
-    Page<SensitiveWord> page(PageRequest pageRequest, String content, UsingState state);
+    Page<SensitiveWord> page(PageRequest pageRequest, String content, UsingState state, String groupId);
 
     String getRegEx(String wxno);
 

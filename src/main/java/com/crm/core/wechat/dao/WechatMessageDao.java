@@ -4,6 +4,7 @@ import com.crm.core.wechat.consts.WechatMessageStatus;
 import com.crm.core.wechat.consts.WechatMessageType;
 import com.crm.core.wechat.dao.mapper.WechatMessageMapper;
 import com.crm.core.wechat.entity.WechatMessage;
+import com.crm.core.wechat.utils.WechatMessageUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,7 @@ public class WechatMessageDao{
                 Assert.hasText(message.getWechatId(), "微信ID不能为空");
 
                 message.setId(IDGenerator.uuid32());
+                message.setExtract(WechatMessageUtils.extract(message));
                 message.setCreateTime(new Date());
                 mapper.save(message);
             }else{
@@ -59,6 +61,7 @@ public class WechatMessageDao{
                 Assert.hasText(message.getWechatId(), "微信ID不能为空");
 
                 message.setId(IDGenerator.uuid32());
+                message.setExtract(WechatMessageUtils.extract(message));
                 message.setCreateTime(now);
             }
 

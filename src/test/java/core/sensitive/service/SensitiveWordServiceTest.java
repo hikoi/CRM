@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring.xml"})
+@ContextConfiguration(locations = {"classpath:spring.xml", "classpath:springbeans.xml"})
 @ActiveProfiles(value = "test")
 public class SensitiveWordServiceTest{
 
@@ -34,6 +34,10 @@ public class SensitiveWordServiceTest{
         List<String> sensitiveIds = new ArrayList<String>(Arrays.asList("822c68d305c2451dbe8cb4086c7efe35", "85c131dd7dfc4e608281d6e918d66d2d"));
 
         sensitiveWordService.updateRelationByWechatId(wechatId, sensitiveIds);
+
+        while(true){
+
+        }
     }
 
     @Test
