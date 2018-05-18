@@ -99,5 +99,65 @@ CREATE TABLE `jpush` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `account` (
+  `id` varchar(32) NOT NULL,
+  `username` varchar(12) NOT NULL,
+  `phone` varchar(15) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` varchar(256) NOT NULL,
+  `state` tinyint(1) NOT NULL,
+  `is_delete` tinyint(1) NOT NULL DEFAULT '0',
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `delete_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `phone` (`phone`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `user` (
+  `id` varchar(32) NOT NULL,
+  `account_id` varchar(32) NOT NULL,
+  `nickname` varchar(12) DEFAULT NULL,
+  `name` varchar(30) DEFAULT NULL,
+  `head_img_url` varchar(255) DEFAULT NULL,
+  `age` tinyint(1) DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `sex` tinyint(1) DEFAULT '2',
+  `autograph` varchar(120) DEFAULT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `role` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(20) DEFAULT NULL,
+  `state` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `permission` (
+  `id` varchar(32) NOT NULL,
+  `url` varchar(256) NOT NULL,
+  `description` varchar(60) DEFAULT NULL,
+  `need_allot` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `account_group` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `state` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 

@@ -144,7 +144,7 @@ public class WechatMessageUtils{
                 return matcher.group();
             }
 
-            return "";
+            return content;
         }catch(Exception e){
             throw new UtilsException(e.getMessage(), e);
         }
