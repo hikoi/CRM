@@ -74,7 +74,9 @@ public class WechatFriendDao{
 
             final Date now = new Date();
             for(WechatFriend friend : friends){
+                Assert.hasText(friend.getWechatId(), "所属微信ID不能为空");
                 Assert.hasText(friend.getWxid(), "微信wxid不能为空");
+
                 friend.setUpdateTime(now);
             }
 

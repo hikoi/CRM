@@ -166,10 +166,50 @@
         ) VALUE (
              #{id,         jdbcType=VARCHAR},
              #{name,       jdbcType=VARCHAR},
-             #{state,      typeHander=UsingStateHandler},
+             #{state,      typeHandler=UsingStateHandler},
              #{createTime, jdbcType=TIMESTAMP}
         )
     </insert>
+
+    <insert id="establishByRoleId">
+      INSERT
+        INTO role_permission (
+             role_id,
+             permission_id
+        ) VALUES
+      <foreach collection="permissionIds" item="permissionId" separator=",">
+        (
+             #{roleId,       jdbcType=VARCHAR},
+             #{permissionId, jdbcType=VARCHAR}
+        )
+      </foreach>
+    </insert>
+
+    <delete id="dissolveByRoleId">
+      DELETE
+        FROM role_permission
+       WHERE role_id = #{roleId}
+    </delete>
+
+    <insert id="establishByAccountId">
+      INSERT
+        INTO account_role (
+             account_id,
+             role_id
+        ) VALUES
+      <foreach collection="roleIds" item="roleId" separator=",">
+        (
+            #{accountId, jdbcType=VARCHAR},
+            #{roleId,    jdbcType=VARCHAR}
+        )
+      </foreach>
+    </insert>
+
+    <delete id="dissolveByAccountId">
+      DELETE
+        FROM account_role
+       WHERE account_id = #{accountId}
+    </delete>
 
     <update id="update">
       UPDATE role
@@ -220,5 +260,13 @@
       <if test="params != null">
         <include refid="WHERE_SQL"/>
       </if>
+    </select>
+
+    <select id="findByAccountId" resultMap="role">
+      SELECT r.*
+        FROM role r
+   LEFT JOIN account_role ar
+          ON ar.role_id = r.id
+       WHERE ar.account_id = #{accountId}
     </select>
 </mapper>

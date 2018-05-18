@@ -113,13 +113,11 @@ public class GroupsDao{
             Assert.hasText(groupId, "分组ID不能为空");
 
             //删除原有关系
-            Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("groupId", groupId));
-            mapper.dissolve(criteria);
+            mapper.dissolveRelationByGroupId(groupId);
 
             //保存新关系
             if(wechatIds != null && !wechatIds.isEmpty()){
-                mapper.establishByGroupId(groupId, wechatIds);
+                mapper.establishRelationByGroupId(groupId, wechatIds);
             }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
@@ -132,13 +130,11 @@ public class GroupsDao{
             Assert.hasText(wechatId, "微信ID不能为空");
 
             //删除原有关系
-            Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("wechatId", wechatId));
-            mapper.dissolve(criteria);
+            mapper.dissolveRelationByWechatId(wechatId);
 
             //保存新关系
             if(groupIds != null && !groupIds.isEmpty()){
-                mapper.establishByWechatId(wechatId, groupIds);
+                mapper.establishRelationByWechatId(wechatId, groupIds);
             }
         }catch(Exception e){
             logger.error(e.getMessage(), e);

@@ -1,7 +1,7 @@
 package core.account.service;
 
-import com.crm.core.account.entity.Permission;
-import com.crm.core.account.service.PermissionService;
+import com.crm.core.account.entity.Role;
+import com.crm.core.account.service.RoleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,38 +12,36 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring.xml", "classpath:springbeans.xml"})
 @ActiveProfiles(value = "test")
-public class PermissionServiceTest{
+public class RoleServiceTest{
 
     @Autowired
-    private PermissionService permissionService;
+    private RoleService roleService;
 
     @Test
     public void save(){
-        Permission permission = new Permission();
-        permission.setUrl("/**");
-        permission.setDescription("超级管理员权限");
+        Role role = new Role();
+        role.setName("超级管理员");
 
-        permissionService.save(permission);
+        roleService.save(role);
+    }
+
+    @Test
+    public void updateRelationByRoleId(){
+        String roleId = "0";
+        List<String> permissionIds = new ArrayList<String>(Arrays.asList("0"));
+
+        roleService.updateRelationByRoleId(roleId, permissionIds);
     }
 
     @Test
     public void updateRelationByAccountId(){
         String accountId = "0";
-        List<String> permissionIds = new ArrayList<String>(Arrays.asList("0"));
+        List<String> roleIds = new ArrayList<String>(Arrays.asList("0"));
 
-        permissionService.updateRelationByAccountId(accountId, permissionIds);
-    }
-
-    @Test
-    public void findByAccountId(){
-        String accountId = "0";
-
-        Set<Permission> permissions = permissionService.findByAccountId(accountId);
-        System.out.println(permissions.size());
+        roleService.updateRelationByAccountId(accountId, roleIds);
     }
 }

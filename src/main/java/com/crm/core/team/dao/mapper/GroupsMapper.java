@@ -14,11 +14,13 @@ public interface GroupsMapper{
 
     void update(Groups group);
 
-    void dissolve(@Param("params") Criteria criteria);
+    void dissolveRelationByGroupId(String groupId);
 
-    void establishByGroupId(@Param("groupId") String groupId, @Param("wechatIds") List<String> wechatIds);
+    void dissolveRelationByWechatId(String wechatId);
 
-    void establishByWechatId(@Param("wechatId") String wechatId, @Param("groupIds") List<String> groupIds);
+    void establishRelationByGroupId(@Param("groupId") String groupId, @Param("wechatIds") List<String> wechatIds);
+
+    void establishRelationByWechatId(@Param("wechatId") String wechatId, @Param("groupIds") List<String> groupIds);
 
     Groups get(@Param("params") Criteria criteria);
 

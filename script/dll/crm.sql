@@ -143,6 +143,7 @@ CREATE TABLE `role` (
 CREATE TABLE `permission` (
   `id` varchar(32) NOT NULL,
   `url` varchar(256) NOT NULL,
+  `method` varchar(10) DEFAULT NULL,
   `description` varchar(60) DEFAULT NULL,
   `need_allot` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
@@ -150,14 +151,18 @@ CREATE TABLE `permission` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `account_group` (
-  `id` varchar(32) NOT NULL,
-  `name` varchar(60) DEFAULT NULL,
-  `state` tinyint(1) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE `role_permission` (
+  `role_id` varchar(32) NOT NULL,
+  `permission_id` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `account_role` (
+  `account_id` varchar(32) NOT NULL,
+  `role_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `account_permission` (
+  `account_id` varchar(32) NOT NULL,
+  `permission_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

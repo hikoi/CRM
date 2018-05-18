@@ -187,7 +187,7 @@
         WHERE id = #{id}
     </update>
 
-    <insert id="establishByGroupId">
+    <insert id="establishSensitiveByGroupId">
       INSERT
         INTO wechat_group (
              wechat_id,
@@ -201,7 +201,7 @@
       </foreach>
     </insert>
 
-    <insert id="establishByWechatId">
+    <insert id="establishSensitiveByWechatId">
       INSERT
         INTO wechat_group (
              wechat_id,
@@ -215,12 +215,16 @@
       </foreach>
     </insert>
 
-    <delete id="dissolve">
+    <delete id="dissolveSensitiveByGroupId">
       DELETE
         FROM wechat_group
-      <if test="params != null">
-        <include refid="WHERE_SQL"/>
-      </if>
+       WHERE group_id = #{groupId}
+    </delete>
+
+    <delete id="dissolveSensitiveByWechatId">
+      DELETE
+        FROM wechat_group
+       WHERE wechat_id = #{wechatId}
     </delete>
 
     <select id="get" resultMap="group">

@@ -13,6 +13,7 @@
     </settings>
 
     <typeAliases>
+        <typeAlias type="org.apache.ibatis.type.EnumTypeHandler"                       alias="EnumTypeHandler"/>
         <typeAlias type="org.wah.doraemon.utils.mybatis.handler.AccountStateHandler"   alias="AccountStateHandler"/>
         <typeAlias type="org.wah.doraemon.utils.mybatis.handler.SexHandler"            alias="SexHandler"/>
         <typeAlias type="org.wah.doraemon.utils.mybatis.handler.UsingStateHandler"     alias="UsingStateHandler"/>
