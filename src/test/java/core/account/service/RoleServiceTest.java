@@ -32,7 +32,7 @@ public class RoleServiceTest{
     @Test
     public void updateRelationByRoleId(){
         String roleId = "0";
-        List<String> permissionIds = new ArrayList<String>(Arrays.asList("0"));
+        List<String> permissionIds = new ArrayList<String>(Arrays.asList("0", "1", "2", "3"));
 
         roleService.updateRelationByRoleId(roleId, permissionIds);
     }

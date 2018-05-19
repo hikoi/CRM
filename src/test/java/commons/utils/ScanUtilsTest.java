@@ -1,5 +1,6 @@
 package commons.utils;
 
+import com.crm.commons.consts.Constants;
 import com.crm.commons.utils.ScanUtils;
 import com.crm.core.account.entity.Permission;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class ScanUtilsTest{
     public void findPermission(){
         String basePackage = "com.crm.core.device";
 
-        List<Permission> permissions = ScanUtils.findPermission(basePackage);
+        List<Permission> permissions = ScanUtils.findPermission(basePackage, Constants.API_ANNOTATIONS);
         System.out.println(permissions.size());
     }
 }

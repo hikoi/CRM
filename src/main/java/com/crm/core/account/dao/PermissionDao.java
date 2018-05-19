@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.wah.doraemon.security.exception.DataAccessException;
 import org.wah.doraemon.utils.IDGenerator;
 import org.wah.doraemon.utils.mybatis.Criteria;
@@ -136,9 +137,22 @@ public class PermissionDao{
         }
     }
 
-    public List<Permission> find(){
+    public List<Permission> find(String url, RequestMethod method, Boolean needAllot){
         try{
-            return mapper.find(null);
+            Criteria criteria = new Criteria();
+            criteria.sort(Restrictions.asc("url"));
+
+            if(StringUtils.isNotBlank(url)){
+                criteria.and(Restrictions.like("url", url));
+            }
+            if(method != null){
+                criteria.and(Restrictions.eq("method", method.name()));
+            }
+            if(needAllot != null){
+                criteria.and(Restrictions.eq("needAllot", needAllot));
+            }
+
+            return mapper.find(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

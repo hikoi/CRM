@@ -222,6 +222,9 @@
     <update id="update">
       UPDATE permission
        <set>
+          <if test="method != null">
+            method = #{method, typeHandler=EnumTypeHandler},
+          </if>
           <if test="description != null">
             description = #{description, jdbcType=VARCHAR},
           </if>
@@ -239,6 +242,9 @@
       <foreach collection="permissions" item="permission" separator=";">
         UPDATE permission
          <set>
+            <if test="permission.method != null">
+              method = #{permission.method, typeHandler=EnumTypeHandler},
+            </if>
             <if test="permission.description != null">
               description = #{permission.description, jdbcType=VARCHAR},
             </if>

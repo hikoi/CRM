@@ -17,20 +17,4 @@ public class BackstageController{
     public ModelAndView index(){
         return new ModelAndView("backstage/index");
     }
-
-    /**
-     * 分组首页
-     */
-    @RequestMapping(value = "/group/index", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView groupIndex(){
-        return new ModelAndView("backstage/group/index");
-    }
-
-    /**
-     * 分组编辑页
-     */
-    @RequestMapping(value = "/group/edit", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView groupEdit(){
-        return new ModelAndView("backstage/group/edit");
-    }
 }

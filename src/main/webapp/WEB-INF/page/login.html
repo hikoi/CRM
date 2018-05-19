@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+
+        <title>CRM | LOGIN</title>
+
+        <link rel="stylesheet" type="text/css" href="http://wah-commons.test.upcdn.net/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="http://wah-commons.test.upcdn.net/font-awesome/css/fontawesome-all.min.css">
+        <link rel="stylesheet" type="text/css" href="http://wah-ferryman.test.upcdn.net/css/ferryman.css">
+        <link rel="stylesheet" type="text/css" href="http://wah-ferryman.test.upcdn.net/css/index.css">
+
+        <!--[if lt IE 9]>
+        <script type="text/javascript" src="http://wah-commons.test.upcdn.net/bootstrap/js/html5shiv.min.js"></script>
+        <script type="text/javascript" src="http://wah-commons.test.upcdn.net/bootstrap/js/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="form">
+            <div class="container">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input type="text" class="form-control" id="username">
+                </div><!-- item -->
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-gamepad"></i></span>
+                    <input type="password" class="form-control" id="password">
+                </div><!-- item -->
+
+                <div class="button-bar">
+                    <button type="button" class="btn" id="submit">登录</button>
+                    <button type="button" class="btn" id="reset">重置</button>
+                </div>
+            </div><!-- container -->
+        </div><!-- form -->
+
+        <script type="text/javascript" src="http://wah-commons.test.upcdn.net/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="http://wah-commons.test.upcdn.net/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/commons/js/jsencrypt.min.js"></script>
+        <script type="text/javascript">
+            var login = login || {
+                publicKey : 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCaTWTPyqcqSApOO+DFKLYyNi6aF5/Tnl6Uw5avtodWOeLDTbhqjfX1Ji6duLuY6kqv09TiO8YEbRWnJH0KGPqlYDSY1agWZ6z4BVHHQNHfMsAjP1g4GiZKvHhAZegcOAO3J4Gt6BLEw/bsiNxQN720z55ULFeG2ILjLebhhJqP2QIDAQAB',
+
+                submit : function(){
+                    var username = $('#username').val();
+                    var password = $('#password').val();
+
+                    if(username == null || username == undefined || username == ''){
+                        alert('请输入登录名');
+                        return false;
+                    }
+                    if(password == null || password == undefined || password == ''){
+                        alert('请输入密码');
+                        return false;
+                    }
+
+                    //加密工具
+                    var crypt = new JSEncrypt();
+                    crypt.setPublicKey(login.publicKey);
+
+                    $.ajax({
+                        url      : '/api/1.0/account/login',
+                        type     : 'POST',
+                        dataType : 'json',
+                        data     : {
+                            'username' : username,
+                            'password' : crypt.encrypt(password)
+                        },
+                        success  : function(res){
+                            if(res.success){
+                                console.log(res.result);
+                            }else{
+                                alert(res.msg);
+                            }
+                        },
+                        error    : function(response){
+                            alert(response);
+                        }
+                    });
+                },
+
+                reset : function(){
+                    $('#username').val('');
+                    $('#password').val('');
+                },
+
+                binding : function(){
+                    $('#submit').bind('click', login.submit);
+                    $('#reset').bind('click', login.reset);
+                }
+            };
+
+            $(function(){
+                login.binding();
+            });
+        </script>
+    </body>
+</html>

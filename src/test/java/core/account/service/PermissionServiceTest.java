@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ public class PermissionServiceTest{
         Permission permission = new Permission();
         permission.setUrl("/**");
         permission.setDescription("超级管理员权限");
+        permission.setMethod(RequestMethod.DELETE);
 
         permissionService.save(permission);
     }
@@ -45,5 +47,10 @@ public class PermissionServiceTest{
 
         Set<Permission> permissions = permissionService.findByAccountId(accountId);
         System.out.println(permissions.size());
+    }
+
+    @Test
+    public void synchronize(){
+        permissionService.synchronize();
     }
 }

@@ -48,38 +48,28 @@ public class WechatFriendServiceImpl implements WechatFriendService{
         //好友列表
         List<WechatFriend> original = wechatFriendDao.findByWechatId(wechatId);
 
-        if(original == null || original.isEmpty()){
-            //没有好友列表
-            for(WechatFriend friend : friends){
-                Assert.hasText(friend.getWxid(), "微信好友wxid不能为空");
+        for(WechatFriend friend : friends){
+            Assert.hasText(friend.getWxid(), "微信好友wxid不能为空");
 
-                friend.setWechatId(wechatId);
+            friend.setWechatId(wechatId);
+
+            if(original.contains(friend)){
+                //原有好友
+                friend.setId(original.get(original.indexOf(friend)).getId());
+                updateList.add(friend);
+            }else{
+                //新增好友
+                saveList.add(friend);
             }
+        }
 
-            wechatFriendDao.saveList(friends);
-        }else{
-            for(WechatFriend friend : friends){
-                Assert.hasText(friend.getWxid(), "微信好友wxid不能为空");
-
-                friend.setWechatId(wechatId);
-
-                if(original.contains(friend)){
-                    //原有好友
-                    updateList.add(friend);
-                }else{
-                    //新增好友
-                    saveList.add(friend);
-                }
-            }
-
-            //更新
-            if(!updateList.isEmpty()){
-                wechatFriendDao.updateList(updateList);
-            }
-            //保存
-            if(!saveList.isEmpty()){
-                wechatFriendDao.saveList(saveList);
-            }
+        //更新
+        if(!updateList.isEmpty()){
+            wechatFriendDao.updateList(updateList);
+        }
+        //保存
+        if(!saveList.isEmpty()){
+            wechatFriendDao.saveList(saveList);
         }
     }
 

@@ -240,8 +240,7 @@
               update_time = #{friend.updateTime, jdbcType=TIMESTAMP},
             </if>
          </set>
-          WHERE wxid = #{friend.wxid}
-            AND wechat_id = #{friend.wechatId}
+          WHERE id = #{friend.id}
       </foreach>
     </update>
 

@@ -1,6 +1,7 @@
 package com.crm.commons.security.handler;
 
 import com.crm.commons.security.exception.DuplicateException;
+import com.crm.commons.security.exception.LoginFailException;
 import com.crm.commons.security.exception.QueueServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,16 @@ public class ExceptionAdvice{
         logger.error(e.getMessage(), e);
 
         return new Responsed(e.getMessage(), ResponseCode.AUTHENTICATION_FAIL, false);
+    }
+
+    /**
+     * 登录失败异常
+     */
+    @ExceptionHandler(value = LoginFailException.class)
+    public ModelAndView loginFail(LoginFailException e){
+        logger.error(e.getMessage(), e);
+
+        return new ModelAndView("login");
     }
 
     /**

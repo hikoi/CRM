@@ -143,7 +143,7 @@ CREATE TABLE `role` (
 CREATE TABLE `permission` (
   `id` varchar(32) NOT NULL,
   `url` varchar(256) NOT NULL,
-  `method` varchar(10) DEFAULT NULL,
+  `method` varchar(10) NOT NULL,
   `description` varchar(60) DEFAULT NULL,
   `need_allot` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,

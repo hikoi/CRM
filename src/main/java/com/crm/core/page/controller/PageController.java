@@ -13,7 +13,7 @@ public class PageController{
     /**
      * 首页
      */
-    @RequestMapping(value = {"", "/index"}, method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView index(){
         return new ModelAndView("index");
     }
@@ -24,5 +24,13 @@ public class PageController{
     @RequestMapping(value = "/page/browserNotSupport", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView browserNotSupport(){
         return new ModelAndView("browserNotSupport");
+    }
+
+    /**
+     * 登录页面
+     */
+    @RequestMapping(value = "/page/login", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView login(){
+        return new ModelAndView("login");
     }
 }

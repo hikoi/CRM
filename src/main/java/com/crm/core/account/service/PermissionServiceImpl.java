@@ -1,5 +1,6 @@
 package com.crm.core.account.service;
 
+import com.crm.commons.consts.Constants;
 import com.crm.commons.utils.ScanUtils;
 import com.crm.core.account.dao.PermissionDao;
 import com.crm.core.account.dao.RoleDao;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.wah.doraemon.utils.ObjectUtils;
 
@@ -42,10 +44,26 @@ public class PermissionServiceImpl implements PermissionService{
         List<Permission> update = new ArrayList<Permission>();
 
         //原有数据
-        List<Permission> original = permissionDao.find();
+        List<Permission> original = permissionDao.find(null, null, null);
 
         //现有数据
+        List<Permission> permissions = ScanUtils.findPermission(Constants.PROJECT_ROOT, Constants.API_ANNOTATIONS);
 
+        for(Permission permission : permissions){
+            if(original.contains(permission)){
+                permission.setId(original.get(original.indexOf(permission)).getId());
+                update.add(permission);
+            }else{
+                insert.add(permission);
+            }
+        }
+
+        if(!insert.isEmpty()){
+            permissionDao.saveList(insert);
+        }
+        if(!update.isEmpty()){
+            permissionDao.updateList(update);
+        }
     }
 
     @Override
@@ -60,17 +78,22 @@ public class PermissionServiceImpl implements PermissionService{
     public Set<Permission> findByAccountId(String accountId){
         Assert.hasText(accountId, "账户ID不能为空");
 
-        Set<Permission> target = new HashSet<Permission>();
+        Set<Permission> permissions = new HashSet<Permission>();
 
         //根据账户ID查询
-        target.addAll(permissionDao.findByAccountId(accountId));
+        permissions.addAll(permissionDao.findByAccountId(accountId));
 
         //根据角色ID查询
         List<Role> roles = roleDao.findByAccountId(accountId);
         if(roles != null && !roles.isEmpty()){
-            target.addAll(permissionDao.findByRoleIds(ObjectUtils.ids(roles)));
+            permissions.addAll(permissionDao.findByRoleIds(ObjectUtils.ids(roles)));
         }
 
-        return target;
+        return permissions;
+    }
+
+    @Override
+    public List<Permission> find(String url, RequestMethod method, Boolean needAllot){
+        return permissionDao.find(url, method, needAllot);
     }
 }

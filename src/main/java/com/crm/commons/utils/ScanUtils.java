@@ -1,6 +1,5 @@
 package com.crm.commons.utils;
 
-import com.crm.commons.consts.Constants;
 import com.crm.core.account.entity.Permission;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -111,13 +110,13 @@ public class ScanUtils{
         }
     }
 
-    public static List<Permission> findPermission(String basePackage){
+    public static List<Permission> findPermission(String basePackage, List<Class<? extends Annotation>> annotations){
         if(StringUtils.isBlank(basePackage)){
             throw new UtilsException("扫描的包名不能为空");
         }
 
         try{
-            List<Class> classes = findBeans(basePackage, Constants.API_ANNOTATIONS);
+            List<Class> classes = findBeans(basePackage, annotations);
 
             List<Permission> permissions = new ArrayList<Permission>();
 

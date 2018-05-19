@@ -77,6 +77,12 @@
 
     <!-- 拦截器 -->
     <mvc:interceptors>
+        <!-- 权限验证 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.crm.commons.security.interceptor.PermissionInterceptor"/>
+        </mvc:interceptor>
+
         <!-- 页面拦截器 -->
         <mvc:interceptor>
             <mvc:mapping path="/page/**"/>

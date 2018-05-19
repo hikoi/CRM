@@ -4,7 +4,7 @@ import org.wah.doraemon.entity.Account;
 
 public interface AccountService{
 
-    void register(Account account);
+    void register(String username, String password);
 
     Account login(String username, String password);
 }
