@@ -17,4 +17,22 @@ public class BackstageController{
     public ModelAndView index(){
         return new ModelAndView("backstage/index");
     }
+
+    /**
+     *  账户管理
+     *  首页
+     */
+    @RequestMapping(value = "/account/index", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView accountIndex(){
+        return new ModelAndView("backstage/account/index");
+    }
+
+    /**
+     *  微信管理
+     *  首页
+     */
+    @RequestMapping(value = "/wechat/index", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView wechatIndex(){
+        return new ModelAndView("backstage/wechat/index");
+    }
 }

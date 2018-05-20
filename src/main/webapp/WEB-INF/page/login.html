@@ -10,7 +10,6 @@
         <link rel="stylesheet" type="text/css" href="http://wah-commons.test.upcdn.net/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="http://wah-commons.test.upcdn.net/font-awesome/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="http://wah-ferryman.test.upcdn.net/css/ferryman.css">
-        <link rel="stylesheet" type="text/css" href="http://wah-ferryman.test.upcdn.net/css/index.css">
 
         <!--[if lt IE 9]>
         <script type="text/javascript" src="http://wah-commons.test.upcdn.net/bootstrap/js/html5shiv.min.js"></script>
@@ -72,7 +71,9 @@
                         },
                         success  : function(res){
                             if(res.success){
-                                console.log(res.result);
+                                sessionStorage.setItem("account_id", res.result);
+
+                                location.href = '/page/backstage/index';
                             }else{
                                 alert(res.msg);
                             }

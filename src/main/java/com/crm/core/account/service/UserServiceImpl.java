@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.wah.doraemon.entity.User;
+import org.wah.doraemon.security.request.Page;
+import org.wah.doraemon.security.request.PageRequest;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,5 +32,19 @@ public class UserServiceImpl implements UserService{
         Assert.hasText(user.getId(), "用户ID不能为空");
 
         userDao.saveOrUpdate(user);
+    }
+
+    @Override
+    public User getByAccountId(String accountId){
+        Assert.hasText(accountId, "账户ID不能为空");
+
+        return userDao.getByAccountId(accountId);
+    }
+
+    @Override
+    public Page<User> page(PageRequest pageRequest, String nickname, String name){
+        Assert.notNull(pageRequest, "分页信息不能为空");
+
+        return userDao.page(pageRequest, nickname, name);
     }
 }

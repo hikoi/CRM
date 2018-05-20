@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
+
+        <title>CRM | INDEX</title>
+
+        <link rel="stylesheet" type="text/css" href="//wah-commons.test.upcdn.net/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="//wah-commons.test.upcdn.net/font-awesome/css/fontawesome-all.min.css">
+        <link rel="stylesheet" type="text/css" href="//wah-ferryman.test.upcdn.net/css/ferryman.css">
+        <link rel="stylesheet" type="text/css" href="/commons/css/backstage/index.css">
+
+        <!--[if lt IE 9]>
+        <script type="text/javascript" src="//wah-commons.test.upcdn.net/bootstrap/js/html5shiv.min.js"></script>
+        <script type="text/javascript" src="//wah-commons.test.upcdn.net/bootstrap/js/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body ng-app="crm">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="navbar-header">
+                <a href="javascript:;" class="nav-brand">CRM</a>
+
+                <a href="javascript:;" class="brand-toggle">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+
+            <div class="user-info pull-right clearfix">
+                <img class="headImgUrl" src="">
+                <span class="name"></span>
+            </div><!-- user info -->
+        </nav><!-- nav -->
+
+        <div class="menu show">
+            <div class="menu-wrap">
+                <div class="menu-side">
+                    <div class="title">账户管理</div>
+
+                    <div class="item">
+                        <a ui-sref="account" ui-sref-active="active">
+                            <i class="fa fa-user"></i>
+                            账户管理
+                        </a>
+                    </div><!-- item -->
+                </div><!-- side -->
+
+                <div class="menu-side">
+                    <div class="title">微信管理</div>
+
+                    <div class="item">
+                        <a ui-sref="wechat" ui-sref-active="active">
+                            <i class="fa fa-user"></i>
+                            微信管理
+                        </a>
+                    </div><!-- item -->
+
+                    <div class="item">
+                        <a href="javascript:;">
+                            <i class="fa fa-user"></i>
+                            设备管理
+                        </a>
+                    </div><!-- item -->
+                </div><!-- side -->
+            </div><!-- wrap -->
+        </div><!-- menu -->
+            
+        <div class="content">
+            <ui-view></ui-view><!-- router view -->
+        </div><!-- content -->
+
+        <script type="text/javascript" src="//wah-commons.test.upcdn.net/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="//wah-commons.test.upcdn.net/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="//cdn.bootcss.com/angular.js/1.7.0/angular.min.js"></script>
+        <script type="text/javascript" src="//cdn.bootcss.com/angular-ui-router/1.0.17/angular-ui-router.min.js"></script>
+        <script type="text/javascript" src="//cdn.bootcss.com/oclazyload/1.1.0/ocLazyLoad.min.js"></script>
+        <script type="text/javascript" src="/commons/js/backstage/index.js"></script>
+    </body>
+</html>

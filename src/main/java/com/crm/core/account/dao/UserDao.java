@@ -9,11 +9,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import org.wah.doraemon.entity.User;
 import org.wah.doraemon.security.exception.DataAccessException;
+import org.wah.doraemon.security.request.Page;
+import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.utils.IDGenerator;
 import org.wah.doraemon.utils.mybatis.Criteria;
 import org.wah.doraemon.utils.mybatis.Restrictions;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public class UserDao{
@@ -65,6 +68,31 @@ public class UserDao{
             criteria.and(Restrictions.eq("accountId", accountId));
 
             return mapper.get(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public Page<User> page(PageRequest pageRequest, String nickname, String name){
+        try{
+            Assert.notNull(pageRequest, "分页信息不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
+            criteria.sort(Restrictions.desc("createTime"));
+
+            if(StringUtils.isNotBlank(nickname)){
+                criteria.and(Restrictions.like("nickname", nickname));
+            }
+            if(StringUtils.isNotBlank(name)){
+                criteria.and(Restrictions.like("name", name));
+            }
+
+            List<User> list = mapper.find(criteria);
+            Long total = mapper.count(criteria);
+
+            return new Page<User>(list, total, pageRequest);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

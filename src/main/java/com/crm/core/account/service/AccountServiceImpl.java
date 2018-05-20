@@ -80,14 +80,10 @@ public class AccountServiceImpl implements AccountService{
         Base64 base64 = new Base64();
         password = new String(RSAUtils.decryptByPrivateKey(base64.decode(password), privateKey));
 
+        //校验密码
         if(!password.equals(RSAUtils.decryptByPrivateKey(account.getPassword(), privateKey))){
             throw new AuthenticationException("账户名或密码不正确");
         }
-
-//        //校验密码
-//        if(!RSAUtils.equalsByPrivateKey(password, account.getPassword(), privateKey)){
-//            throw new AuthenticationException("账户名或密码不正确");
-//        }
 
         //缓存权限
         Set<Permission> permissions = new HashSet<Permission>();
