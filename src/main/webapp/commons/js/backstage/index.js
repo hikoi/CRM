@@ -7,12 +7,10 @@ app.config(function($stateProvider){
         resolve       : {
             deps : ['$ocLazyLoad', function($ocLazyLoad){
                 return $ocLazyLoad.load([
-                    'https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.css',
+                    '//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css',
                     '/commons/css/backstage/backstage.css',
-                    'https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table.min.js',
+                    '//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js',
                     '/commons/js/backstage/account/index.js'
-                    // 'https://cdn.bootcss.com/bootstrap-table/1.12.1/bootstrap-table-locale-all.min.js',
-                    // 'https://cdn.bootcss.com/bootstrap-table/1.12.1/locale/bootstrap-table-zh-CN.min.js'
                 ]);
             }]
         }
@@ -79,12 +77,14 @@ var index = index || {
     },
 
     resizeHandler: function(){
-        var width = document.documentElement.offsetWidth || document.body.offsetWidth;
+        // var width = document.documentElement.offsetWidth || document.body.offsetWidth;
 
-        if(width > 767){
-            $('.menu').removeClass('hide');
-            $('.menu').addClass('show');
+        var isShow = $('.menu').hasClass('show');
+
+        if(isShow){
             $('.content').removeClass('full');
+        }else{
+            $('.content').addClass('full');
         }
     },
 

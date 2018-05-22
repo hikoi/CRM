@@ -1,13 +1,5 @@
 CREATE DATABASE `crm` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';
 
-CREATE TABLE `wechat_allot_log` (
-  `account_id` varchar(32) NOT NULL,
-  `wechat_id` varchar(32) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE `wechat` (
   `id` varchar(32) NOT NULL,
   `account_id` varchar(32) DEFAULT NULL,
@@ -131,38 +123,61 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `role` (
-  `id` varchar(32) NOT NULL,
-  `name` varchar(20) DEFAULT NULL,
-  `state` tinyint(1) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE `permission` (
   `id` varchar(32) NOT NULL,
-  `url` varchar(256) NOT NULL,
-  `method` varchar(10) NOT NULL,
-  `description` varchar(60) DEFAULT NULL,
-  `need_allot` tinyint(1) NOT NULL,
+  `resource_id` varchar(32) NOT NULL,
+  `type` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `role_permission` (
-  `role_id` varchar(32) NOT NULL,
-  `permission_id` varchar(32) NOT NULL
+CREATE TABLE `menu` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `url` varchar(256) DEFAULT NULL,
+  `parent_id` varchar(32) DEFAULT NULL,
+  `is_parent` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `account_role` (
-  `account_id` varchar(32) NOT NULL,
-  `role_id` varchar(32) NOT NULL
+CREATE TABLE `function` (
+  `id` varchar(32) NOT NULL,
+  `url` varchar(256) NOT NULL,
+  `description` varchar(60) DEFAULT NULL,
+  `need_allot` tinyint(4) NOT NULL,
+  `method` varchar(10) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `account_permission` (
-  `account_id` varchar(32) NOT NULL,
-  `permission_id` varchar(32) NOT NULL
+CREATE TABLE `company` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `phone` varchar(30) DEFAULT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `department` (
+  `id` varchar(32) NOT NULL,
+  `company_id` varchar(32) NOT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `position` (
+  `id` varchar(32) NOT NULL,
+  `department_id` varchar(32) NOT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

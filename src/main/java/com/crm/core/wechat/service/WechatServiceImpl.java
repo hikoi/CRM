@@ -1,6 +1,5 @@
 package com.crm.core.wechat.service;
 
-import com.crm.commons.security.exception.DuplicateException;
 import com.crm.core.jpush.dao.JPushDao;
 import com.crm.core.jpush.entity.JPush;
 import com.crm.core.wechat.dao.WechatDao;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.wah.doraemon.security.exception.DuplicateException;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 

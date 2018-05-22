@@ -1,10 +1,14 @@
 package commons.utils;
 
+import com.crm.core.permission.entity.Permission;
 import com.crm.core.wechat.entity.WechatMessage;
 import com.google.gson.reflect.TypeToken;
 import org.junit.Test;
+import org.wah.doraemon.domain.Entity;
 import org.wah.doraemon.utils.GsonUtils;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GsonUtilsTest{
@@ -26,5 +30,17 @@ public class GsonUtilsTest{
         WechatMessage message = GsonUtils.deserialize(json, WechatMessage.class);
 
         System.out.println(message);
+    }
+
+    @Test
+    public void test(){
+        Permission permission = new Permission();
+        permission.setCreateTime(new Date());
+
+        List<Entity> list = new ArrayList<Entity>();
+        list.add(permission);
+        list.add(permission);
+
+        System.out.println(GsonUtils.serialize(list));
     }
 }

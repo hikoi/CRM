@@ -20,5 +20,6 @@
         <typeAlias type="com.crm.core.wechat.utils.handler.WechatMessageTypeHandler"   alias="WechatMessageTypeHandler"/>
         <typeAlias type="com.crm.core.wechat.utils.handler.WechatMessageStatusHandler" alias="WechatMessageStatusHandler"/>
         <typeAlias type="com.crm.core.device.utils.handler.DeviceTypeHandler"          alias="DeviceTypeHandler"/>
+        <typeAlias type="com.crm.core.permission.utils.handler.ResourceTypeHandler"    alias="ResourceTypeHandler"/>
     </typeAliases>
 </configuration>

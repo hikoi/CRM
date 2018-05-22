@@ -3,7 +3,7 @@ package com.crm.core.sensitive.service;
 import com.crm.commons.utils.CharUtils;
 import com.crm.core.sensitive.dao.SensitiveWordDao;
 import com.crm.core.sensitive.entity.SensitiveWord;
-import com.crm.core.team.dao.GroupsDao;
+import com.crm.core.group.dao.GroupsDao;
 import com.crm.core.wechat.dao.WechatDao;
 import com.crm.core.wechat.entity.Wechat;
 import org.apache.commons.lang3.StringUtils;

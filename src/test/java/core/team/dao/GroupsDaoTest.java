@@ -1,7 +1,7 @@
 package core.team.dao;
 
-import com.crm.core.team.dao.GroupsDao;
-import com.crm.core.team.entity.Groups;
+import com.crm.core.group.dao.GroupsDao;
+import com.crm.core.group.entity.Groups;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
