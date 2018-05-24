@@ -32,6 +32,8 @@ public class RoleDao{
             Assert.notNull(role, "权限信息不能为空");
 
             if(StringUtils.isBlank(role.getId())){
+                Assert.notNull(role.getIsAdmin(), "超级管理员标示不能为空");
+
                 role.setId(IDGenerator.uuid32());
                 role.setState(UsingState.USABLE);
                 role.setCreateTime(new Date());
@@ -76,7 +78,19 @@ public class RoleDao{
         }
     }
 
-    public Page<Role> page(PageRequest pageRequest, String id, String name, UsingState state){
+    public List<Role> findAdmins(){
+        try{
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("isAdmin", true));
+
+            return mapper.find(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public Page<Role> page(PageRequest pageRequest, String id, String name, UsingState state, Boolean isAdmin){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -92,6 +106,9 @@ public class RoleDao{
             }
             if(state != null){
                 criteria.and(Restrictions.eq("state", state.getId()));
+            }
+            if(isAdmin != null){
+                criteria.and(Restrictions.eq("isAdmin", isAdmin));
             }
 
             List<Role> list  = mapper.find(criteria);

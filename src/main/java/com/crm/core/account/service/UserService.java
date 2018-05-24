@@ -13,5 +13,6 @@ public interface UserService{
 
     User getByAccountId(String accountId);
 
-    Page<User> page(PageRequest pageRequest, String accountId, String name, String nickname, Sex sex);
+    Page<User> page(PageRequest pageRequest, String accountId, String name, String nickname,
+                    Sex sex, String companyId, String departmentId, String positionId);
 }

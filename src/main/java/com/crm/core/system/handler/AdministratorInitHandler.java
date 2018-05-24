@@ -76,6 +76,7 @@ public class AdministratorInitHandler{
         //创建超级管理员角色
         Role role = new Role();
         role.setName("administrator");
+        role.setIsAdmin(true);
         roleDao.saveOrUpdate(role);
 
         //创建超级管理员功能

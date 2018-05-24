@@ -2,6 +2,7 @@ package com.crm.core.organization.dao;
 
 import com.crm.core.organization.dao.mapper.CompanyMapper;
 import com.crm.core.organization.entity.Company;
+import com.crm.core.permission.consts.ResourceType;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,10 @@ import org.wah.doraemon.utils.IDGenerator;
 import org.wah.doraemon.utils.mybatis.Criteria;
 import org.wah.doraemon.utils.mybatis.Restrictions;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class CompanyDao{
@@ -58,7 +61,7 @@ public class CompanyDao{
         }
     }
 
-    public List<Company> find(String id, String name, String address, String phone){
+    public List<Company> find(String id, String name, String address, String phone, List<String> ids){
         try{
             Criteria criteria = new Criteria();
             criteria.sort(Restrictions.desc("createTime"));
@@ -75,6 +78,9 @@ public class CompanyDao{
             if(StringUtils.isNotBlank(phone)){
                 criteria.and(Restrictions.like("phone", phone));
             }
+            if(ids != null && !ids.isEmpty()){
+                criteria.and(Restrictions.in("id", ids));
+            }
 
             return mapper.find(criteria);
         }catch(Exception e){
@@ -83,7 +89,7 @@ public class CompanyDao{
         }
     }
 
-    public Page<Company> page(PageRequest pageRequest, String id, String name, String address, String phone){
+    public Page<Company> page(PageRequest pageRequest, String id, String name, String address, String phone, List<String> ids){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -102,6 +108,9 @@ public class CompanyDao{
             }
             if(StringUtils.isNotBlank(phone)){
                 criteria.and(Restrictions.like("phone", phone));
+            }
+            if(ids != null && !ids.isEmpty()){
+                criteria.and(Restrictions.in("id", ids));
             }
 
             List<Company> list  = mapper.find(criteria);

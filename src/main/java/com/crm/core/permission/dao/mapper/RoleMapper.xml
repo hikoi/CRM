@@ -152,6 +152,7 @@
         <id     column="id"          property="id"         javaType="java.lang.String"/>
         <result column="name"        property="name"       javaType="java.lang.String"/>
         <result column="state"       property="state"      typeHandler="UsingStateHandler"/>
+        <result column="is_admin"    property="isAdmin"    javaType="java.lang.Boolean"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTime" javaType="java.util.Date"/>
     </resultMap>
@@ -162,11 +163,13 @@
                id,
                name,
                state,
+               is_admin,
                create_time
           ) VALUE (
                #{id,         jdbcType=VARCHAR},
                #{name,       jdbcType=VARCHAR},
                #{state,      typeHandler=UsingStateHandler},
+               #{isAdmin,    jdbcType=BOOLEAN},
                #{createTime, jdbcType=TIMESTAMP}
           )
     </insert>
@@ -179,6 +182,9 @@
              </if>
              <if test="state != null">
                  state = #{state, typeHandler=UsingStateHandler},
+             </if>
+             <if test="isAdmin != null">
+                 is_admin = #{isAdmin, jdbcType=BOOLEAN},
              </if>
              <if test="updateTime != null">
                  update_time = #{updateTime, jdbcType=TIMSTAMP},

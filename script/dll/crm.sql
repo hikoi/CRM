@@ -127,6 +127,7 @@ CREATE TABLE `role` (
   `id` varchar(32) NOT NULL,
   `name` varchar(60) DEFAULT NULL,
   `state` tinyint(1) NOT NULL,
+  `is_admin` tinyint(1) default '0' not null,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

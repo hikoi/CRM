@@ -203,17 +203,6 @@
         </foreach>
     </insert>
 
-    <delete id="deleteRelationsToRole">
-        DELETE rp
-          FROM role_permission rp
-     LEFT JOIN permission p
-            ON p.id = rp.permission_id
-         WHERE rp.role_id = #{roleId}
-      <if test="type != null">
-          AND p.type = #{type, typeHandler=ResourceTypeHandler}
-      </if>
-    </delete>
-
     <insert id="saveRelationsToAccount">
         INSERT
           INTO account_permission (
@@ -228,6 +217,31 @@
         </foreach>
     </insert>
 
+    <insert id="saveResourceToRoles">
+        INSERT
+          INTO role_permission (
+               role_id,
+               permission_id
+          ) VALUES
+        <foreach collection="permissionIds" item="permissionId" separator=",">
+          (
+               #{role_id,      jdbcType=VARCHAR},
+               #{permissionId, jdbcType=VARCHAR}
+          )
+        </foreach>
+    </insert>
+
+    <delete id="deleteRelationsToRole">
+        DELETE rp
+        FROM role_permission rp
+        LEFT JOIN permission p
+        ON p.id = rp.permission_id
+        WHERE rp.role_id = #{roleId}
+        <if test="type != null">
+            AND p.type = #{type, typeHandler=ResourceTypeHandler}
+        </if>
+    </delete>
+
     <delete id="deleteRelationsToAccount">
         DELETE ap
           FROM account_permission ap
@@ -237,6 +251,25 @@
       <if test="type != null">
           AND p.type = #{type, typeHandler=ResourceTypeHandler}
       </if>
+    </delete>
+
+    <delete id="deleteResourcesToAccounts">
+        DELETE
+          FROM account_permission
+         WHERE permission_id IN
+      <foreach collection="permissionIds" item="permissionId" separator="," open="(" close=")">
+          #{permissionId}
+      </foreach>
+    </delete>
+
+    <delete id="deleteResourceToRoles">
+        DELETE
+          FROM role_permission
+         WHERE permission_id = #{permissionId}
+           AND role_id IN
+       <foreach collection="roleIds" item="roleId" open="(" close=")" separator=",">
+           #{roleId}
+       </foreach>
     </delete>
 
     <select id="get" resultMap="permission">

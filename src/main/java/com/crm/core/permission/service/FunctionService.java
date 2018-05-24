@@ -7,7 +7,7 @@ import org.wah.doraemon.security.request.PageRequest;
 
 import java.util.List;
 
-public interface FunctionService{
+public interface FunctionService {
 
     void save(Function function);
 

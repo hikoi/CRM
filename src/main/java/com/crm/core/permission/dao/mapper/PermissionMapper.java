@@ -20,9 +20,15 @@ public interface PermissionMapper{
 
     void deleteRelationsToRole(@Param("roleId") String roleId, @Param("type") ResourceType type);
 
-    void saveRelationToAccount(@Param("permissionIds") List<String> permissionIds, @Param("accountId") String accountId);
+    void saveRelationsToAccount(@Param("permissionIds") List<String> permissionIds, @Param("accountId") String accountId);
 
-    void deleteRelationToAccount(@Param("accountId") String accountId, @Param("type") ResourceType type);
+    void saveResourceToRoles(@Param("roleIds") List<String> roleIds, @Param("permissionId") String permissionId);
+
+    void deleteRelationsToAccount(@Param("accountId") String accountId, @Param("type") ResourceType type);
+
+    void deleteResourcesToAccounts(@Param("permissionIds") List<String> permissionIds);
+
+    void deleteResourceToRoles(@Param("roleIds") List<String> roleIds, @Param("permissionId") String permissionId);
 
     Permission get(@Param("params") Criteria criteria);
 

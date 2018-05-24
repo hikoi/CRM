@@ -79,6 +79,22 @@ public class PermissionDao{
         }
     }
 
+    public void updateFunctionsToAccount(List<String> permissionIds, String accountId){
+        try{
+            Assert.hasText(accountId, "账户ID不能为空");
+
+            //删除原有权限
+            mapper.deleteRelationsToAccount(accountId, ResourceType.FUNCTION);
+            //添加权限
+            if(permissionIds != null && !permissionIds.isEmpty()){
+                mapper.saveRelationsToAccount(permissionIds, accountId);
+            }
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
     public void updateMenusToRole(List<String> permissionIds, String roleId){
         try{
             Assert.hasText(roleId, "角色ID不能为空");
@@ -95,31 +111,15 @@ public class PermissionDao{
         }
     }
 
-    public void updateFunctionsToAccount(List<String> permissionIds, String accountId){
-        try{
-            Assert.hasText(accountId, "账户ID不能为空");
-
-            //删除原有权限
-            mapper.deleteRelationToAccount(accountId, ResourceType.FUNCTION);
-            //添加权限
-            if(permissionIds != null && !permissionIds.isEmpty()){
-                mapper.saveRelationToAccount(permissionIds, accountId);
-            }
-        }catch(Exception e){
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
     public void updateCompanysToAccount(List<String> permissionIds, String accountId){
         try{
             Assert.hasText(accountId, "账户ID不能为空");
 
             //删除原有权限
-            mapper.deleteRelationToAccount(accountId, ResourceType.COMPANY);
+            mapper.deleteRelationsToAccount(accountId, ResourceType.COMPANY);
             //添加权限
             if(permissionIds != null && !permissionIds.isEmpty()){
-                mapper.saveRelationToAccount(permissionIds, accountId);
+                mapper.saveRelationsToAccount(permissionIds, accountId);
             }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
@@ -132,10 +132,10 @@ public class PermissionDao{
             Assert.hasText(accountId, "账户ID不能为空");
 
             //删除原有权限
-            mapper.deleteRelationToAccount(accountId, ResourceType.DEPARTMENT);
+            mapper.deleteRelationsToAccount(accountId, ResourceType.DEPARTMENT);
             //添加权限
             if(permissionIds != null && !permissionIds.isEmpty()){
-                mapper.saveRelationToAccount(permissionIds, accountId);
+                mapper.saveRelationsToAccount(permissionIds, accountId);
             }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
@@ -148,10 +148,10 @@ public class PermissionDao{
             Assert.hasText(accountId, "账户ID不能为空");
 
             //删除原有权限
-            mapper.deleteRelationToAccount(accountId, ResourceType.POSITION);
+            mapper.deleteRelationsToAccount(accountId, ResourceType.POSITION);
             //添加权限
             if(permissionIds != null && !permissionIds.isEmpty()){
-                mapper.saveRelationToAccount(permissionIds, accountId);
+                mapper.saveRelationsToAccount(permissionIds, accountId);
             }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
@@ -164,10 +164,10 @@ public class PermissionDao{
             Assert.hasText(accountId, "账户ID不能为空");
 
             //删除原有权限
-            mapper.deleteRelationToAccount(accountId, ResourceType.WECHAT);
+            mapper.deleteRelationsToAccount(accountId, ResourceType.WECHAT);
             //添加权限
             if(permissionIds != null && !permissionIds.isEmpty()){
-                mapper.saveRelationToAccount(permissionIds, accountId);
+                mapper.saveRelationsToAccount(permissionIds, accountId);
             }
         }catch(Exception e){
             logger.error(e.getMessage(), e);
@@ -180,11 +180,51 @@ public class PermissionDao{
             Assert.hasText(accountId, "账户ID不能为空");
 
             //删除原有权限
-            mapper.deleteRelationToAccount(accountId, ResourceType.DEVICE);
+            mapper.deleteRelationsToAccount(accountId, ResourceType.DEVICE);
             //添加权限
             if(permissionIds != null && !permissionIds.isEmpty()){
-                mapper.saveRelationToAccount(permissionIds, accountId);
+                mapper.saveRelationsToAccount(permissionIds, accountId);
             }
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public void updateResourcesToAccount(List<String> permissionIds, String accountId){
+        try{
+            Assert.notEmpty(permissionIds, "权限ID列表不能为空");
+
+            //删除原有权限
+            mapper.deleteResourcesToAccounts(permissionIds);
+            //添加新权限
+            if(StringUtils.isNotBlank(accountId)){
+                mapper.saveRelationsToAccount(permissionIds, accountId);
+            }
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public void saveResourceToRoles(String permissionId, List<String> roleIds){
+        try{
+            Assert.notEmpty(roleIds, "角色ID列表不能为空");
+            Assert.hasText(permissionId, "资源权限ID不能为空");
+
+            mapper.saveResourceToRoles(roleIds, permissionId);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public void deleteResourceToRoles(String permissionId, List<String> roleIds){
+        try{
+            Assert.notEmpty(roleIds, "角色ID列表不能为空");
+            Assert.hasText(permissionId, "资源权限ID不能为空");
+
+            mapper.deleteResourceToRoles(roleIds, permissionId);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

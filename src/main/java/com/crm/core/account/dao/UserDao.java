@@ -61,7 +61,7 @@ public class UserDao{
         }
     }
 
-    public Page<User> page(PageRequest pageRequest, String accountId, String name, String nickname, Sex sex){
+    public Page<User> page(PageRequest pageRequest, String accountId, String name, String nickname, Sex sex, List<String> ids){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -80,6 +80,9 @@ public class UserDao{
             }
             if(sex != null){
                 criteria.and(Restrictions.eq("sex", sex.getId()));
+            }
+            if(ids != null && !ids.isEmpty()){
+                criteria.and(Restrictions.in("id", ids));
             }
 
             List<User> list  = mapper.find(criteria);

@@ -14,7 +14,7 @@ public interface CompanyService{
 
     Company getById(String id);
 
-    List<Company> find(String id, String name, String address, String phone);
+    List<Company> find(String id, String name, String address, String phone, String accountId);
 
-    Page<Company> page(PageRequest pageRequest, String id, String name, String address, String phone);
+    Page<Company> page(PageRequest pageRequest, String id, String name, String address, String phone, String accountId);
 }

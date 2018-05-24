@@ -40,16 +40,16 @@ public class CompanyRestController{
     }
 
     @RequestMapping(value = "/find", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<List<Company>> find(String id, String name, String address, String phone){
-        List<Company> list = companyService.find(id, name, address, phone);
+    public Responsed<List<Company>> find(String id, String name, String address, String phone, String accountId){
+        List<Company> list = companyService.find(id, name, address, phone, accountId);
 
         return new Responsed<List<Company>>("查询成功", list);
     }
 
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Company>> page(Long pageNum, Long pageSize, String id, String name, String address, String phone){
+    public Responsed<Page<Company>> page(Long pageNum, Long pageSize, String id, String name, String address, String phone, String accountId){
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Company> page = companyService.page(pageRequest, id, name, address, phone);
+        Page<Company> page = companyService.page(pageRequest, id, name, address, phone, accountId);
 
         return new Responsed<Page<Company>>("查询成功", page);
     }
