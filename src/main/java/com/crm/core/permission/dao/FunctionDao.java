@@ -86,7 +86,7 @@ public class FunctionDao{
         }
     }
 
-    public List<Function> find(String url, RequestMethod method, Boolean needAllot){
+    public List<Function> find(String url, RequestMethod method, Boolean needAllot, List<String> ids){
         try{
             Criteria criteria = new Criteria();
             criteria.sort(Restrictions.asc("url"));
@@ -99,6 +99,9 @@ public class FunctionDao{
             }
             if(needAllot != null){
                 criteria.and(Restrictions.eq("needAllot", needAllot));
+            }
+            if(ids != null && !ids.isEmpty()){
+                criteria.and(Restrictions.in("id", ids));
             }
 
             return mapper.find(criteria);

@@ -9,6 +9,8 @@ import org.springframework.util.Assert;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class CompanyServiceImpl implements CompanyService{
@@ -38,6 +40,11 @@ public class CompanyServiceImpl implements CompanyService{
         Assert.hasText(id, "公司ID不能为空");
 
         return companyDao.getById(id);
+    }
+
+    @Override
+    public List<Company> find(String id, String name, String address, String phone){
+        return companyDao.find(id, name, address, phone);
     }
 
     @Override

@@ -83,18 +83,18 @@
             <bean class="com.crm.commons.security.interceptor.PermissionInterceptor"/>
         </mvc:interceptor>
 
-        <!-- 页面拦截器 -->
-        <mvc:interceptor>
-            <mvc:mapping path="/page/**"/>
-            <mvc:mapping path="/"/>
-            <bean class="com.crm.commons.security.interceptor.PageInterceptor">
-                <property name="excludes">
-                    <list>
-                        <value>/page/browserNotSupport</value>
-                    </list>
-                </property>
-            </bean>
-        </mvc:interceptor>
+        <!--&lt;!&ndash; 页面拦截器 &ndash;&gt;-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/page/**"/>-->
+            <!--<mvc:mapping path="/"/>-->
+            <!--<bean class="com.crm.commons.security.interceptor.PageInterceptor">-->
+                <!--<property name="excludes">-->
+                    <!--<list>-->
+                        <!--<value>/page/browserNotSupport</value>-->
+                    <!--</list>-->
+                <!--</property>-->
+            <!--</bean>-->
+        <!--</mvc:interceptor>-->
 
         <!--&lt;!&ndash; 环境语言切换 &ndash;&gt;-->
         <!--<mvc:interceptor>-->

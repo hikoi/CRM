@@ -123,6 +123,15 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `role` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `state` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `permission` (
   `id` varchar(32) NOT NULL,
   `resource_id` varchar(32) NOT NULL,
@@ -180,4 +189,19 @@ CREATE TABLE `position` (
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `role_permission` (
+  `role_id` varchar(32) NOT NULL,
+  `permission_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `account_permission` (
+  `account_id` varchar(32) NOT NULL,
+  `permission_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `account_role` (
+  `account_id` varchar(32) NOT NULL,
+  `role_id` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

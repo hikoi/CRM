@@ -58,6 +58,31 @@ public class CompanyDao{
         }
     }
 
+    public List<Company> find(String id, String name, String address, String phone){
+        try{
+            Criteria criteria = new Criteria();
+            criteria.sort(Restrictions.desc("createTime"));
+
+            if(StringUtils.isNotBlank(id)){
+                criteria.and(Restrictions.eq("id", id));
+            }
+            if(StringUtils.isNotBlank(name)){
+                criteria.and(Restrictions.like("name", name));
+            }
+            if(StringUtils.isNotBlank(address)){
+                criteria.and(Restrictions.like("address", address));
+            }
+            if(StringUtils.isNotBlank(phone)){
+                criteria.and(Restrictions.like("phone", phone));
+            }
+
+            return mapper.find(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
     public Page<Company> page(PageRequest pageRequest, String id, String name, String address, String phone){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");

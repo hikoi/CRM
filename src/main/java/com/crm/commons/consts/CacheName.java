@@ -4,7 +4,7 @@ public class CacheName{
 
     public static final String NEED_NOT_ALLOT_URL = "need_not_allot_url";
 
-    public static final String USER_PERMISSION    = "user_permission:";
+    public static final String USER_FUNCTION      = "user_function:";
 
     public static final String USER_MENU          = "user_menu:";
 

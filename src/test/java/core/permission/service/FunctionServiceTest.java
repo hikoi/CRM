@@ -39,7 +39,7 @@ public class FunctionServiceTest{
         List<Permission> permissions = new ArrayList<Permission>();
 
         //原有功能
-        List<Function> original = functionDao.find(null, null, null);
+        List<Function> original = functionDao.find(null, null, null, null);
         //现有功能
         List<Function> functions = new ArrayList<Function>();
 

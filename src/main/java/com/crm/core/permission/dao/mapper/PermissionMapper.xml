@@ -188,4 +188,123 @@
           )
         </foreach>
     </insert>
+
+    <insert id="saveRelationsToRole">
+        INSERT
+          INTO role_permission (
+               role_id,
+               permission_id
+          ) VALUES
+        <foreach collection="permissionIds" item="permissionId" separator=",">
+          (
+               #{roleId,       jdbcType=VARCHAR},
+               #{permissionId, jdbcType=VARCHAR}
+          )
+        </foreach>
+    </insert>
+
+    <delete id="deleteRelationsToRole">
+        DELETE rp
+          FROM role_permission rp
+     LEFT JOIN permission p
+            ON p.id = rp.permission_id
+         WHERE rp.role_id = #{roleId}
+      <if test="type != null">
+          AND p.type = #{type, typeHandler=ResourceTypeHandler}
+      </if>
+    </delete>
+
+    <insert id="saveRelationsToAccount">
+        INSERT
+          INTO account_permission (
+               account_id,
+               permission_id
+          ) VALUES
+        <foreach collection="permissionIds" item="permissionId" separator=",">
+          (
+               #{accountId,    jdbcType=VARCHAR},
+               #{permissionId, jdbcType=VARCHAR}
+          )
+        </foreach>
+    </insert>
+
+    <delete id="deleteRelationsToAccount">
+        DELETE ap
+          FROM account_permission ap
+     LEFT JOIN permission p
+            ON p.id = ap.permission_id
+         WHERE ap.account_id = #{accountId}
+      <if test="type != null">
+          AND p.type = #{type, typeHandler=ResourceTypeHandler}
+      </if>
+    </delete>
+
+    <select id="get" resultMap="permission">
+        SELECT *
+          FROM permission
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
+    </select>
+
+    <select id="find" resultMap="permission">
+        SELECT *
+          FROM permission
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+
+            <if test="params.sorts != null and params.sorts.size > 0">
+                ORDER BY
+                <foreach collection="params.sorts" item="sort" separator=",">
+                    ${sort.property} ${sort.operator}
+                </foreach>
+            </if>
+
+            <if test="params.limit != null">
+                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            </if>
+        </if>
+    </select>
+
+    <select id="findByRoleIds" resultMap="permission">
+        SELECT p.*
+          FROM permission p
+     LEFT JOIN role_permission rp
+            ON rp.permission_id = p.id
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+
+            <if test="params.sorts != null and params.sorts.size > 0">
+                ORDER BY
+                <foreach collection="params.sorts" item="sort" separator=",">
+                    ${sort.property} ${sort.operator}
+                </foreach>
+            </if>
+
+            <if test="params.limit != null">
+                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            </if>
+        </if>
+    </select>
+
+    <select id="findByAccountId" resultMap="permission">
+        SELECT p.*
+          FROM permission p
+     LEFT JOIN account_permission ap
+            ON ap.permission_id = p.id
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+
+            <if test="params.sorts != null and params.sorts.size > 0">
+                ORDER BY
+                <foreach collection="params.sorts" item="sort" separator=",">
+                    ${sort.property} ${sort.operator}
+                </foreach>
+            </if>
+
+            <if test="params.limit != null">
+                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            </if>
+        </if>
+    </select>
 </mapper>

@@ -112,7 +112,7 @@ public class MenuDao{
         }
     }
 
-    public List<Menu> find(String id, String name, String url, String parentId, Boolean isParent){
+    public List<Menu> find(String id, String name, String url, String parentId, Boolean isParent, List<String> ids){
         try{
             Criteria criteria = new Criteria();
             criteria.sort(Restrictions.desc("parentId"));
@@ -131,6 +131,9 @@ public class MenuDao{
             }
             if(isParent != null){
                 criteria.and(Restrictions.eq("isParent", isParent));
+            }
+            if(ids != null && !ids.isEmpty()){
+                criteria.and(Restrictions.in("id", ids));
             }
 
             return mapper.find(criteria);

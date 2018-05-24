@@ -10,6 +10,7 @@ import org.wah.doraemon.utils.GsonUtils;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class GsonUtilsTest{
 
@@ -42,5 +43,12 @@ public class GsonUtilsTest{
         list.add(permission);
 
         System.out.println(GsonUtils.serialize(list));
+    }
+
+    @Test
+    public void test2(){
+        String json2 = "{\"id\": 3,\"name\": \"邮箱产品部\",\"parentid\": 2,\"order\": 40}";
+        Map map = GsonUtils.deserialize(json2, new TypeToken<Map>(){}.getType());
+        System.out.println(map);
     }
 }

@@ -9,6 +9,8 @@ import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/1.0/company")
 public class CompanyRestController{
@@ -35,6 +37,13 @@ public class CompanyRestController{
         Company company = companyService.getById(id);
 
         return new Responsed<Company>("查询成功", company);
+    }
+
+    @RequestMapping(value = "/find", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<List<Company>> find(String id, String name, String address, String phone){
+        List<Company> list = companyService.find(id, name, address, phone);
+
+        return new Responsed<List<Company>>("查询成功", list);
     }
 
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

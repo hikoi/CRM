@@ -38,7 +38,7 @@ public class FunctionServiceImpl implements FunctionService{
 
     @Override
     public List<Function> find(String url, RequestMethod method, Boolean needAllot){
-        return functionDao.find(url, method, needAllot);
+        return functionDao.find(url, method, needAllot, null);
     }
 
     @Override

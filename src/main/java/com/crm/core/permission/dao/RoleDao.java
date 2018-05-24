@@ -46,6 +46,22 @@ public class RoleDao{
         }
     }
 
+    public void updateRelationsToAccount(List<String> roleIds, String accountId){
+        try{
+            Assert.hasText(accountId, "账户ID不能为空");
+
+            //删除原有角色
+            mapper.deleteRelationsToAccount(accountId);
+            //添加角色
+            if(roleIds != null && !roleIds.isEmpty()){
+                mapper.saveRelationsToAccount(roleIds, accountId);
+            }
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
     public Role getById(String id){
         try{
             Assert.hasText(id, "角色ID不能为空");
@@ -82,6 +98,17 @@ public class RoleDao{
             Long       total = mapper.count(criteria);
 
             return new Page<Role>(list, total, pageRequest);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<Role> findByAccountId(String accountId){
+        try{
+            Assert.hasText(accountId, "账户ID不能为空");
+
+            return mapper.findByAccountId(accountId);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

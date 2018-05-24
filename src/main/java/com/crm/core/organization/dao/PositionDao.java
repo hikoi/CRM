@@ -60,6 +60,28 @@ public class PositionDao{
         }
     }
 
+    public List<Position> find(String id, String name, String departmentId){
+        try{
+            Criteria criteria = new Criteria();
+            criteria.sort(Restrictions.desc("createTime"));
+
+            if(StringUtils.isNotBlank(id)){
+                criteria.and(Restrictions.eq("id", id));
+            }
+            if(StringUtils.isNotBlank(name)){
+                criteria.and(Restrictions.like("name", name));
+            }
+            if(StringUtils.isNotBlank(departmentId)){
+                criteria.and(Restrictions.eq("departmentId", departmentId));
+            }
+
+            return mapper.find(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
     public Page<Position> page(PageRequest pageRequest, String id, String name, String departmentId){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");

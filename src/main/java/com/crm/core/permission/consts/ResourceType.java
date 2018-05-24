@@ -22,6 +22,15 @@ public enum ResourceType implements EnumType{
     @SerializedName("3")
     DEVICE(3, "设备"),
 
+    @SerializedName("4")
+    COMPANY(4, "公司"),
+
+    @SerializedName("5")
+    DEPARTMENT(5, "部门"),
+
+    @SerializedName("6")
+    POSITION(6, "岗位"),
+
     @SerializedName("999")
     UNKNOWN(999, "未知");
 
