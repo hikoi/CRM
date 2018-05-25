@@ -268,6 +268,14 @@
       <version>${redis.version}</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+    <dependency>
+      <groupId>net.sf.json-lib</groupId>
+      <artifactId>json-lib</artifactId>
+      <version>2.4</version>
+      <classifier>jdk15</classifier>
+    </dependency>
+
     <!-- message queue -->
     <dependency>
       <groupId>org.springframework.data</groupId>
