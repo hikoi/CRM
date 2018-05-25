@@ -77,6 +77,12 @@
 
     <!-- 拦截器 -->
     <mvc:interceptors>
+        <!-- 跨域拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.crm.commons.security.interceptor.CorsInterceptor"/>
+        </mvc:interceptor>
+
         <!-- 权限验证 -->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
