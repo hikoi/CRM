@@ -33,10 +33,10 @@
     <mybatis-spring.version>1.2.2</mybatis-spring.version>
     <mysql.version>5.1.38</mysql.version>
     <poi.version>3.9</poi.version>
-    <!--<redis.version>2.7.3</redis.version>-->
     <redis.version>2.9.0</redis.version>
     <servlet-api.version>3.0.1</servlet-api.version>
-    <spring.version>4.1.5.RELEASE</spring.version>
+    <!--<spring.version>4.1.5.RELEASE</spring.version>-->
+    <spring.version>4.2.5.RELEASE</spring.version>
     <slf4j.version>1.7.6</slf4j.version>
     <tomcat-jdbc.version>7.0.52</tomcat-jdbc.version>
     <userAgent.version>1.17</userAgent.version>

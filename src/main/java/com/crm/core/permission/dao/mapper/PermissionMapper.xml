@@ -340,4 +340,29 @@
             </if>
         </if>
     </select>
+
+    <select id="findAccountIdsByResourceId" resultType="java.lang.String">
+        SELECT ap.account_id
+          FROM account_permission ap
+     LEFT JOIN permission p
+            ON p.id = permission_id
+         WHERE p.resource_id = #{resourceId}
+    </select>
+
+    <select id="findAccountIdsByRoleIds" resultType="java.lang.String">
+        SELECT account_id
+          FROM account_role
+         WHERE role_id IN
+      <foreach collection="roleIds" item="roleId" separator="," open="(" close=")">
+          #{roleId}
+      </foreach>
+    </select>
+
+    <select id="findRoleIdsByResourceId" resultType="java.lang.String">
+        SELECT rp.role_id
+          FROM role_premission rp
+     LEFT JOIN permission p
+            ON p.id = permission_id
+         WHERE p.resource_id = #{resourceId}
+    </select>
 </mapper>

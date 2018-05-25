@@ -31,6 +31,7 @@ public class WechatDao{
             Assert.notNull(wechat, "微信信息不能为空");
 
             if(StringUtils.isBlank(wechat.getId())){
+                Assert.hasText(wechat.getCompanyId(), "公司ID不能为空");
                 Assert.hasText(wechat.getWxno(), "微信号不能为空");
 
                 wechat.setId(IDGenerator.uuid32());
@@ -88,7 +89,7 @@ public class WechatDao{
         }
     }
 
-    public Page<Wechat> page(PageRequest pageRequest, String accountId, String wxno, String nickname){
+    public Page<Wechat> page(PageRequest pageRequest, String wxno, String nickname, List<String> ids){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -96,18 +97,18 @@ public class WechatDao{
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
             criteria.sort(Restrictions.desc("createTime"));
 
-            if(StringUtils.isNotBlank(accountId)){
-                criteria.and(Restrictions.eq("accountId", accountId));
-            }
             if(StringUtils.isNotBlank(wxno)){
                 criteria.and(Restrictions.like("wxno", wxno));
             }
             if(StringUtils.isNotBlank(nickname)){
                 criteria.and(Restrictions.like("nickname", nickname));
             }
+            if(ids != null && !ids.isEmpty()){
+                criteria.and(Restrictions.in("id", ids));
+            }
 
-            List<Wechat> list = mapper.find(criteria);
-            Long total = mapper.count(criteria);
+            List<Wechat> list  = mapper.find(criteria);
+            Long         total = mapper.count(criteria);
 
             return new Page<Wechat>(list, total, pageRequest);
         }catch(Exception e){

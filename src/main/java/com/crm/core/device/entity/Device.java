@@ -17,6 +17,7 @@ public class Device extends Entity implements Createable, Updateable{
     private String     imei;
     private String     meid;
     private DeviceType type;
+    private String     companyId;
     private Date       createTime;
     private Date       updateTime;
 }

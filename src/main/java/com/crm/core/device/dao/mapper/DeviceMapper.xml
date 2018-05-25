@@ -150,6 +150,7 @@
 
     <resultMap id="device" type="com.crm.core.device.entity.Device">
         <id     column="id"          property="id"         javaType="java.lang.String"/>
+        <result column="companyId"   property="companyId"  javaType="java.lang.String"/>
         <result column="phone"       property="phone"      javaType="java.lang.String"/>
         <result column="imei"        property="imei"       javaType="java.lang.String"/>
         <result column="meid"        property="meid"       javaType="java.lang.String"/>
@@ -162,6 +163,7 @@
       INSERT
         INTO device (
              id,
+             company_id,
              phone,
              imei,
              meid,
@@ -169,6 +171,7 @@
              create_time
         ) VALUE (
              #{id,         jdbcType=VARCHAR},
+             #{companyId,  jdbcType=VARCHAR},
              #{phone,      jdbcType=VARCHAR},
              #{imei,       jdbcType=VARCHAR},
              #{meid,       jdbcType=VARCHAR},

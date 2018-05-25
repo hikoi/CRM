@@ -90,7 +90,7 @@ public class RoleDao{
         }
     }
 
-    public Page<Role> page(PageRequest pageRequest, String id, String name, UsingState state, Boolean isAdmin){
+    public Page<Role> page(PageRequest pageRequest, String id, String name, UsingState state, Boolean isAdmin, List<String> ids){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -109,6 +109,9 @@ public class RoleDao{
             }
             if(isAdmin != null){
                 criteria.and(Restrictions.eq("isAdmin", isAdmin));
+            }
+            if(ids != null && !ids.isEmpty()){
+                criteria.and(Restrictions.in("id", ids));
             }
 
             List<Role> list  = mapper.find(criteria);

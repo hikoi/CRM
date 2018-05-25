@@ -39,9 +39,17 @@ public class DeviceRestController{
     }
 
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Device>> page(Long pageNum, Long pageSize, String phone, String imei, String meid, DeviceType type){
+    public Responsed<Page<Device>> page(Long pageNum, Long pageSize, String companyId, String phone, String imei, String meid, DeviceType type, String accountId){
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Device> page = deviceService.page(pageRequest, phone, imei, meid, type);
+        Page<Device> page = deviceService.page(pageRequest, companyId, phone, imei, meid, type, accountId);
+
+        return new Responsed<Page<Device>>("查询成功", page);
+    }
+
+    @RequestMapping(value = "/page/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<Page<Device>> pageByAccountId(Long pageNum, Long pageSize, @PathVariable("accountId") String accountId, String companyId, String phone, String imei, String meid, DeviceType type){
+        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
+        Page<Device> page = deviceService.page(pageRequest, companyId, phone, imei, meid, type, accountId);
 
         return new Responsed<Page<Device>>("查询成功", page);
     }

@@ -4,9 +4,6 @@ import com.crm.core.organization.dao.CompanyDao;
 import com.crm.core.organization.entity.Company;
 import com.crm.core.permission.consts.ResourceType;
 import com.crm.core.permission.dao.PermissionDao;
-import com.crm.core.permission.dao.RoleDao;
-import com.crm.core.permission.entity.Permission;
-import com.crm.core.permission.entity.Role;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
-import org.wah.doraemon.utils.ObjectUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,9 +23,6 @@ public class CompanyServiceImpl implements CompanyService{
     private CompanyDao companyDao;
 
     @Autowired
-    private RoleDao roleDao;
-
-    @Autowired
     private PermissionDao permissionDao;
 
     @Override
@@ -39,16 +30,7 @@ public class CompanyServiceImpl implements CompanyService{
     public void save(Company company){
         Assert.notNull(company, "公司信息不能为空");
 
-        //创建公司
         companyDao.saveOrUpdate(company);
-        //创建资源
-        Permission permission = new Permission();
-        permission.setResourceId(company.getId());
-        permission.setType(ResourceType.COMPANY);
-        permissionDao.save(permission);
-        //分配到管理员
-        List<Role> admins = roleDao.findAdmins();
-        permissionDao.saveResourceToRoles(permission.getId(), ObjectUtils.ids(admins));
     }
 
     @Override

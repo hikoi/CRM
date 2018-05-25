@@ -14,10 +14,7 @@ import org.wah.doraemon.utils.IDGenerator;
 import org.wah.doraemon.utils.mybatis.Criteria;
 import org.wah.doraemon.utils.mybatis.Restrictions;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 public class PermissionDao{
@@ -337,6 +334,28 @@ public class PermissionDao{
             }
 
             return ids;
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public Set<String> findAccountIdsByResourceId(String resourceId){
+        try{
+            Assert.hasText(resourceId, "资源ID不能为空");
+
+            Set<String> accountIds = new HashSet<String>();
+
+            //用户权限
+            accountIds.addAll(mapper.findAccountIdsByResourceId(resourceId));
+            //角色权限
+            Set<String> roleIds = mapper.findRoleIdsByResourceId(resourceId);
+            //用户角色
+            if(roleIds != null && !roleIds.isEmpty()){
+                accountIds.addAll(mapper.findAccountIdsByRoleIds(new ArrayList<String>(roleIds)));
+            }
+
+            return accountIds;
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

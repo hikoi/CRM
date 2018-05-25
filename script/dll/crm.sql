@@ -2,7 +2,7 @@ CREATE DATABASE `crm` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';
 
 CREATE TABLE `wechat` (
   `id` varchar(32) NOT NULL,
-  `account_id` varchar(32) DEFAULT NULL,
+  `company_id` varchar(32) DEFAULT NULL,
   `device_id` varchar(32) DEFAULT NULL,
   `wxno` varchar(50) NOT NULL,
   `nickname` varchar(50) DEFAULT NULL,
@@ -44,6 +44,7 @@ CREATE TABLE `device` (
   `imei` varchar(20) DEFAULT NULL,
   `meid` varchar(20) DEFAULT NULL,
   `type` tinyint(1) NOT NULL,
+  `company_id` varchar(32) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

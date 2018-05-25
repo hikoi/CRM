@@ -17,7 +17,7 @@ public class Wechat implements Createable, Updateable{
 
     @SerializedName(value = "token", alternate = "id")
     private String  id;
-    private String  accountId;
+    private String  companyId;
     private String  deviceId;
     private String  wxno;
     private String  nickname;

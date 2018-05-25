@@ -61,13 +61,13 @@ public class UserServiceImpl implements UserService{
 
         if(StringUtils.isNotBlank(accountId)){
             if(StringUtils.isNotBlank(companyId)){
-                ids.addAll(permissionDao.findResourceIdsByAccountId(accountId, ResourceType.COMPANY));
+                ids.addAll(permissionDao.findAccountIdsByResourceId(companyId));
             }
             if(StringUtils.isNotBlank(departmentId)){
-                ids.retainAll(permissionDao.findResourceIdsByAccountId(accountId, ResourceType.DEPARTMENT));
+                ids.retainAll(permissionDao.findAccountIdsByResourceId(departmentId));
             }
             if(StringUtils.isNotBlank(positionId)){
-                ids.retainAll(permissionDao.findResourceIdsByAccountId(accountId, ResourceType.POSITION));
+                ids.retainAll(permissionDao.findAccountIdsByResourceId(positionId));
             }
         }
 

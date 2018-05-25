@@ -37,4 +37,10 @@ public interface PermissionMapper{
     Set<Permission> findByRoleIds(@Param("params") Criteria criteria);
 
     Set<Permission> findByAccountId(@Param("params") Criteria criteria);
+
+    Set<String> findAccountIdsByResourceId(String resourceId);
+
+    Set<String> findAccountIdsByRoleIds(@Param("roleIds") List<String> roleIds);
+
+    Set<String> findRoleIdsByResourceId(String resourceId);
 }

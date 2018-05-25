@@ -13,5 +13,5 @@ public interface DeviceService{
 
     Device getById(String id);
 
-    Page<Device> page(PageRequest pageRequest, String phone, String imei, String meid, DeviceType type);
+    Page<Device> page(PageRequest pageRequest, String companyId, String phone, String imei, String meid, DeviceType type, String accountId);
 }

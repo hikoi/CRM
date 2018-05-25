@@ -32,6 +32,8 @@ public class DeviceDao{
             Assert.notNull(device, "设备信息不能为空");
 
             if(StringUtils.isBlank(device.getId())){
+                Assert.hasText(device.getCompanyId(), "公司ID不能为空");
+
                 device.setId(IDGenerator.uuid32());
                 device.setCreateTime(new Date());
                 mapper.save(device);
@@ -59,7 +61,7 @@ public class DeviceDao{
         }
     }
 
-    public Page<Device> page(PageRequest pageRequest, String phone, String imei, String meid, DeviceType type){
+    public Page<Device> page(PageRequest pageRequest, String companyId, String phone, String imei, String meid, DeviceType type, List<String> ids){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -67,6 +69,9 @@ public class DeviceDao{
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
             criteria.sort(Restrictions.desc("createTime"));
 
+            if(StringUtils.isNotBlank(companyId)){
+                criteria.and(Restrictions.eq("companyId", companyId));
+            }
             if(StringUtils.isNotBlank(phone)){
                 criteria.and(Restrictions.like("phone", phone));
             }
@@ -79,9 +84,12 @@ public class DeviceDao{
             if(type != null){
                 criteria.and(Restrictions.eq("type", type.getId()));
             }
+            if(ids != null && !ids.isEmpty()){
+                criteria.and(Restrictions.in("id", ids));
+            }
 
-            List<Device> list = mapper.find(criteria);
-            Long total = mapper.count(criteria);
+            List<Device> list  = mapper.find(criteria);
+            Long         total = mapper.count(criteria);
 
             return new Page<Device>(list, total, pageRequest);
         }catch(Exception e){

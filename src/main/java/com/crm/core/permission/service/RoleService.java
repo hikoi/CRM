@@ -13,5 +13,5 @@ public interface RoleService{
 
     Role getById(String id);
 
-    Page<Role> page(PageRequest pageRequest, String id, String name, UsingState state);
+    Page<Role> page(PageRequest pageRequest, String id, String name, UsingState state, Boolean isAdmin, String accountId);
 }

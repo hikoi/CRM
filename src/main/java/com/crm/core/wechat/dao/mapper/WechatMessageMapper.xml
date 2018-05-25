@@ -177,7 +177,7 @@
              create_time
         ) VALUE (
              #{id,               jdbcType=VARCHAR},
-             (SELECT account_id FROM wechat WHERE id = #{wechatId}),
+             (SELECT ap.account_id FROM account_permission ap LEFT JOIN permission p ON p.id = ap.permission WHERE p.resource_id = #{wechatId}),
              #{wechatId,         jdbcType=VARCHAR},
              #{wxid,             jdbcType=VARCHAR},
              #{content,          jdbcType=VARCHAR},
@@ -206,7 +206,7 @@
       <foreach collection="messages" item="message" separator=",">
         (
               #{message.id,               jdbcType=VARCHAR},
-              (SELECT account_id FROM wechat WHERE id = #{message.wechatId}),
+          (SELECT ap.account_id FROM account_permission ap LEFT JOIN permission p ON p.id = ap.permission WHERE p.resource_id = #{wechatId}),
               #{message.wechatId,         jdbcType=VARCHAR},
               #{message.wxid,             jdbcType=VARCHAR},
               #{message.content,          jdbcType=VARCHAR},

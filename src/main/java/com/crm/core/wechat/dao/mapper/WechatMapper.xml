@@ -150,7 +150,7 @@
 
     <resultMap id="wechat" type="com.crm.core.wechat.entity.Wechat">
         <id     column="id"          property="id"         javaType="java.lang.String"/>
-        <result column="account_id"  property="accountId"  javaType="java.lang.String"/>
+        <result column="company_id"  property="companyId"  javaType="java.lang.String"/>
         <result column="device_id"   property="deviceId"   javaType="java.lang.String"/>
         <result column="wxno"        property="wxno"       javaType="java.lang.String"/>
         <result column="nickname"    property="nickname"   javaType="java.lang.String"/>
@@ -162,14 +162,14 @@
       INSERT
         INTO wechat (
              id,
-             account_id,
+             company_id,
              device_id,
              wxno,
              nickname,
              create_time
         ) VALUE (
              #{id,         jdbcType=VARCHAR},
-             #{accountId,  jdbcType=VARCHAR},
+             #{companyId,  jdbcType=VARCHAR},
              #{deviceId,   jdbcType=VARCHAR},
              #{wxno,       jdbcType=VARCHAR},
              #{nickname,   jdbcType=VARCHAR},
@@ -180,13 +180,10 @@
     <update id="update">
       UPDATE wechat
        <set>
-          <if test="accountId != null">
-            account_id = #{accountId, jdbcType=VARCHAR},
-          </if>
           <if test="deviceId != null">
             device_id = #{deviceId, jdbcType=VARCHAR},
           </if>
-          <if test="wxno != null">
+          <if test="wxno != null and wxno != ''">
             wxno = #{wxno, jdbcType=VARCHAR},
           </if>
           <if test="nickname != null">
