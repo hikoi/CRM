@@ -15,6 +15,8 @@ public class CorsInterceptor extends HandlerInterceptorAdapter{
         response.setHeader("Access-Control-Allow-Headers", "*");
         //所有请求类型
         response.setHeader("Access-Control-Allow-Methods", "*");
+        //允许cookies
+        response.setHeader("Access-Control-Allow-Credentials", "true");
 
         return true;
     }
