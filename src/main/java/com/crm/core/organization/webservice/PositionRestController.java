@@ -39,7 +39,7 @@ public class PositionRestController{
         return new Responsed<Position>("查询成功", position);
     }
 
-    @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/find", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Responsed<List<Position>> find(String id, String name, String departmentId){
         List<Position> list = positionService.find(id, name, departmentId);
 
