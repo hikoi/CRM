@@ -43,69 +43,31 @@
         </property>
     </bean>
 
-    <!-- 视图 -->
-    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
-        <property name="resourceLoaderPath" value="/WEB-INF/page"/>
-        <property name="velocityProperties">
-            <props>
-                <prop key="input.encoding">UTF-8</prop>
-                <prop key="output.encoding">UTF-8</prop>
-            </props>
-        </property>
-    </bean>
-
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
-        <property name="cache"                    value="false"/>
-        <property name="prefix"                   value="/"/>
-        <property name="suffix"                   value=".html"/>
-        <property name="contentType"              value="text/html;charset=UTF-8"/>
-        <property name="exposeSessionAttributes"  value="true"/>
-        <property name="exposeRequestAttributes"  value="true"/>
-        <property name="requestContextAttribute"  value="request"/>
-    </bean>
-
-    <!--&lt;!&ndash; 国际化 &ndash;&gt;-->
-    <!--<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
-        <!--<property name="basename"                value="classpath:/i18n/messages"/>-->
-        <!--<property name="useCodeAsDefaultMessage" value="true"/>-->
-        <!--<property name="defaultEncoding"         value="UTF-8"/>-->
-    <!--</bean>-->
-
-    <!--<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">-->
-        <!--<property name="defaultLocale" value="zh_CN"/>-->
-    <!--</bean>-->
-
     <!-- 拦截器 -->
     <mvc:interceptors>
-        <!-- 跨域拦截器 -->
+        <!-- 登录认证 -->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean class="com.crm.commons.security.interceptor.CorsInterceptor"/>
+            <bean class="com.crm.commons.security.interceptor.AuthenticationInterceptor">
+                <property name="server" value=""/>
+                <property name="excludes">
+                    <list>
+                        <value>/**</value>
+                    </list>
+                </property>
+            </bean>
         </mvc:interceptor>
 
         <!-- 权限验证 -->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean class="com.crm.commons.security.interceptor.PermissionInterceptor"/>
+            <bean class="com.crm.commons.security.interceptor.PermissionInterceptor">
+                <property name="excludes">
+                    <list>
+                        <value>/**</value>
+                    </list>
+                </property>
+            </bean>
         </mvc:interceptor>
-
-        <!--&lt;!&ndash; 页面拦截器 &ndash;&gt;-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/page/**"/>-->
-            <!--<mvc:mapping path="/"/>-->
-            <!--<bean class="com.crm.commons.security.interceptor.PageInterceptor">-->
-                <!--<property name="excludes">-->
-                    <!--<list>-->
-                        <!--<value>/page/browserNotSupport</value>-->
-                    <!--</list>-->
-                <!--</property>-->
-            <!--</bean>-->
-        <!--</mvc:interceptor>-->
-
-        <!--&lt;!&ndash; 环境语言切换 &ndash;&gt;-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/page/**"/>-->
-            <!--<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>-->
-        <!--</mvc:interceptor>-->
     </mvc:interceptors>
 </beans>

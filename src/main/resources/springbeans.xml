@@ -2,13 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:redis="http://www.springframework.org/schema/redis" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:redis="http://www.springframework.org/schema/redis"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context-4.0.xsd
                            http://www.springframework.org/schema/redis
-                           http://www.springframework.org/schema/redis/spring-redis-1.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+                           http://www.springframework.org/schema/redis/spring-redis-1.0.xsd"
        default-lazy-init="false">
 
     <context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="true" location="classpath:/properties/beans.properties"/>
@@ -73,13 +73,4 @@
         <redis:listener ref="saveWechatMessageListener"         method="saveWechatMessage"        serializer="jdkSerializer" topic="save_wechat_message_queue"/>
         <redis:listener ref="synchronizeWechatMessageListener"  method="synchronizeWechatMessage" serializer="jdkSerializer" topic="synchronize_wechat_message_queue"/>
     </redis:listener-container>
-
-    <!-- redis session共享 -->
-    <!--<bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>-->
-
-    <!--<bean class="org.springframework.session.web.http.DefaultCookieSerializer">-->
-        <!--<property name="cookiePath" value="/"/>-->
-        <!--<property name="domainName" value="rab.com"/>-->
-        <!--<property name="cookieName" value="rab_cookie"/>-->
-    <!--</bean>-->
 </beans>

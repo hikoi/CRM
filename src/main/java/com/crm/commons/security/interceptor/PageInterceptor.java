@@ -16,7 +16,7 @@ import java.util.List;
 public class PageInterceptor extends HandlerInterceptorAdapter{
 
     //路径匹配器
-    private static final AntPathMatcher matcher = new AntPathMatcher();
+    private AntPathMatcher matcher = new AntPathMatcher();
 
     //忽略拦截列表
     @Getter

@@ -39,7 +39,6 @@ public class ExceptionAdvice{
      * 持久层异常
      */
     @ExceptionHandler(value = DataAccessException.class)
-    @ResponseBody
     public Responsed dataAccess(DataAccessException e){
         logger.error(e.getMessage(), e);
 
@@ -53,7 +52,7 @@ public class ExceptionAdvice{
     public Responsed authentication(AuthenticationException e){
         logger.error(e.getMessage(), e);
 
-        return new Responsed(e.getMessage(), ResponseCode.AUTHENTICATION_FAIL, false);
+        return new Responsed(e.getMessage(), ResponseCode.AUTHENTICATE_FAIL, false);
     }
 
     /**
@@ -80,9 +79,9 @@ public class ExceptionAdvice{
      * 不支持的客户端类型
      */
     @ExceptionHandler(value = BrowserNotSupportException.class)
-    public ModelAndView browserNotSupport(BrowserNotSupportException e){
+    public Responsed browserNotSupport(BrowserNotSupportException e){
         logger.error(e.getMessage(), e);
 
-        return new ModelAndView("browserNotSupport");
+        return new Responsed("不支持的客户端", ResponseCode.BROWSER_NOT_SUPPORT, false);
     }
 }

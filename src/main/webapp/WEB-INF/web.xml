@@ -7,7 +7,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            classpath:/spring.xml
+            classpath:/spring.xml,
             classpath:/springbeans.xml
         </param-value>
     </context-param>
@@ -93,6 +93,16 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <!-- cors -->
+    <filter>
+        <filter-name>corsFile</filter-name>
+        <filter-class>org.wah.ferryman.security.filter.CorsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>corsFile</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -111,17 +121,6 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-
-    <!--<filter>-->
-        <!--<filter-name>springSessionRepositoryFilter</filter-name>-->
-        <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>springSessionRepositoryFilter</filter-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-        <!--<dispatcher>REQUEST</dispatcher>-->
-        <!--<dispatcher>ERROR</dispatcher>-->
-    <!--</filter-mapping>-->
 
     <filter>
         <filter-name>httpMethodFilter</filter-name>
