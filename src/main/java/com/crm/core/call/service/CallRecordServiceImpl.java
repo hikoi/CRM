@@ -43,9 +43,9 @@ public class CallRecordServiceImpl implements CallRecordService {
 
 
     @Override
-    public Page<CallRecord> page(PageRequest pageRequest, String accountId, String name, String nickname, Sex sex){
+    public Page<CallRecord> page(PageRequest pageRequest, String callerId, String caller){
         Assert.notNull(pageRequest, "分页信息不能为空");
 
-        return callRecordDao.page(pageRequest, accountId, name, nickname, sex);
+        return callRecordDao.page(pageRequest, callerId, caller);
     }
 }

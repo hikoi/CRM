@@ -1,6 +1,7 @@
 package com.crm.core.call.utils;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,24 +21,39 @@ public class HttpClientUtil {
 
     private final static String CONTENT_TYPE_TEXT_JSON = "text/json";
 
-    public static String postRequest(String url, Map<String, Object> param) throws ClientProtocolException, IOException{
+//    public static String postRequest(String url, Map<String, Object> param) throws ClientProtocolException, IOException{
+//
+//        CloseableHttpClient client = HttpClients.createDefault();
+//
+//        HttpPost httpPost = new HttpPost(url);
+//        httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
+//
+//        Gson gson = new Gson();
+//        String parameter = gson.toJson(param);
+//
+//        StringEntity se = new StringEntity(parameter);
+//        se.setContentType(CONTENT_TYPE_TEXT_JSON);
+//        httpPost.setEntity(se);
+//
+//        CloseableHttpResponse response = client.execute(httpPost);
+//        HttpEntity entity = response.getEntity();
+//        String result = EntityUtils.toString(entity, "UTF-8");
+//
+//        return result;
+//    }
 
+
+
+    public static String postRequest(String url, Map<String, Object> params) throws ClientProtocolException, IOException{
         CloseableHttpClient client = HttpClients.createDefault();
-
         HttpPost httpPost = new HttpPost(url);
-        httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
-
+        httpPost.setHeader("Content-Type", "application/json; charset=UTF-8");
         Gson gson = new Gson();
-        String parameter = gson.toJson(param);
-
-        StringEntity se = new StringEntity(parameter);
-        se.setContentType(CONTENT_TYPE_TEXT_JSON);
+        StringEntity se = new StringEntity(gson.toJson(params), Charset.forName("UTF-8"));
         httpPost.setEntity(se);
-
         CloseableHttpResponse response = client.execute(httpPost);
         HttpEntity entity = response.getEntity();
         String result = EntityUtils.toString(entity, "UTF-8");
-
         return result;
     }
 

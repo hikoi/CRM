@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.wah.doraemon.security.request.Page;
+import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,11 +51,11 @@ public class CallRecordRestController {
             System.out.println("calledId: " + calledId);
             System.out.println("calledName: " + calledName);
             System.out.println("data: " + data);
-            if (StringUtils.isBlank(appId)) {
-                responsed.setSuccess(false);
-                responsed.setMsg("appId 不能为空");
-                return responsed;
-            }
+//            if (StringUtils.isBlank(appId)) {
+//                responsed.setSuccess(false);
+//                responsed.setMsg("appId 不能为空");
+//                return responsed;
+//            }
             if (StringUtils.isBlank(caller)) {
                 responsed.setSuccess(false);
                 responsed.setMsg("caller 不能为空");
@@ -75,9 +77,9 @@ public class CallRecordRestController {
                 return responsed;
             }
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("appId", appId);
-            map.put("caller", caller);
-            map.put("called", called);
+            map.put("appId", TencentCloud.APP_ID);
+            map.put("caller", TencentCloud.TEST_NUMBER);
+            map.put("called", caller);
             map.put("data", data);
             map.put("Timeout", 40);
             String outCallResult = HttpClientUtil.postRequest(TencentCloud.TEST_IP + TencentCloud.OUT_CALL, map);
@@ -100,7 +102,7 @@ public class CallRecordRestController {
             callRecord.setStatus(CallStatus.CALLER_OUT);
             callRecordService.save(callRecord);
             responsed.setSuccess(true);
-            responsed.setMsg("拨号成功");
+            responsed.setMsg(callRecord.getCallId());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -176,21 +178,30 @@ public class CallRecordRestController {
      * 播放语音
      */
     @RequestMapping(value = "/play", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String play(String appId, String callId, int getkey, int playFlag, String voiceStr, int playTime, int maxRevCnt, String key2End, int spaceTime, int totalTime, String data) {
+    public String play(String callId,String voiceStr, String data) {
         String result = "";
         try {
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("appId", appId);
+            map.put("appId", TencentCloud.APP_ID);
             map.put("callId", callId);
-            map.put("getkey", getkey);
-            map.put("playFlag", playFlag);
+            map.put("getkey", 1);
+            map.put("playFlag", 0);
+
+            if(StringUtils.isBlank(voiceStr)){
+                voiceStr = "请对咨询评分，1非常满意，2满意，3一般，4不满意，5非常不满意，并按*号键结束。";
+            }
             map.put("voiceStr", voiceStr);
-            map.put("playTime", playTime);
-            map.put("maxRevCnt", maxRevCnt);
-            map.put("key2End", key2End);
-            map.put("spaceTime", spaceTime);
-            map.put("totalTime", totalTime);
+            map.put("playTime", 1);
+            map.put("maxRevCnt", 1);
+            map.put("key2End", "*");
+            map.put("spaceTime", 30);
+            map.put("totalTime", 60);
             map.put("data", data);
+
+            CallRecord callRecord = callRecordService.getByCallId(callId);
+            callRecord.setDtmfType(voiceStr);
+            callRecordService.save(callRecord);
+
             result = HttpClientUtil.postRequest(TencentCloud.TEST_IP + TencentCloud.PLAY, map);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -214,9 +225,13 @@ public class CallRecordRestController {
                 sb.append(s);
             }
             jsonObject = JSONObject.fromObject(sb.toString());
+            System.out.println("jsonObject: " + jsonObject);
             String callId = jsonObject.get("callId").toString();
             CallRecord callRecord = callRecordService.getByCallId(callId);
-            if ("000000".equals(jsonObject.get("code").toString())) {
+
+            System.out.println("callstatrpt: X" + jsonObject.get("event").toString() + "X");
+            if ("callstatrpt".equals(jsonObject.get("event").toString())) {
+//                呼叫状态通知
                 if (CallStatus.CALLER_OUT.equals(callRecord.getStatus())) {
                     if ("2".equals(jsonObject.get("ansCode").toString())) {
                         Map<String, Object> map = new HashMap<String, Object>();
@@ -224,8 +239,9 @@ public class CallRecordRestController {
                         map.put("callId", callRecord.getCallId());
                         map.put("called", callRecord.getCalled());
                         map.put("data", callRecord.getData());
-                        String result = HttpClientUtil.postRequest(TencentCloud.TEST_IP + TencentCloud.TRANSFER, map);
-                        jsonObject = JSONObject.fromObject(result);
+                        String outCallResult = HttpClientUtil.postRequest(TencentCloud.TEST_IP + TencentCloud.TRANSFER, map);
+                        System.out.println("outCallResult: " + outCallResult);
+                        jsonObject = JSONObject.fromObject(outCallResult);
                         if ("000000".equals(jsonObject.get("code").toString())) {
                             callRecord.setStatus(CallStatus.CALLED_OUT);
                         } else {
@@ -233,8 +249,38 @@ public class CallRecordRestController {
                         }
                     }
                 }
-            } else {
-                callRecord.setTcFailCode(jsonObject.get("code").toString());
+            }else if ("calldisconnectrpt".equals(jsonObject.get("event").toString())) {
+//                通话结束通知
+
+//                {
+//
+//                    "appId":"247e35ff320a4142a105024055c367cf",
+//                        "callId":"2015100908563101533CTI",
+//                        "flieName":"1446560181239909",
+//                        "date":"20151103"
+//                    "dir":0,
+//                        "event":"calldisconnectrpt",
+//                        "reason":0,
+//                        "timeStamp":"20160131170852107"
+//                }
+
+                callRecord.setRecordUrl(jsonObject.get("fileName").toString());
+
+            }else if ("ivrreportdtmf".equals(jsonObject.get("event").toString())) {
+//                dtmf code 通知
+                callRecord.setDtmfCode(jsonObject.get("dtmfCode").toString());
+            }else if ("playoverrpt".equals(jsonObject.get("event").toString())) {
+//                播放语音结束 通知
+
+//                {
+//                    "appId":"247e35ff320a4142a105024055c367cf",
+//                        "callId":"2015100908543501530CTI",
+//                        "data":""
+//                    "event":"playoverrpt",
+//                        "timeStamp":"20160131170852107"
+//                }
+
+//                callRecord.setDtmfCode(jsonObject.get("dtmfCode").toString());
             }
             callRecordService.update(callRecord);
             jsonObject.put("code", "0");
@@ -278,5 +324,13 @@ public class CallRecordRestController {
             logger.error(e.getMessage(), e);
         }
         return callRecordService.getByCallId("callId");
+    }
+
+
+    @RequestMapping(value = "/page", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<Page<CallRecord>> page(Long pageNum, Long pageSize, String callerId, String caller){
+        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
+        Page<CallRecord> page = callRecordService.page(pageRequest, callerId, caller);
+        return new Responsed<Page<CallRecord>>("查询成功", page);
     }
 }

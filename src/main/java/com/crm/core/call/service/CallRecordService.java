@@ -14,5 +14,5 @@ public interface CallRecordService {
 
     CallRecord getByCallId(String callId);
 
-    Page<CallRecord> page(PageRequest pageRequest, String accountId, String name, String nickname, Sex sex);
+    Page<CallRecord> page(PageRequest pageRequest, String callerId, String caller);
 }
