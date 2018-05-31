@@ -56,13 +56,43 @@ public class ExceptionAdvice{
     }
 
     /**
+     * 票据认证异常
+     */
+    @ExceptionHandler(value = TicketAuthenticationException.class)
+    public Responsed ticketAuthentication(TicketAuthenticationException e){
+        logger.error(e.getMessage(), e);
+
+        return new Responsed(e.getMessage(), ResponseCode.TICKET_AUTHENTICATE_FAIL, false);
+    }
+
+    /**
+     * 票据凭证刷新失败
+     */
+    @ExceptionHandler(value = TicketRefreshFailException.class)
+    public Responsed ticketRefreshFail(TicketRefreshFailException e){
+        logger.error(e.getMessage(), e);
+
+        return new Responsed(e.getMessage(), ResponseCode.TICKET_REFRESH_FAIL, false);
+    }
+
+    /**
      * 登录失败异常
      */
     @ExceptionHandler(value = LoginFailException.class)
-    public ModelAndView loginFail(LoginFailException e){
+    public Responsed loginFail(LoginFailException e){
         logger.error(e.getMessage(), e);
 
-        return new ModelAndView("login");
+        return new Responsed(e.getMessage(), ResponseCode.LOGIN_FAIL, false);
+    }
+
+    /**
+     * 未知用户信息异常
+     */
+    @ExceptionHandler(value = AccountNotFoundException.class)
+    public Responsed accountNotFound(AccountNotFoundException e){
+        logger.error(e.getMessage(), e);
+
+        return new Responsed(e.getMessage(), ResponseCode.ACCOUNT_NOT_FOUND, false);
     }
 
     /**

@@ -1,10 +1,15 @@
 package com.crm.commons.security.interceptor;
 
+import com.crm.commons.consts.Constants;
+import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.wah.doraemon.security.exception.AuthenticationException;
+import org.wah.doraemon.security.exception.TicketAuthenticationException;
+import org.wah.doraemon.security.exception.TicketRefreshFailException;
 import org.wah.doraemon.security.response.Responsed;
 import org.wah.ferryman.entity.Ticket;
 import org.wah.ferryman.security.consts.HttpHeaderName;
@@ -22,9 +27,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
     @Setter
     private List<String> excludes;
 
-    @Setter
-    private String server;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
         String url = request.getRequestURI().substring(request.getContextPath().length());
@@ -41,16 +43,15 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
         String token = request.getHeader(HttpHeaderName.AUTHORIZATION);
 
         if(StringUtils.isBlank(token)){
-            throw new AuthenticationException("无效的票据Token");
+            throw new TicketAuthenticationException("无效的票据Token");
         }
 
-        Responsed<Ticket> responsed = TicketUtils.authenticate(server, token);
+        Responsed responsed = TicketUtils.authenticate(Constants.SSO_SERVER, token);
 
-        if(!responsed.getSuccess() || responsed.getResult() == null){
-            throw new AuthenticationException(responsed.getMsg());
+        if(!responsed.getSuccess()){
+            throw new TicketAuthenticationException(responsed.getMsg());
         }
 
-        response.setHeader(HttpHeaderName.AUTHORIZATION, responsed.getResult().getToken());
         return true;
     }
 }

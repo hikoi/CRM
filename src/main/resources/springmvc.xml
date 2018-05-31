@@ -49,10 +49,9 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.crm.commons.security.interceptor.AuthenticationInterceptor">
-                <property name="server" value=""/>
                 <property name="excludes">
                     <list>
-                        <value>/**</value>
+                        <value>/api/1.0/account/login</value>
                     </list>
                 </property>
             </bean>
@@ -61,13 +60,7 @@
         <!-- 权限验证 -->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean class="com.crm.commons.security.interceptor.PermissionInterceptor">
-                <property name="excludes">
-                    <list>
-                        <value>/**</value>
-                    </list>
-                </property>
-            </bean>
+            <bean class="com.crm.commons.security.interceptor.PermissionInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>
