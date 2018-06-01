@@ -51,18 +51,6 @@
 
     <!-- 拦截器 -->
     <mvc:interceptors>
-        <!--&lt;!&ndash; 登录认证 &ndash;&gt;-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/**"/>-->
-            <!--<bean class="com.crm.commons.security.interceptor.AuthenticationInterceptor">-->
-                <!--<property name="excludes">-->
-                    <!--<list>-->
-                        <!--<value>/api/1.0/account/login</value>-->
-                    <!--</list>-->
-                <!--</property>-->
-            <!--</bean>-->
-        <!--</mvc:interceptor>-->
-
         <!-- 权限验证 -->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>

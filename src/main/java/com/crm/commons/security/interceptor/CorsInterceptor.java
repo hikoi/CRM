@@ -10,7 +10,7 @@ public class CorsInterceptor extends HandlerInterceptorAdapter{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
         //所有域名
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Origin", "http://192.168.10.42");
         //所有请求头
         response.setHeader("Access-Control-Allow-Headers", "*");
         //所有请求类型
