@@ -56,6 +56,16 @@ public class ExceptionAdvice{
     }
 
     /**
+     * 账户状态异常
+     */
+    @ExceptionHandler(value = InvalidStateException.class)
+    public Responsed invalidState(InvalidStateException e){
+        logger.error(e.getMessage(), e);
+
+        return new Responsed(e.getMessage(), ResponseCode.INVALID_STATE, false);
+    }
+
+    /**
      * 票据认证异常
      */
     @ExceptionHandler(value = TicketAuthenticationException.class)

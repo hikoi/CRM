@@ -73,4 +73,13 @@
         <redis:listener ref="saveWechatMessageListener"         method="saveWechatMessage"        serializer="jdkSerializer" topic="save_wechat_message_queue"/>
         <redis:listener ref="synchronizeWechatMessageListener"  method="synchronizeWechatMessage" serializer="jdkSerializer" topic="synchronize_wechat_message_queue"/>
     </redis:listener-container>
+
+    <!-- token 通知 -->
+    <bean class="com.crm.commons.security.handler.TokenAdvice">
+        <property name="excludes">
+            <list>
+                <value>/api/1.0/account/login</value>
+            </list>
+        </property>
+    </bean>
 </beans>

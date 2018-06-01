@@ -54,4 +54,17 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
 
         return true;
     }
+
+//    @Override
+//    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception{
+//        //原Token
+//        String token = request.getHeader(HttpHeaderName.AUTHORIZATION);
+//
+//        if(StringUtils.isNotBlank(token)){
+//            //刷新Token
+//            Responsed<String> responsed = TicketUtils.refresh(Constants.SSO_SERVER, token);
+//
+//            response.setHeader(HttpHeaderName.AUTHORIZATION, responsed.getResult());
+//        }
+//    }
 }
