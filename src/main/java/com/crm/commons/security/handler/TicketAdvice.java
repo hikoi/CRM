@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Aspect
-public class TokenAdvice{
+public class TicketAdvice{
 
     //路径匹配器
     private AntPathMatcher matcher = new AntPathMatcher();
@@ -29,6 +29,9 @@ public class TokenAdvice{
     @Setter
     private List<String> excludes;
 
+    @Getter
+    @Setter
+    private boolean refreshToken = false;
 
     @Before("execution(* com.crm.core..webservice.*.*(..))")
     public void authenticate() throws Exception{
@@ -46,13 +49,13 @@ public class TokenAdvice{
             }
         }
 
-        String token = request.getHeader(HttpHeaderName.AUTHORIZATION);
+        String ticket = request.getHeader(HttpHeaderName.AUTHORIZATION);
 
-        if(StringUtils.isBlank(token)){
-            throw new TicketAuthenticationException("无效的票据Token");
+        if(StringUtils.isBlank(ticket)){
+            throw new TicketAuthenticationException("无效的票据凭证");
         }
 
-        Responsed responsed = TicketUtils.authenticate(Constants.SSO_SERVER, token);
+        Responsed responsed = TicketUtils.authenticate(Constants.SSO_SERVER, ticket);
 
         if(!responsed.getSuccess()){
             throw new TicketAuthenticationException(responsed.getMsg());
@@ -61,28 +64,30 @@ public class TokenAdvice{
 
     @After("execution(* com.crm.core..webservice.*.*(..))")
     public void refresh() throws Exception{
-        HttpServletRequest  request  = ((ServletRequestAttributes) (RequestContextHolder.getRequestAttributes())).getRequest();
-        HttpServletResponse response = ((ServletRequestAttributes) (RequestContextHolder.getRequestAttributes())).getResponse();
+        if(refreshToken){
+            HttpServletRequest  request  = ((ServletRequestAttributes) (RequestContextHolder.getRequestAttributes())).getRequest();
+            HttpServletResponse response = ((ServletRequestAttributes) (RequestContextHolder.getRequestAttributes())).getResponse();
 
-        String url = request.getRequestURI().substring(request.getContextPath().length());
+            String url = request.getRequestURI().substring(request.getContextPath().length());
 
-        //忽略
-        if(excludes != null && !excludes.isEmpty()){
-            for(String exclude : excludes){
-                if(matcher.match(exclude, url)){
-                    return;
+            //忽略
+            if(excludes != null && !excludes.isEmpty()){
+                for(String exclude : excludes){
+                    if(matcher.match(exclude, url)){
+                        return;
+                    }
                 }
             }
-        }
 
-        //原Token
-        String token = request.getHeader(HttpHeaderName.AUTHORIZATION);
+            //原Token
+            String ticket = request.getHeader(HttpHeaderName.AUTHORIZATION);
 
-        if(StringUtils.isNotBlank(token)){
-            //刷新Token
-            Responsed<String> responsed = TicketUtils.refresh(Constants.SSO_SERVER, token);
+            if(StringUtils.isNotBlank(ticket)){
+                //刷新Token
+                Responsed<String> responsed = TicketUtils.refresh(Constants.SSO_SERVER, ticket);
 
-            response.setHeader(HttpHeaderName.AUTHORIZATION, responsed.getResult());
+                response.setHeader(HttpHeaderName.AUTHORIZATION, responsed.getResult());
+            }
         }
     }
 }
