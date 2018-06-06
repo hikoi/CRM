@@ -50,7 +50,7 @@ public class AccountServiceImpl implements AccountService{
         Assert.hasText(password, "账户密码不能为空");
 
         Responsed<String> ticketResponse = AccountUtils.login(username, password);
-        Responsed<User>   userResponse  = AccountUtils.getUser(ticketResponse.getResult());
+        Responsed<User>   userResponse   = AccountUtils.getUser(ticketResponse.getResult());
 
         String ticket = ticketResponse.getResult();
         User   user   = userResponse.getResult();
@@ -89,8 +89,8 @@ public class AccountServiceImpl implements AccountService{
         List<Menu> menus = menuDao.find(null, null, null, null, null, new ArrayList<String>(menuIds));
 
         //缓存
-        RedisUtils.sadd(jedis, CacheName.USER_FUNCTION + user.getAccountId(), functions);
-        RedisUtils.sadd(jedis, CacheName.USER_MENU + user.getAccountId(), menus);
+        RedisUtils.sadd(jedis, CacheName.USER_FUNCTION + ticket, functions);
+        RedisUtils.sadd(jedis, CacheName.USER_MENU + ticket, menus);
         RedisUtils.close(jedis);
 
         //返回Ticket
