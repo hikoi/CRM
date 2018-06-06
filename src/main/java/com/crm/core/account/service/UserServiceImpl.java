@@ -33,8 +33,7 @@ public class UserServiceImpl implements UserService{
             return user;
         }
 
-        Responsed<User> userResponse = AccountUtils.getUser(ticket);
-        user = userResponse.getResult();
+        user = AccountUtils.getUser(ticket);
 
         //缓存
         RedisUtils.save(jedis, CacheName.USER_INFO + ticket, user);

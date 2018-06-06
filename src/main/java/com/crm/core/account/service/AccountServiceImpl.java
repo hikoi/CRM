@@ -49,11 +49,8 @@ public class AccountServiceImpl implements AccountService{
         Assert.hasText(username, "账户名不能为空");
         Assert.hasText(password, "账户密码不能为空");
 
-        Responsed<String> ticketResponse = AccountUtils.login(username, password);
-        Responsed<User>   userResponse   = AccountUtils.getUser(ticketResponse.getResult());
-
-        String ticket = ticketResponse.getResult();
-        User   user   = userResponse.getResult();
+        String ticket = AccountUtils.login(username, password);
+        User   user   = AccountUtils.getUser(ticket);
 
         //缓存
         ShardedJedis jedis = shardedJedisPool.getResource();
