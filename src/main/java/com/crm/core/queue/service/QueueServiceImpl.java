@@ -27,7 +27,6 @@ import java.text.MessageFormat;
 import java.util.*;
 
 @Service
-@Transactional(readOnly = true)
 public class QueueServiceImpl implements QueueService{
 
     @Autowired
@@ -83,7 +82,7 @@ public class QueueServiceImpl implements QueueService{
                 params.put("message", message);
 
                 HttpPost post = HttpClientUtils.post(JPushConfig.PUSH_API, null, (Object) params);
-                post.addHeader("Authorization", JPushConfig.AUTH_STRING());
+                post.addHeader("Authorization", JPushConfig.AUTH_STRING);
                 post.addHeader("Content-Type", "application/json");
 
                 HttpResponse response = client.execute(post);
@@ -101,7 +100,7 @@ public class QueueServiceImpl implements QueueService{
      * 微信消息实时同步
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void saveWechatMessage(String messageString){
         try{
             Assert.hasText(messageString, "微信消息内容不能为空");
@@ -121,7 +120,7 @@ public class QueueServiceImpl implements QueueService{
      * 微信消息定时同步
      */
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void synchronizeWechatMessage(String messagesString){
         try{
             Assert.hasText(messagesString, "微信消息内容不能为空");

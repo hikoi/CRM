@@ -73,14 +73,4 @@
         <redis:listener ref="saveWechatMessageListener"         method="saveWechatMessage"        serializer="jdkSerializer" topic="save_wechat_message_queue"/>
         <redis:listener ref="synchronizeWechatMessageListener"  method="synchronizeWechatMessage" serializer="jdkSerializer" topic="synchronize_wechat_message_queue"/>
     </redis:listener-container>
-
-    <!-- 单点登录拦截器 -->
-    <bean class="com.crm.commons.security.handler.TicketAdvice">
-        <property name="refreshToken" value="true"/>
-        <property name="excludes">
-            <list>
-                <value>/api/1.0/account/login</value>
-            </list>
-        </property>
-    </bean>
 </beans>

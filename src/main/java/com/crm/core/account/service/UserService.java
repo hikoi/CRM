@@ -4,5 +4,5 @@ import org.wah.doraemon.entity.User;
 
 public interface UserService{
 
-    User getByToken(String token);
+    User getByTicket(String ticket) throws Exception;
 }

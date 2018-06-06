@@ -333,7 +333,6 @@
         <includes>
           <include>**/*.properties</include>
           <include>**/*.xml</include>
-          <include>**/*.pem</include>
         </includes>
       </resource>
 

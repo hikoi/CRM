@@ -36,7 +36,7 @@ public class PageInterceptor extends HandlerInterceptorAdapter{
         }
 
         //是否允许IE访问
-        Boolean allowed = (Boolean) request.getSession().getAttribute(SessionName.ALLOW_IE);
+        Boolean allowed = new Boolean(response.getHeader(SessionName.ALLOW_IE));
         if(allowed != null && allowed){
             return true;
         }

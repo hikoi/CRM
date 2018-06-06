@@ -45,19 +45,20 @@ public class AccountServiceImpl implements AccountService{
     private ShardedJedisPool shardedJedisPool;
 
     @Override
-    public String login(String username, String password){
+    public String login(String username, String password) throws Exception{
         Assert.hasText(username, "账户名不能为空");
         Assert.hasText(password, "账户密码不能为空");
 
-        Responsed<String> tokenResponsed = AccountUtils.login(Constants.SSO_SERVER, username, password);
-        Responsed<User>   userResponsed  = AccountUtils.getUser(Constants.SSO_SERVER, tokenResponsed.getResult());
+        Responsed<String> ticketResponse = AccountUtils.login(username, password);
+        Responsed<User>   userResponse  = AccountUtils.getUser(ticketResponse.getResult());
 
-        User user = userResponsed.getResult();
+        String ticket = ticketResponse.getResult();
+        User   user   = userResponse.getResult();
 
         //缓存
         ShardedJedis jedis = shardedJedisPool.getResource();
-        //删除登录异常列表
-        RedisUtils.srem(jedis, CacheName.LOGIN_FAIL, user.getAccountId());
+        //缓存用户信息
+        RedisUtils.save(jedis, CacheName.USER_INFO + ticket, user);
 
         //缓存权限
         Set<Permission> permissions = new HashSet<Permission>();
@@ -92,7 +93,7 @@ public class AccountServiceImpl implements AccountService{
         RedisUtils.sadd(jedis, CacheName.USER_MENU + user.getAccountId(), menus);
         RedisUtils.close(jedis);
 
-        //返回Token
-        return tokenResponsed.getResult();
+        //返回Ticket
+        return ticket;
     }
 }
