@@ -21,7 +21,7 @@ public class FunctionInitHandler{
     @Autowired
     private FunctionDao functionDao;
 
-    @PostConstruct
+//    @PostConstruct
     public void init(){
         List<Function> functions = functionDao.find(null, null, false, null);
 
