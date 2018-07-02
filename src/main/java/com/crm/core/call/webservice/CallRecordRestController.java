@@ -1,14 +1,10 @@
 package com.crm.core.call.webservice;
 
-import com.crm.commons.utils.UpYunTest;
-import com.crm.commons.utils.UpyunUtils;
 import com.crm.core.call.consts.CallStatus;
 import com.crm.core.call.entity.CallRecord;
 import com.crm.core.call.service.CallRecordService;
-import com.crm.core.call.utils.AddressUtils;
 import com.crm.core.call.utils.HttpClientUtil;
 import com.crm.core.call.utils.TencentCloud;
-
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -23,14 +19,15 @@ import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+//import com.crm.core.call.utils.AddressUtils;
 
 /**
  * Created by miku03 on 2018/5/11.
@@ -425,87 +422,87 @@ public class CallRecordRestController {
     }
 
 
-    @RequestMapping(value = "/testAddress", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<String> testAddress(HttpServletRequest request) {
-//所有域名
-        String ip = request.getHeader("x-forwarded-for");
-
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        System.out.println("CorsInterceptor: " + ip);
-        String address = AddressUtils.getaddress(ip);
-        return new Responsed<String>("你的外网IP: " + ip + " 定位是：" + address);
-    }
+//    @RequestMapping(value = "/testAddress", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public Responsed<String> testAddress(HttpServletRequest request) {
+////所有域名
+//        String ip = request.getHeader("x-forwarded-for");
+//
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//            ip = request.getHeader("Proxy-Client-IP");
+//        }
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//            ip = request.getHeader("WL-Proxy-Client-IP");
+//        }
+//        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//            ip = request.getRemoteAddr();
+//        }
+//        System.out.println("CorsInterceptor: " + ip);
+//        String address = AddressUtils.getaddress(ip);
+//        return new Responsed<String>("你的外网IP: " + ip + " 定位是：" + address);
+//    }
 
 
     public static void main(String[] args) {
 
 
-        String txFilePath = "https://record-1254335672.cos.ap-shanghai.myqcloud.com/recordserver/test7713870/20180530/80530151814181-051883073054-18022875621.wav";
-//        callRecord.setRecordUrl(txFilePath);
-        String[] txFilePathArr = txFilePath.split("/");
-
-        URL url = null;
-//                InputStream isFile =null;
-        try {
-            url = new URL(txFilePath);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();//利用HttpURLConnection对象,我们可以从网络中获取网页数据.
-            conn.setDoInput(true);
-            conn.connect();
-//                isFile = conn.getInputStream(); //得到网络返回的输入流
-
-
-            String filePath = UpyunUtils.CALL_RECORD_LU_YIN + txFilePathArr[txFilePathArr.length - 1];
-            System.out.println(filePath);
-            //上传
-
-//            InputStream fileInputStream = new FileInputStream(new File("C:\\Users\\miku03\\Desktop\\error.sql"));
-//            String filePath = UpyunUtils.CALL_RECORD_LU_YIN + "sql.sql";
-//            InputStream fileInputStream =  conn.getInputStream();
+//        String txFilePath = "https://record-1254335672.cos.ap-shanghai.myqcloud.com/recordserver/test7713870/20180530/80530151814181-051883073054-18022875621.wav";
+////        callRecord.setRecordUrl(txFilePath);
+//        String[] txFilePathArr = txFilePath.split("/");
+//
+//        URL url = null;
+////                InputStream isFile =null;
+//        try {
+//            url = new URL(txFilePath);
+//
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();//利用HttpURLConnection对象,我们可以从网络中获取网页数据.
+//            conn.setDoInput(true);
+//            conn.connect();
+////                isFile = conn.getInputStream(); //得到网络返回的输入流
 //
 //
-//            FileOutputStream f = new FileOutputStream("C:\\Users\\miku03\\Desktop\\test.wav");
-
+//            String filePath = UpyunUtils.CALL_RECORD_LU_YIN + txFilePathArr[txFilePathArr.length - 1];
+//            System.out.println(filePath);
+//            //上传
 //
-////            f.write(conn.getInputStream().);
-//            byte[] b = new byte[1024];
-//            while(conn.getInputStream().read(b) != -1){
-//                f.write(b);
+////            InputStream fileInputStream = new FileInputStream(new File("C:\\Users\\miku03\\Desktop\\error.sql"));
+////            String filePath = UpyunUtils.CALL_RECORD_LU_YIN + "sql.sql";
+////            InputStream fileInputStream =  conn.getInputStream();
+////
+////
+////            FileOutputStream f = new FileOutputStream("C:\\Users\\miku03\\Desktop\\test.wav");
+//
+////
+//////            f.write(conn.getInputStream().);
+////            byte[] b = new byte[1024];
+////            while(conn.getInputStream().read(b) != -1){
+////                f.write(b);
+////            }
+////
+////            f.close();
+//
+//
+//            InputStream ii = conn.getInputStream();
+//            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+//            byte[] buffer = new byte[1024];
+//            int len = 0;
+//            while ((len = ii.read(buffer)) != -1) {
+//                outStream.write(buffer);
 //            }
+//            ii.close();
+//            byte[] ttt = outStream.toByteArray();
+//            System.out.println(ttt.length);
 //
-//            f.close();
-
-
-            InputStream ii = conn.getInputStream();
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int len = 0;
-            while ((len = ii.read(buffer)) != -1) {
-                outStream.write(buffer);
-            }
-            ii.close();
-            byte[] ttt = outStream.toByteArray();
-            System.out.println(ttt.length);
-
-
 //
-            boolean result = UpyunUtils.writeFile(filePath, ttt);
-            System.out.println("AAAAAAAAAAAAAAA: " + result);
-//                String[] paramArr = filename.split("_");
-            String outFilePath = "http://kuliao.b0.upaiyun.com" + filePath;
-            System.out.println("AAAAAAAAAAAAAAA: " + outFilePath);
-//            callRecord.setData(outFilePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+////
+//            boolean result = UpyunUtils.writeFile(filePath, ttt);
+//            System.out.println("AAAAAAAAAAAAAAA: " + result);
+////                String[] paramArr = filename.split("_");
+//            String outFilePath = "http://kuliao.b0.upaiyun.com" + filePath;
+//            System.out.println("AAAAAAAAAAAAAAA: " + outFilePath);
+////            callRecord.setData(outFilePath);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 }
