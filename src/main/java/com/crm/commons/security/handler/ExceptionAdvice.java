@@ -122,6 +122,16 @@ public class ExceptionAdvice{
     public Responsed browserNotSupport(BrowserNotSupportException e){
         logger.error(e.getMessage(), e);
 
-        return new Responsed("不支持的客户端", ResponseCode.BROWSER_NOT_SUPPORT, false);
+        return new Responsed(e.getMessage(), ResponseCode.BROWSER_NOT_SUPPORT, false);
+    }
+
+    /**
+     * 权限禁止异常
+     */
+    @ExceptionHandler(value = ForbiddenException.class)
+    public Responsed forbidden(ForbiddenException e){
+        logger.error(e.getMessage(), e);
+
+        return new Responsed(e.getMessage(), ResponseCode.FORBIDDEN, false);
     }
 }

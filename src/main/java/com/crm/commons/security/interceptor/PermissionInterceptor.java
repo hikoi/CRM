@@ -50,7 +50,7 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter{
         ShardedJedis jedis = shardedJedisPool.getResource();
 
         //非需授权URL
-        List<Function> needNotAllots = RedisUtils.get(jedis, CacheName.NEED_NOT_ALLOT_URL, new TypeToken<List<Function>>(){}.getType());
+        Set<Function> needNotAllots = RedisUtils.smembers(jedis, CacheName.NEED_NOT_ALLOT_URL, Function.class);
         if(needNotAllots != null && !needNotAllots.isEmpty()){
             for(Function needNotAllot : needNotAllots){
                 if(matcher.match(needNotAllot.getUrl(), url) && needNotAllot.getMethod().equals(method)){
@@ -76,6 +76,6 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter{
             }
         }
 
-        throw new ForbiddenException("您没有访问的权限[{0}]", url);
+        throw new ForbiddenException("您没有访问权限[{0}]", url);
     }
 }

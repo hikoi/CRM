@@ -12,8 +12,11 @@ import com.crm.core.permission.entity.Permission;
 import com.crm.core.permission.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.wah.doraemon.entity.Account;
 import org.wah.doraemon.entity.User;
+import org.wah.doraemon.entity.consts.Sex;
 import org.wah.doraemon.security.response.Responsed;
 import org.wah.doraemon.utils.ObjectUtils;
 import org.wah.doraemon.utils.RedisUtils;
@@ -45,6 +48,17 @@ public class AccountServiceImpl implements AccountService{
     private ShardedJedisPool shardedJedisPool;
 
     @Override
+    public User register(String username, String password, Boolean isInternal, String name, String nickname, String headImgUrl, Sex sex) throws Exception{
+        Assert.hasText(username, "账户名称不能为空");
+        Assert.hasText(password, "账户密码不能为空");
+        Assert.notNull(isInternal, "账户域标识不能为空");
+
+        User user = AccountUtils.register(username, password, isInternal, name, nickname, headImgUrl, sex);
+
+        return user;
+    }
+
+    @Override
     public String login(String username, String password) throws Exception{
         Assert.hasText(username, "账户名不能为空");
         Assert.hasText(password, "账户密码不能为空");
@@ -57,12 +71,14 @@ public class AccountServiceImpl implements AccountService{
         //缓存用户信息
         RedisUtils.save(jedis, CacheName.USER_INFO + ticket, user);
 
-        //缓存权限
+        //查询权限
         Set<Permission> permissions = new HashSet<Permission>();
         permissions.addAll(permissionDao.findByAccountId(user.getAccountId(), null));
 
         List<Role> roles = roleDao.findByAccountId(user.getAccountId());
-        permissions.addAll(permissionDao.findByRoleIds(ObjectUtils.ids(roles), null));
+        if(roles != null && !roles.isEmpty()){
+            permissions.addAll(permissionDao.findByRoleIds(ObjectUtils.ids(roles), null));
+        }
 
         //所有功能
         Set<String> functionIds = new HashSet<String>();
@@ -82,12 +98,22 @@ public class AccountServiceImpl implements AccountService{
             }
         }
 
-        List<Function> functions = functionDao.find(null, null, null, new ArrayList<String>(functionIds));
-        List<Menu> menus = menuDao.find(null, null, null, null, null, new ArrayList<String>(menuIds));
+        if(functionIds != null && !functionIds.isEmpty()){
+            List<Function> functions = functionDao.find(null, null, null, new ArrayList<String>(functionIds));
+            //缓存
+            if(functions != null && !functions.isEmpty()){
+                RedisUtils.sadd(jedis, CacheName.USER_FUNCTION + ticket, functions);
+            }
+        }
 
-        //缓存
-        RedisUtils.sadd(jedis, CacheName.USER_FUNCTION + ticket, functions);
-        RedisUtils.sadd(jedis, CacheName.USER_MENU + ticket, menus);
+        if(menuIds != null && !menuIds.isEmpty()){
+            List<Menu> menus = menuDao.find(null, null, null, null, null, new ArrayList<String>(menuIds));
+            //缓存
+            if(menus != null && !menus.isEmpty()){
+                RedisUtils.sadd(jedis, CacheName.USER_MENU + ticket, menus);
+            }
+        }
+
         RedisUtils.close(jedis);
 
         //返回Ticket

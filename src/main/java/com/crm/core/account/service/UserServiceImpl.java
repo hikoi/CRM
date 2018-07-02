@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wah.doraemon.entity.User;
 import org.wah.doraemon.security.exception.TicketAuthenticationException;
-import org.wah.doraemon.security.response.Responsed;
 import org.wah.doraemon.utils.RedisUtils;
 import org.wah.ferryman.utils.AccountUtils;
 import redis.clients.jedis.ShardedJedis;
