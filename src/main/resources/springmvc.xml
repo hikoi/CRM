@@ -50,32 +50,32 @@
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- 拦截器 -->
-    <mvc:interceptors>
+    <!--<mvc:interceptors>-->
         <!-- 单点登录票据验证拦截 -->
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <bean class="org.wah.ferryman.security.interceptor.AuthenticateInterceptor">
-                <property name="server" value="http://localhost:8088"></property>
-                <property name="excludes">
-                    <list>
-                        <value>/api/1.0/account/login</value>
-                        <value>/api/1.0/account/register</value>
-                    </list>
-                </property>
-            </bean>
-        </mvc:interceptor>
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<bean class="org.wah.ferryman.security.interceptor.AuthenticateInterceptor">-->
+                <!--<property name="server" value="http://localhost:8088"></property>-->
+                <!--<property name="excludes">-->
+                    <!--<list>-->
+                        <!--<value>/api/1.0/account/login</value>-->
+                        <!--<value>/api/1.0/account/register</value>-->
+                    <!--</list>-->
+                <!--</property>-->
+            <!--</bean>-->
+        <!--</mvc:interceptor>-->
 
         <!-- 权限验证 -->
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <bean class="com.crm.commons.security.interceptor.PermissionInterceptor">
-                <property name="excludes">
-                    <list>
-                        <value>/api/1.0/account/login</value>
-                        <value>/api/1.0/account/register</value>
-                    </list>
-                </property>
-            </bean>
-        </mvc:interceptor>
-    </mvc:interceptors>
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<bean class="com.crm.commons.security.interceptor.PermissionInterceptor">-->
+                <!--<property name="excludes">-->
+                    <!--<list>-->
+                        <!--<value>/api/1.0/account/login</value>-->
+                        <!--<value>/api/1.0/account/register</value>-->
+                    <!--</list>-->
+                <!--</property>-->
+            <!--</bean>-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
 </beans>

@@ -285,6 +285,13 @@
       <artifactId>spring-data-redis</artifactId>
       <version>${spring-data-redis.version}</version>
     </dependency>
+
+    <!-- upyun -->
+    <dependency>
+      <groupId>com.upyun</groupId>
+      <artifactId>java-sdk</artifactId>
+      <version>3.13</version>
+    </dependency>
   </dependencies>
 
   <profiles>
