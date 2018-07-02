@@ -3,6 +3,7 @@ package com.crm.core.call.service;
 
 import com.crm.core.call.dao.CallRecordDao;
 import com.crm.core.call.entity.CallRecord;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +11,8 @@ import org.springframework.util.Assert;
 import org.wah.doraemon.entity.consts.Sex;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -47,5 +50,15 @@ public class CallRecordServiceImpl implements CallRecordService {
         Assert.notNull(pageRequest, "分页信息不能为空");
 
         return callRecordDao.page(pageRequest, callerId, caller);
+    }
+
+    @Override
+    public List<CallRecord> findLastestByCalledId(String calledId, String called) {
+        return callRecordDao.findLastestByCalledId(calledId, called);
+    }
+
+    @Override
+    public List<CallRecord> findByCalledAndCaller(String calledId, String called, String callerId, String caller) {
+        return callRecordDao.findByCalledAndCaller(calledId, called, callerId, caller);
     }
 }

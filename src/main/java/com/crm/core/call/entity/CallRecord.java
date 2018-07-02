@@ -24,6 +24,15 @@ public class CallRecord {
     private String dtmfCode;
     private String data;
     private String tcFailCode;
+    private String times;
+
+    public String getTimes() {
+        return times;
+    }
+
+    public void setTimes(String times) {
+        this.times = times;
+    }
 
     public String getTcFailCode() {
         return tcFailCode;

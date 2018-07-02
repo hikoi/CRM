@@ -19,4 +19,10 @@ public interface CallRecordMapper {
     List<CallRecord> find(@Param("params") Criteria criteria);
 
     Long count(@Param("params") Criteria criteria);
+
+    List<CallRecord> findLastestByCalledId(@Param("params") Criteria criteria);
+
+    List<CallRecord> findByCalledAndCaller(@Param("params") Criteria criteria);
+
+
 }

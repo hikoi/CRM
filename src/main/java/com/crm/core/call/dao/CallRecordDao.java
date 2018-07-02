@@ -80,4 +80,49 @@ public class CallRecordDao {
             throw new DataAccessException(e.getMessage(), e);
         }
     }
+
+
+    public List<CallRecord> findLastestByCalledId(String calledId, String called) {
+        try {
+            Criteria criteria = new Criteria();
+            if (StringUtils.isNotBlank(calledId)) {
+                criteria.and(Restrictions.eq("calledId", calledId));
+            }
+            if (StringUtils.isNotBlank(called)) {
+                criteria.and(Restrictions.eq("called", called));
+            }
+            List<CallRecord> list = mapper.findLastestByCalledId(criteria);
+//            Long total = mapper.count(criteria);
+            return list;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+
+    public List<CallRecord> findByCalledAndCaller(String calledId, String called, String callerId, String caller) {
+        try {
+            Criteria criteria = new Criteria();
+            if (StringUtils.isNotBlank(calledId)) {
+                criteria.and(Restrictions.eq("calledId", calledId));
+            }
+            if (StringUtils.isNotBlank(called)) {
+                criteria.and(Restrictions.eq("called", called));
+            }
+            if (StringUtils.isNotBlank(callerId)) {
+                criteria.and(Restrictions.eq("callerId", callerId));
+            }
+            if (StringUtils.isNotBlank(caller)) {
+                criteria.and(Restrictions.eq("caller", caller));
+            }
+            criteria.sort(Restrictions.desc("startTime"));
+            List<CallRecord> list = mapper.findByCalledAndCaller(criteria);
+//            Long total = mapper.count(criteria);
+            return list;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
 }

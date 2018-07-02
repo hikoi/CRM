@@ -1,8 +1,11 @@
 package com.crm.core.call.webservice;
 
+import com.crm.commons.utils.UpYunTest;
+import com.crm.commons.utils.UpyunUtils;
 import com.crm.core.call.consts.CallStatus;
 import com.crm.core.call.entity.CallRecord;
 import com.crm.core.call.service.CallRecordService;
+import com.crm.core.call.utils.AddressUtils;
 import com.crm.core.call.utils.HttpClientUtil;
 import com.crm.core.call.utils.TencentCloud;
 
@@ -20,11 +23,13 @@ import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,7 +45,7 @@ public class CallRecordRestController {
     private CallRecordService callRecordService;
 
     @RequestMapping(value = "/call", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed call(String appId, String caller, String called, String data, String callerId, String calledId, String callerName, String calledName) {
+    public Responsed call(String appId, String caller, String called, String data, String callerId, String calledId, String callerName, String calledName, String callType) {
         Responsed responsed = new Responsed();
         try {
             System.out.println("appId: " + appId);
@@ -76,6 +81,10 @@ public class CallRecordRestController {
                 responsed.setMsg("calledId 不能为空");
                 return responsed;
             }
+
+
+
+
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("appId", TencentCloud.APP_ID);
             map.put("caller", TencentCloud.TEST_NUMBER);
@@ -84,23 +93,48 @@ public class CallRecordRestController {
             map.put("Timeout", 40);
             String outCallResult = HttpClientUtil.postRequest(TencentCloud.TEST_IP + TencentCloud.OUT_CALL, map);
             JSONObject jsonObject = JSONObject.fromObject(outCallResult);
+
             CallRecord callRecord = new CallRecord();
+            callRecord.setAppId(TencentCloud.APP_ID);
+            callRecord.setCallId(jsonObject.get("callId").toString());
+            callRecord.setCaller(caller);
+            callRecord.setCalled(called);
+            callRecord.setCalledName(calledName);
+            callRecord.setCallerName(callerName);
+            callRecord.setCallerId(callerId);
+            callRecord.setCalledId(calledId);
+            callRecord.setStartTime(new Date());
+            if (StringUtils.isNotBlank(callType)) {
+                callRecord.setCallType(callType);
+            } else {
+                callRecord.setCallType("999");
+            }
+            callRecord.setStatus(CallStatus.CALLER_OUT);
+            callRecordService.save(callRecord);
             if ("000000".equals(jsonObject.get("code").toString())) {
-                callRecord.setCallId(jsonObject.get("callId").toString());
+                Map<String, Object> map2 = new HashMap<String, Object>();
+                map2.put("appId",  TencentCloud.APP_ID);
+                map2.put("callId", jsonObject.get("callId").toString());
+                map2.put("called", called);
+//                map2.put("data", callRecord.getData());
+                String outCallResult2 = HttpClientUtil.postRequest(TencentCloud.TEST_IP + TencentCloud.TRANSFER, map2);
+                System.out.println("outCallResult: " + outCallResult2);
+                jsonObject = JSONObject.fromObject(outCallResult2);
+                if ("000000".equals(jsonObject.get("code").toString())) {
+                    callRecord.setStatus(CallStatus.CALLED_OUT);
+                } else {
+                    callRecord.setTcFailCode(jsonObject.get("code").toString());
+                }
+
+
             } else {
                 callRecord.setTcFailCode(jsonObject.get("code").toString());
+                callRecordService.update(callRecord);
                 responsed.setSuccess(false);
                 responsed.setMsg("拨号异常: " + jsonObject.get("code").toString());
                 return responsed;
             }
-            callRecord.setAppId(appId);
-            callRecord.setCaller(caller);
-            callRecord.setCalled(called);
-            callRecord.setCallerId(callerId);
-            callRecord.setCalledId(calledId);
-            callRecord.setStartTime(new Date());
-            callRecord.setStatus(CallStatus.CALLER_OUT);
-            callRecordService.save(callRecord);
+            callRecordService.update(callRecord);
             responsed.setSuccess(true);
             responsed.setMsg(callRecord.getCallId());
         } catch (Exception e) {
@@ -178,7 +212,7 @@ public class CallRecordRestController {
      * 播放语音
      */
     @RequestMapping(value = "/play", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public String play(String callId,String voiceStr, String data) {
+    public String play(String callId, String voiceStr, String data) {
         String result = "";
         try {
             Map<String, Object> map = new HashMap<String, Object>();
@@ -187,7 +221,7 @@ public class CallRecordRestController {
             map.put("getkey", 1);
             map.put("playFlag", 0);
 
-            if(StringUtils.isBlank(voiceStr)){
+            if (StringUtils.isBlank(voiceStr)) {
                 voiceStr = "请对咨询评分，1非常满意，2满意，3一般，4不满意，5非常不满意，并按*号键结束。";
             }
             map.put("voiceStr", voiceStr);
@@ -200,7 +234,7 @@ public class CallRecordRestController {
 
             CallRecord callRecord = callRecordService.getByCallId(callId);
             callRecord.setDtmfType(voiceStr);
-            callRecordService.save(callRecord);
+            callRecordService.update(callRecord);
 
             result = HttpClientUtil.postRequest(TencentCloud.TEST_IP + TencentCloud.PLAY, map);
         } catch (Exception e) {
@@ -232,24 +266,24 @@ public class CallRecordRestController {
             System.out.println("callstatrpt: X" + jsonObject.get("event").toString() + "X");
             if ("callstatrpt".equals(jsonObject.get("event").toString())) {
 //                呼叫状态通知
-                if (CallStatus.CALLER_OUT.equals(callRecord.getStatus())) {
-                    if ("2".equals(jsonObject.get("ansCode").toString())) {
-                        Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("appId", callRecord.getAppId());
-                        map.put("callId", callRecord.getCallId());
-                        map.put("called", callRecord.getCalled());
-                        map.put("data", callRecord.getData());
-                        String outCallResult = HttpClientUtil.postRequest(TencentCloud.TEST_IP + TencentCloud.TRANSFER, map);
-                        System.out.println("outCallResult: " + outCallResult);
-                        jsonObject = JSONObject.fromObject(outCallResult);
-                        if ("000000".equals(jsonObject.get("code").toString())) {
-                            callRecord.setStatus(CallStatus.CALLED_OUT);
-                        } else {
-                            callRecord.setTcFailCode(jsonObject.get("code").toString());
-                        }
-                    }
-                }
-            }else if ("calldisconnectrpt".equals(jsonObject.get("event").toString())) {
+//                if (CallStatus.CALLER_OUT.equals(callRecord.getStatus())) {
+//                    if ("2".equals(jsonObject.get("ansCode").toString())) {
+//                        Map<String, Object> map = new HashMap<String, Object>();
+//                        map.put("appId", callRecord.getAppId());
+//                        map.put("callId", callRecord.getCallId());
+//                        map.put("called", callRecord.getCalled());
+//                        map.put("data", callRecord.getData());
+//                        String outCallResult = HttpClientUtil.postRequest(TencentCloud.TEST_IP + TencentCloud.TRANSFER, map);
+//                        System.out.println("outCallResult: " + outCallResult);
+//                        jsonObject = JSONObject.fromObject(outCallResult);
+//                        if ("000000".equals(jsonObject.get("code").toString())) {
+//                            callRecord.setStatus(CallStatus.CALLED_OUT);
+//                        } else {
+//                            callRecord.setTcFailCode(jsonObject.get("code").toString());
+//                        }
+//                    }
+//                }
+            } else if ("calldisconnectrpt".equals(jsonObject.get("event").toString())) {
 //                通话结束通知
 
 //                {
@@ -264,12 +298,49 @@ public class CallRecordRestController {
 //                        "timeStamp":"20160131170852107"
 //                }
 
-                callRecord.setRecordUrl(jsonObject.get("fileName").toString());
+                String txFilePath = jsonObject.get("fileName").toString();
+                callRecord.setRecordUrl(txFilePath);
 
-            }else if ("ivrreportdtmf".equals(jsonObject.get("event").toString())) {
+
+//                》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》录音另存《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《
+//                String[] txFilePathArr = txFilePath.split("/");
+//
+//                URL url = null;
+////                InputStream isFile =null;
+//                url = new URL(txFilePath);
+//                HttpURLConnection conn = (HttpURLConnection) url.openConnection();//利用HttpURLConnection对象,我们可以从网络中获取网页数据.
+//                conn.setDoInput(true);
+//                conn.connect();
+////                isFile = conn.getInputStream(); //得到网络返回的输入流
+//
+//
+//                String filePath = UpyunUtils.CALL_RECORD_LU_YIN + txFilePathArr[txFilePathArr.length - 1];
+//                System.out.println(filePath);
+//                //上传
+//
+//                InputStream ii = conn.getInputStream();
+//                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+//                byte[] buffer = new byte[1024];
+//                int len = 0;
+//                while( (len=ii.read(buffer)) != -1 ){
+//                    outStream.write(buffer);
+//                }
+//                ii.close();
+//                byte[] ttt = outStream.toByteArray();
+////
+//                boolean result = UpyunUtils.writeFile(filePath, ttt);
+//                System.out.println("AAAAAAAAAAAAAAA: " + result);
+////                String[] paramArr = filename.split("_");
+//                String outFilePath = "http://kuliao.b0.upaiyun.com" + filePath;
+//                System.out.println("AAAAAAAAAAAAAAA: " + outFilePath);
+//                callRecord.setData(outFilePath);
+//                》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》录音另存《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《《
+
+
+            } else if ("ivrreportdtmf".equals(jsonObject.get("event").toString())) {
 //                dtmf code 通知
                 callRecord.setDtmfCode(jsonObject.get("dtmfCode").toString());
-            }else if ("playoverrpt".equals(jsonObject.get("event").toString())) {
+            } else if ("playoverrpt".equals(jsonObject.get("event").toString())) {
 //                播放语音结束 通知
 
 //                {
@@ -328,9 +399,113 @@ public class CallRecordRestController {
 
 
     @RequestMapping(value = "/page", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<CallRecord>> page(Long pageNum, Long pageSize, String callerId, String caller){
+    public Responsed<Page<CallRecord>> page(Long pageNum, Long pageSize, String callerId, String caller) {
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
         Page<CallRecord> page = callRecordService.page(pageRequest, callerId, caller);
         return new Responsed<Page<CallRecord>>("查询成功", page);
+    }
+
+
+    @RequestMapping(value = "/findLastestByCalledId", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<List<CallRecord>> findLastestByCalledId(String calledId, String called) {
+        System.out.println("calledId: " + calledId);
+        System.out.println("called: " + called);
+        List<CallRecord> list = callRecordService.findLastestByCalledId(calledId, called);
+        return new Responsed<List<CallRecord>>("查询成功", list);
+    }
+
+    @RequestMapping(value = "/findByCalledAndCaller", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<List<CallRecord>> findByCalledAndCaller(String calledId, String called, String callerId, String caller) {
+        System.out.println("calledId: " + calledId);
+        System.out.println("called: " + called);
+        System.out.println("callerId: " + callerId);
+        System.out.println("caller: " + caller);
+        List<CallRecord> list = callRecordService.findByCalledAndCaller(calledId, called, callerId, caller);
+        return new Responsed<List<CallRecord>>("查询成功", list);
+    }
+
+
+    @RequestMapping(value = "/testAddress", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<String> testAddress(HttpServletRequest request) {
+//所有域名
+        String ip = request.getHeader("x-forwarded-for");
+
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        System.out.println("CorsInterceptor: " + ip);
+        String address = AddressUtils.getaddress(ip);
+        return new Responsed<String>("你的外网IP: " + ip + " 定位是：" + address);
+    }
+
+
+    public static void main(String[] args) {
+
+
+        String txFilePath = "https://record-1254335672.cos.ap-shanghai.myqcloud.com/recordserver/test7713870/20180530/80530151814181-051883073054-18022875621.wav";
+//        callRecord.setRecordUrl(txFilePath);
+        String[] txFilePathArr = txFilePath.split("/");
+
+        URL url = null;
+//                InputStream isFile =null;
+        try {
+            url = new URL(txFilePath);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();//利用HttpURLConnection对象,我们可以从网络中获取网页数据.
+            conn.setDoInput(true);
+            conn.connect();
+//                isFile = conn.getInputStream(); //得到网络返回的输入流
+
+
+            String filePath = UpyunUtils.CALL_RECORD_LU_YIN + txFilePathArr[txFilePathArr.length - 1];
+            System.out.println(filePath);
+            //上传
+
+//            InputStream fileInputStream = new FileInputStream(new File("C:\\Users\\miku03\\Desktop\\error.sql"));
+//            String filePath = UpyunUtils.CALL_RECORD_LU_YIN + "sql.sql";
+//            InputStream fileInputStream =  conn.getInputStream();
+//
+//
+//            FileOutputStream f = new FileOutputStream("C:\\Users\\miku03\\Desktop\\test.wav");
+
+//
+////            f.write(conn.getInputStream().);
+//            byte[] b = new byte[1024];
+//            while(conn.getInputStream().read(b) != -1){
+//                f.write(b);
+//            }
+//
+//            f.close();
+
+
+            InputStream ii = conn.getInputStream();
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = ii.read(buffer)) != -1) {
+                outStream.write(buffer);
+            }
+            ii.close();
+            byte[] ttt = outStream.toByteArray();
+            System.out.println(ttt.length);
+
+
+//
+            boolean result = UpyunUtils.writeFile(filePath, ttt);
+            System.out.println("AAAAAAAAAAAAAAA: " + result);
+//                String[] paramArr = filename.split("_");
+            String outFilePath = "http://kuliao.b0.upaiyun.com" + filePath;
+            System.out.println("AAAAAAAAAAAAAAA: " + outFilePath);
+//            callRecord.setData(outFilePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
