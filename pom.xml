@@ -116,13 +116,13 @@
       <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/doraemon.jar</systemPath>
     </dependency>
 
-    <dependency>
-      <groupId>org.wah</groupId>
-      <artifactId>ferryman-client</artifactId>
-      <version>${ferry-client.version}</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ferryman-client.jar</systemPath>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.wah</groupId>-->
+      <!--<artifactId>ferryman-client</artifactId>-->
+      <!--<version>${ferry-client.version}</version>-->
+      <!--<scope>system</scope>-->
+      <!--<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ferryman-client.jar</systemPath>-->
+    <!--</dependency>-->
 
     <!-- lombok -->
     <dependency>
