@@ -14,8 +14,4 @@ public class Constants{
     public static final String PRIVATE_KEY = "classpath:/key/PrivateKey.pem";
 
     public static final String PUBLIC_KEY  = "classpath:/key/PublicKey.pem";
-
-    public static final String PROJECT_ROOT = "com.crm";
-
-    public static final List<Class<? extends Annotation>> API_ANNOTATIONS = Arrays.asList(Controller.class, RestController.class);
 }

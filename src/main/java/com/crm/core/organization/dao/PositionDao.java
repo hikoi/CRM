@@ -60,14 +60,11 @@ public class PositionDao{
         }
     }
 
-    public List<Position> find(String id, String name, String departmentId){
+    public List<Position> find(String name, String departmentId){
         try{
             Criteria criteria = new Criteria();
             criteria.sort(Restrictions.desc("createTime"));
 
-            if(StringUtils.isNotBlank(id)){
-                criteria.and(Restrictions.eq("id", id));
-            }
             if(StringUtils.isNotBlank(name)){
                 criteria.and(Restrictions.like("name", name));
             }
@@ -82,7 +79,7 @@ public class PositionDao{
         }
     }
 
-    public Page<Position> page(PageRequest pageRequest, String id, String name, String departmentId){
+    public Page<Position> page(PageRequest pageRequest, String name, String departmentId){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -90,9 +87,6 @@ public class PositionDao{
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
             criteria.sort(Restrictions.desc("createTime"));
 
-            if(StringUtils.isNotBlank(id)){
-                criteria.and(Restrictions.eq("id", id));
-            }
             if(StringUtils.isNotBlank(name)){
                 criteria.and(Restrictions.like("name", name));
             }

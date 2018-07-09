@@ -61,19 +61,16 @@ public class DepartmentDao{
         }
     }
 
-    public List<Department> find(String id, String name, String companyId){
+    public List<Department> find(String name, String companyId){
         try{
             Criteria criteria = new Criteria();
             criteria.sort(Restrictions.desc("createTime"));
 
-            if(StringUtils.isNotBlank(id)){
-                criteria.and(Restrictions.eq("id", id));
-            }
             if(StringUtils.isNotBlank(name)){
                 criteria.and(Restrictions.like("name", name));
             }
             if(StringUtils.isNotBlank(companyId)){
-                criteria.and(Restrictions.like("companyId", companyId));
+                criteria.and(Restrictions.eq("companyId", companyId));
             }
 
             return mapper.find(criteria);
@@ -83,7 +80,7 @@ public class DepartmentDao{
         }
     }
 
-    public Page<Department> page(PageRequest pageRequest, String id, String name, String companyId){
+    public Page<Department> page(PageRequest pageRequest, String name, String companyId){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -91,14 +88,11 @@ public class DepartmentDao{
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
             criteria.sort(Restrictions.desc("createTime"));
 
-            if(StringUtils.isNotBlank(id)){
-                criteria.and(Restrictions.eq("id", id));
-            }
             if(StringUtils.isNotBlank(name)){
                 criteria.and(Restrictions.like("name", name));
             }
             if(StringUtils.isNotBlank(companyId)){
-                criteria.and(Restrictions.like("companyId", companyId));
+                criteria.and(Restrictions.eq("companyId", companyId));
             }
 
             List<Department> list  = mapper.find(criteria);

@@ -13,8 +13,4 @@ public interface CompanyService{
     void update(Company company);
 
     Company getById(String id);
-
-    List<Company> find(String id, String name, String address, String phone, String accountId);
-
-    Page<Company> page(PageRequest pageRequest, String id, String name, String address, String phone, String accountId);
 }

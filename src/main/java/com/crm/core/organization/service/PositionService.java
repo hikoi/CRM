@@ -14,7 +14,7 @@ public interface PositionService{
 
     Position getById(String id);
 
-    List<Position> find(String id, String name, String departmentId);
+    List<Position> find(String name, String departmentId);
 
-    Page<Position> page(PageRequest pageRequest, String id, String name, String departmentId);
+    Page<Position> page(PageRequest pageRequest, String name, String departmentId);
 }

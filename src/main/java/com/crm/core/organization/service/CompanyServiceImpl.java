@@ -4,6 +4,7 @@ import com.crm.core.organization.dao.CompanyDao;
 import com.crm.core.organization.entity.Company;
 import com.crm.core.permission.consts.ResourceType;
 import com.crm.core.permission.dao.PermissionDao;
+import com.crm.core.permission.entity.Permission;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,15 +27,21 @@ public class CompanyServiceImpl implements CompanyService{
     private PermissionDao permissionDao;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void save(Company company){
         Assert.notNull(company, "公司信息不能为空");
-
+        //保存公司信息
         companyDao.saveOrUpdate(company);
+
+        //添加资源信息
+        Permission permission = new Permission();
+        permission.setResourceId(company.getId());
+        permission.setType(ResourceType.COMPANY);
+        permissionDao.save(permission);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void update(Company company){
         Assert.notNull(company, "公司信息不能为空");
         Assert.hasText(company.getId(), "公司ID不能为空");
@@ -47,34 +54,5 @@ public class CompanyServiceImpl implements CompanyService{
         Assert.hasText(id, "公司ID不能为空");
 
         return companyDao.getById(id);
-    }
-
-    @Override
-    public List<Company> find(String id, String name, String address, String phone, String accountId){
-
-        //公司ID列表
-        List<String> ids = new ArrayList<String>();
-
-        //查询资源
-        if(StringUtils.isNotBlank(accountId)){
-            ids.addAll(permissionDao.findResourceIdsByAccountId(accountId, ResourceType.COMPANY));
-        }
-
-        return companyDao.find(id, name, address, phone, new ArrayList(ids));
-    }
-
-    @Override
-    public Page<Company> page(PageRequest pageRequest, String id, String name, String address, String phone, String accountId){
-        Assert.notNull(pageRequest, "分页信息不能为空");
-
-        //公司ID列表
-        List<String> ids = new ArrayList<String>();
-
-        //查询资源
-        if(StringUtils.isNotBlank(accountId)){
-            ids.addAll(permissionDao.findResourceIdsByAccountId(accountId, ResourceType.COMPANY));
-        }
-
-        return companyDao.page(pageRequest, id, name, address, phone, ids);
     }
 }

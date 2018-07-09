@@ -14,7 +14,7 @@ public interface DepartmentService{
 
     Department getById(String id);
 
-    List<Department> find(String id, String name, String companyId);
+    List<Department> find(String name, String companyId);
 
-    Page<Department> page(PageRequest pageRequest, String id, String name, String companyId);
+    Page<Department> page(PageRequest pageRequest, String name, String companyId);
 }
