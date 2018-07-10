@@ -11,6 +11,8 @@ import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping(value = "/api/1.0/user")
 public class UserRestController{
@@ -26,5 +28,13 @@ public class UserRestController{
         Page<User> page = userService.page(pageRequest, username, name, companyId, departmentId, positionId);
 
         return new Responsed<Page<User>>("查询成功", page);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<User> getUserInfo(HttpServletRequest request){
+        String ticket = request.getHeader("ticket");
+        User user = userService.getByTicket(ticket);
+
+        return new Responsed<User>("查询成功", user);
     }
 }

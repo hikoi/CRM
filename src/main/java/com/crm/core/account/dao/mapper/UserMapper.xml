@@ -268,7 +268,7 @@
                a.username AS a_username,
                a.phone    AS a_phone,
                a.email    AS a_email,
-               a.state    AS a_state,
+               a.state    AS a_state
           FROM user u
      LEFT JOIN account a
             ON a.id = u.account_id
@@ -282,7 +282,7 @@
                a.username AS a_username,
                a.phone    AS a_phone,
                a.email    AS a_email,
-               a.state    AS a_state,
+               a.state    AS a_state
           FROM user u
      LEFT JOIN account a
             ON a.id = u.account_id

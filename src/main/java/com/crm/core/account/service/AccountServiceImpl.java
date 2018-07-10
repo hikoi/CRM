@@ -2,6 +2,9 @@ package com.crm.core.account.service;
 
 import com.crm.core.account.dao.AccountDao;
 import com.crm.core.account.dao.UserDao;
+import com.crm.core.authentication.dao.ServiceTicketDao;
+import com.crm.core.authentication.entity.ServiceTicket;
+import com.crm.core.pem.dao.PemDao;
 import com.crm.core.permission.dao.PermissionDao;
 import com.crm.core.permission.entity.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,9 @@ import org.wah.doraemon.entity.Account;
 import org.wah.doraemon.entity.User;
 import org.wah.doraemon.entity.consts.AccountState;
 import org.wah.doraemon.entity.consts.Sex;
+import org.wah.doraemon.security.exception.AuthenticationException;
 import org.wah.doraemon.security.exception.DuplicateException;
+import org.wah.doraemon.utils.RSAUtils;
 
 import java.util.Arrays;
 
@@ -28,6 +33,12 @@ public class AccountServiceImpl implements AccountService{
 
     @Autowired
     private PermissionDao permissionDao;
+
+    @Autowired
+    private PemDao pemDao;
+
+    @Autowired
+    private ServiceTicketDao serviceTicketDao;
 
     @Transactional
     @Override
@@ -69,5 +80,32 @@ public class AccountServiceImpl implements AccountService{
 
         Permission position = permissionDao.getByResourceId(positionId);
         permissionDao.updatePositionsToAccount(Arrays.asList(position.getId()), account.getId());
+    }
+
+    @Override
+    public String login(String username, String password){
+        Assert.hasText(username, "账户登录名不能为空");
+        Assert.hasText(password, "账户登录密码不能为空");
+
+        Account account = accountDao.getByUsername(username);
+        //验证账户是否存在
+        if(account == null){
+            throw new AuthenticationException("账户或密码不正确");
+        }
+
+        String privateKey = pemDao.getPrivateKey();
+        //验证密码
+        if(!RSAUtils.equalsByPrivateKey(password, account.getPassword(), privateKey)){
+            throw new AuthenticationException("账户或密码不正确");
+        }
+
+        //查询资源
+        //api权限
+        //菜单
+        //组织架构
+        //设备
+
+        //创建Ticket
+        return serviceTicketDao.create(account.getId());
     }
 }

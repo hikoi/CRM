@@ -23,10 +23,10 @@ public class FunctionInitHandler{
 
 //    @PostConstruct
     public void init(){
-        List<Function> functions = functionDao.find(null, null, false, null);
-
-        ShardedJedis jedis = pool.getResource();
-        RedisUtils.sadd(jedis, CacheName.NEED_NOT_ALLOT_URL, functions);
-        RedisUtils.close(jedis);
+//        List<Function> functions = functionDao.find(null, null, false, null);
+//
+//        ShardedJedis jedis = pool.getResource();
+//        RedisUtils.sadd(jedis, CacheName.NEED_NOT_ALLOT_URL, functions);
+//        RedisUtils.close(jedis);
     }
 }

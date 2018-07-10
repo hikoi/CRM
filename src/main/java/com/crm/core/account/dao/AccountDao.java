@@ -48,14 +48,12 @@ public class AccountDao{
         }
     }
 
-    public Account getByUsernameAndPassword(String username, String password){
+    public Account getByUsername(String username){
         try{
             Assert.hasText(username, "账户登录名不能为空");
-            Assert.hasText(password, "账户登录密码不能为空");
 
             Criteria criteria = new Criteria();
             criteria.and(Restrictions.eq("username", username));
-            criteria.and(Restrictions.eq("password", password));
             criteria.and(Restrictions.eq("isDelete", false));
 
             return mapper.get(criteria);

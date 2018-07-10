@@ -23,7 +23,7 @@ public class ServiceTicketDao{
     @Autowired
     private ShardedJedisPool pool;
 
-    public ServiceTicket create(String accountId){
+    public String create(String accountId){
         try(ShardedJedis jedis = pool.getResource()){
             Assert.hasText(accountId, "账户ID不能为空");
 
@@ -32,36 +32,15 @@ public class ServiceTicketDao{
             ticket.setExpire(CacheName.TICKET_EXPIRE);
             ticket.setCreateTime(new Date());
 
-            //(accountId + createTime - expire)
+            //(accountId + createTime + expire)
             BigInteger master  = new BigInteger(accountId, 16);
-            BigInteger assist = new BigInteger(String.valueOf(ticket.getCreateTime().getTime() - ticket.getExpire()), 10);
+            BigInteger assist = new BigInteger(String.valueOf(ticket.getCreateTime().getTime() + ticket.getExpire()), 10);
             ticket.setId(master.add(assist).toString(36));
 
             //缓存
             RedisUtils.save(jedis, CacheName.SERVICE_TICKET + ticket.getId(), ticket, ticket.getExpire());
-            RedisUtils.close(jedis);
 
-            return ticket;
-        }catch(Exception e){
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    public boolean authentication(String id){
-        try(ShardedJedis jedis = pool.getResource()){
-            Assert.hasText(id, "票据ID不能为空");
-
-            //查询缓存
-            ServiceTicket ticket = RedisUtils.get(jedis, CacheName.SERVICE_TICKET + id, ServiceTicket.class);
-
-            if(ticket == null){
-                return false;
-            }
-
-            RedisUtils.expire(jedis, CacheName.SERVICE_TICKET + id, ticket.getExpire());
-
-            return true;
+            return ticket.getId();
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

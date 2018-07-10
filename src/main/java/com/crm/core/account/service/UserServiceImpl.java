@@ -1,6 +1,8 @@
 package com.crm.core.account.service;
 
+import com.crm.commons.consts.CacheName;
 import com.crm.core.account.dao.UserDao;
+import com.crm.core.authentication.entity.ServiceTicket;
 import com.crm.core.permission.dao.PermissionDao;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,9 @@ import org.springframework.util.Assert;
 import org.wah.doraemon.entity.User;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
+import org.wah.doraemon.utils.RedisUtils;
+import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private PermissionDao permissionDao;
+
+    @Autowired
+    private ShardedJedisPool pool;
 
     @Override
     public Page<User> page(PageRequest pageRequest, String username, String name, String companyId, String departmentId,
@@ -43,5 +51,16 @@ public class UserServiceImpl implements UserService{
         }
 
         return userDao.pageWithAccount(pageRequest, name, username, true, accountIds);
+    }
+
+    @Override
+    public User getByTicket(String ticket){
+        try(ShardedJedis jedis = pool.getResource()){
+            Assert.hasText(ticket, "票据不能为空");
+
+            ServiceTicket st = RedisUtils.get(jedis, CacheName.SERVICE_TICKET + ticket, ServiceTicket.class);
+
+            return userDao.getWithAccountByAccountId(st.getAccountId());
+        }
     }
 }

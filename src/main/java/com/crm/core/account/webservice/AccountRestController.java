@@ -24,4 +24,11 @@ public class AccountRestController{
 
         return new Responsed("保存成功");
     }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<String> login(String username, String password){
+        String ticket = accountService.login(username, password);
+
+        return new Responsed<String>("登录成功", ticket);
+    }
 }

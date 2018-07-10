@@ -18,6 +18,7 @@
 
     <aspectj.version>1.7.4</aspectj.version>
     <assertj.version>1.5.0</assertj.version>
+    <bouncycastle.version>1.52</bouncycastle.version>
     <commons-codec.version>1.9</commons-codec.version>
     <commons-lang3.version>3.2.1</commons-lang3.version>
     <commons-io.version>2.4</commons-io.version>
@@ -112,17 +113,7 @@
       <groupId>org.wah</groupId>
       <artifactId>doraemon</artifactId>
       <version>${doraemon.version}</version>
-      <!--<scope>system</scope>-->
-      <!--<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/doraemon.jar</systemPath>-->
     </dependency>
-
-    <!--<dependency>-->
-      <!--<groupId>org.wah</groupId>-->
-      <!--<artifactId>ferryman-client</artifactId>-->
-      <!--<version>${ferry-client.version}</version>-->
-      <!--<scope>system</scope>-->
-      <!--<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ferryman-client.jar</systemPath>-->
-    <!--</dependency>-->
 
     <!-- lombok -->
     <dependency>
@@ -291,6 +282,19 @@
       <groupId>com.upyun</groupId>
       <artifactId>java-sdk</artifactId>
       <version>3.13</version>
+    </dependency>
+
+    <!-- 腾讯IM -->
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
+      <version>${bouncycastle.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcpkix-jdk15on</artifactId>
+      <version>${bouncycastle.version}</version>
     </dependency>
   </dependencies>
 

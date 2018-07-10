@@ -22,19 +22,17 @@ public class PemDao{
     private Logger logger = LoggerFactory.getLogger(PemDao.class);
 
     @Autowired
-    private ShardedJedisPool shardedJedisPool;
+    private ShardedJedisPool pool;
 
     /**
      * 查询私钥
      */
     public String getPrivateKey(){
-        try{
+        try(ShardedJedis jedis = pool.getResource()){
             //读取缓存
-            ShardedJedis jedis = shardedJedisPool.getResource();
             String privateKey = RedisUtils.hget(jedis, CacheName.KEY, CacheName.PRIVATE_KEY, String.class);
 
             if(!StringUtils.isBlank(privateKey)){
-                RedisUtils.close(jedis);
                 return privateKey;
             }
 
@@ -47,9 +45,11 @@ public class PemDao{
             byte[] buffer = new byte[4096];
             //结果集
             StringBuffer sb = new StringBuffer();
+            //读取长度
+            int length = 0;
 
-            while(stream.read(buffer) != -1){
-                sb.append(new String(buffer));
+            while((length = stream.read(buffer)) != -1){
+                sb.append(new String(buffer, 0, length));
             }
             privateKey = sb.toString();
 
@@ -58,7 +58,6 @@ public class PemDao{
 
             //添加缓存
             RedisUtils.hset(jedis, CacheName.KEY, CacheName.PRIVATE_KEY, privateKey);
-            RedisUtils.close(jedis);
 
             return privateKey;
         }catch(Exception e){
@@ -71,13 +70,11 @@ public class PemDao{
      * 查询公钥
      */
     public String getPublicKey(){
-        try{
+        try(ShardedJedis jedis = pool.getResource()){
             //读取缓存
-            ShardedJedis jedis = shardedJedisPool.getResource();
             String publicKey = RedisUtils.hget(jedis, CacheName.KEY, CacheName.PUBLIC_KEY, String.class);
 
             if(!StringUtils.isBlank(publicKey)){
-                RedisUtils.close(jedis);
                 return publicKey;
             }
 
@@ -90,9 +87,11 @@ public class PemDao{
             byte[] buffer = new byte[4096];
             //结果集
             StringBuffer sb = new StringBuffer();
+            //读取长度
+            int length = 0;
 
-            while(stream.read(buffer) != -1){
-                sb.append(new String(buffer));
+            while((length = stream.read(buffer)) != -1){
+                sb.append(new String(buffer, 0, length));
             }
             publicKey = sb.toString();
 
@@ -101,7 +100,6 @@ public class PemDao{
 
             //添加缓存
             RedisUtils.hset(jedis, CacheName.KEY, CacheName.PUBLIC_KEY, publicKey);
-            RedisUtils.close(jedis);
 
             return publicKey;
         }catch(Exception e){

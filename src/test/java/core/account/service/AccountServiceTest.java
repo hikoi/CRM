@@ -35,4 +35,15 @@ public class AccountServiceTest{
 
         accountService.save(username, password, nickname, name, sex, companyId, departmentId, positionId);
     }
+
+    @Test
+    public void login(){
+        String username = "13246308797";
+        String password = RSAUtils.encryptyPublicKey("moneycat888888", pemDao.getPublicKey());
+
+        System.out.println(password);
+
+        String ticket = accountService.login(username, password);
+        System.out.println("=> " + ticket + " <=");
+    }
 }

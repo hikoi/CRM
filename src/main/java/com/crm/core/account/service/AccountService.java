@@ -6,4 +6,6 @@ public interface AccountService{
 
     void save(String username, String password, String nickname, String name, Sex sex, String companyId,
               String departmentId, String positionId);
+
+    String login(String username, String password);
 }

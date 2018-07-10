@@ -61,6 +61,20 @@ public class UserDao{
         }
     }
 
+    public User getWithAccountByAccountId(String accountId){
+        try{
+            Assert.hasText(accountId, "用户账户ID不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("u.accountId", accountId));
+
+            return mapper.getWithAccount(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
     public Page<User> page(PageRequest pageRequest, String name, List<String> accountIds){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
