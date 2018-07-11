@@ -14,6 +14,6 @@ public interface WechatMessageService{
 
     void synchronize(List<WechatMessage> messages);
 
-    Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wechatId,
+    Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wxno,
                              String wxid, WechatMessageType type, WechatMessageStatus status);
 }

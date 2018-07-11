@@ -1,7 +1,8 @@
 package com.crm.commons.security.interceptor;
 
 import com.crm.commons.consts.CacheName;
-import com.crm.core.authentication.dao.ServiceTicketDao;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.AntPathMatcher;
@@ -14,6 +15,7 @@ import redis.clients.jedis.ShardedJedisPool;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public class PermissionInterceptor extends HandlerInterceptorAdapter{
 
@@ -23,6 +25,10 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter{
     @Autowired
     private ShardedJedisPool pool;
 
+    @Getter
+    @Setter
+    private List<String> excludes;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
         try(ShardedJedis jedis = pool.getResource()){
@@ -30,8 +36,14 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter{
             String        url    = request.getRequestURI().substring(request.getContextPath().length());
             RequestMethod method = RequestMethod.valueOf(request.getMethod().toUpperCase());
 
-            if(matcher.match("/api/1.0/account/login", url)){
-                return true;
+            System.out.println(url);
+
+            if(excludes != null && !excludes.isEmpty()){
+                for(String exclude : excludes){
+                    if(matcher.match(exclude, url)){
+                        return true;
+                    }
+                }
             }
 
             //验证票据

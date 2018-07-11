@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.crm.core.wechat.dao.mapper.WechatFriendMapper">
+<mapper namespace="com.crm.core.im.dao.mapper.IMUserMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,150 +148,98 @@
         </where>
     </sql>
 
-    <resultMap id="friend" type="com.crm.core.wechat.entity.WechatFriend">
+    <resultMap id="user" type="com.crm.core.im.entity.IMUser">
         <id     column="id"           property="id"         javaType="java.lang.String"/>
-        <result column="wechat_id"    property="wechatId"   javaType="java.lang.String"/>
-        <result column="wxid"         property="wxid"       javaType="java.lang.String"/>
-        <result column="wxno"         property="wxno"       javaType="java.lang.String"/>
+        <result column="relation_id"  property="relationId" javaType="java.lang.String"/>
+        <result column="name"         property="name"       javaType="java.lang.String"/>
         <result column="nickname"     property="nickname"   javaType="java.lang.String"/>
-        <result column="remarkname"   property="remarkname" javaType="java.lang.String"/>
         <result column="head_img_url" property="headImgUrl" javaType="java.lang.String"/>
-        <result column="type"         property="type"       typeHandler="WechatFriendTypeHandler"/>
+        <result column="sig"          property="sig"        javaType="java.lang.String"/>
+        <result column="type"         property="type"       typeHandler="IMUserTypeHandler"/>
         <result column="create_time"  property="createTime" javaType="java.util.Date"/>
         <result column="update_time"  property="updateTime" javaType="java.util.Date"/>
     </resultMap>
 
     <insert id="save">
-      INSERT
-        INTO wechat_friend (
-             id,
-             wechat_id,
-             wxid,
-             wxno,
-             nickname,
-             remarkname,
-             head_img_url,
-             type,
-             create_time
-        ) VALUE (
-             #{id,         jdbcType=VARCHAR},
-             #{wechatId,   jdbcType=VARCHAR},
-             #{wxid,       jdbcType=VARCHAR},
-             #{wxno,       jdbcType=VARCHAR},
-             #{nickname,   jdbcType=VARCHAR},
-             #{remarkname, jdbcType=VARCHAR},
-             #{headImgUrl, jdbcType=VARCHAR},
-             #{type,       typeHandler=WechatFriendTypeHandler},
-             #{createTime, jdbcType=TIMESTAMP}
-        )
-    </insert>
-
-    <insert id="saveList">
-      INSERT
-        INTO wechat_friend (
-             id,
-             wechat_id,
-             wxid,
-             wxno,
-             nickname,
-             remarkname,
-             head_img_url,
-             type,
-             create_time
-        ) VALUES
-      <foreach collection="friends" item="friend" separator=",">
-        (
-             #{friend.id,         jdbcType=VARCHAR},
-             #{friend.wechatId,   jdbcType=VARCHAR},
-             #{friend.wxid,       jdbcType=VARCHAR},
-             #{friend.wxno,       jdbcType=VARCHAR},
-             #{friend.nickname,   jdbcType=VARCHAR},
-             #{friend.remarkname, jdbcType=VARCHAR},
-             #{friend.headImgUrl, jdbcType=VARCHAR},
-             #{friend.type,       typeHandler=WechatFriendTypeHandler},
-             #{friend.createTime, jdbcType=TIMESTAMP}
-        )
-      </foreach>
+        INSERT
+          INTO im_user (
+               id,
+               relation_id,
+               name,
+               nickname,
+               head_img_url,
+               sig,
+               type,
+               create_time
+          ) VALUE (
+               #{id,         jdbcType=VARCHAR},
+               #{relationId, jdbcType=VARCHAR},
+               #{name,       jdbcType=VARCHAR},
+               #{nickname,   jdbcType=VARCHAR},
+               #{headImgUrl, jdbcType=VARCHAR},
+               #{sig,        jdbcType=VARCHAR},
+               #{type,       typeHandler=IMUserTypeHandler},
+               #{createTime, jdbcType=TIMESTAMP}
+          )
     </insert>
 
     <update id="update">
-      UPDATE wechat_frined
-       <set>
-          <if test="wxno != null and wxno != ''">
-            wxno = #{wxno, jdbcType=VARCHAR},
-          </if>
-          <if test="nickname != null">
-            nickname = #{nickname, jdbcType=VARCHAR},
-          </if>
-          <if test="remarkname != null">
-            remarkname = #{remarkname, jdbcType=VARCHAR},
-          </if>
-          <if test="headImgUrl != null and headImgUrl != ''">
-            head_img_url = #{headImgUrl, jdbcType=VARCHAR},
-          </if>
-          <if test="updateTime != null">
-            update_time = #{updateTime, jdbcType=TIMESTAMP},
-          </if>
-       </set>
-        WHERE id = #{id}
-    </update>
-
-    <update id="updateList">
-      <foreach collection="friends" item="friend" separator=";">
-        UPDATE wechat_friend
+        UPDATE im_user
          <set>
-            <if test="friend.wxno != null and friend.wxno != ''">
-              wxno = #{friend.wxno, jdbcType=VARCHAR},
-            </if>
-            <if test="friend.nickname != null">
-              nickname = #{friend.nickname, jdbcType=VARCHAR},
-            </if>
-            <if test="friend.remarkname != null">
-              remarkname = #{friend.remarkname, jdbcType=VARCHAR},
-            </if>
-            <if test="friend.headImgUrl != null and friend.headImgUrl != ''">
-              head_img_url = #{friend.headImgUrl, jdbcType=VARCHAR},
-            </if>
-            <if test="friend.updateTime != null">
-              update_time = #{friend.updateTime, jdbcType=TIMESTAMP},
-            </if>
+             <if test="name != null and name != ''">
+                 name = #{name, jdbcType=VARCHAR},
+             </if>
+             <if test="nickname != null and nickname != ''">
+                 nickname = #{nickname, jdbcType=VARCHAR},
+             </if>
+             <if test="headImgUrl != null and headImgUrl != ''">
+                 head_img_url = #{headImgUrl, jdbcType=VARCHAR},
+             </if>
+             <if test="sig != null and sig != ''">
+                 sig = #{sig, jdbcType=VARCHAR},
+             </if>
+             <if test="type != null">
+                 type = #{type, typeHandler=IMUserTypeHandler},
+             </if>
+             <if test="updateTime != null">
+                 update_time = #{updateTime, jdbcType=TIMESTAMP},
+             </if>
          </set>
-          WHERE wxid = #{friend.wxid}
-      </foreach>
+          WHERe id = #{id}
     </update>
 
-    <select id="get" resultMap="friend">
-      SELECT *
-        FROM wechat_friend
-      <if test="params != null">
-        <include refid="WHERE_SQL"/>
-      </if>
+    <select id="get" resultMap="user">
+        SELECT *
+          FROM im_user
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
     </select>
 
-    <select id="find" resultMap="friend">
-      SELECT *
-        FROM wechat_friend
-      <if test="params != null">
-        <include refid="WHERE_SQL"/>
+    <select id="find" resultMap="user">
+        SELECT *
+          FROM im_user
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
 
-        <if test="params.sorts != null and params.sorts.size > 0">
-          ORDER BY
-          <foreach collection="params.sorts" item="sort" separator=",">
-            ${sort.property} ${sort.operator}
-          </foreach>
-        </if>
+            <if test="params.sorts != null and params.sorts.size > 0">
+                ORDER BY
+                <foreach collection="params.sorts" item="sort" separator=",">
+                    ${sort.property} ${sort.operator}
+                </foreach>
+            </if>
 
-        <if test="params.limit != null">
-          ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            <if test="params.limit != null">
+                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            </if>
         </if>
-      </if>
     </select>
 
     <select id="count" resultType="java.lang.Long">
-      SELECT COUNT(*)
-        FROM wechat_friend
-      <if test="params != null">
-        <include refid="WHERE_SQL"/>
-      </if>
+        SELECT COUNT(*)
+          FROM im_user
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
     </select>
 </mapper>

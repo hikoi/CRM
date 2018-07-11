@@ -61,16 +61,16 @@
     </bean>
 
     <!-- 微信消息定时同步 -->
-    <bean id="synchronizeWechatMessageListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
+    <bean id="saveWechatMessagesListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
         <property name="delegate"              ref="queueServiceImpl"/>
         <property name="serializer"            ref="jdkSerializer"/>
-        <property name="defaultListenerMethod" value="synchronizeWechatMessage"/>
+        <property name="defaultListenerMethod" value="saveWechatMessages"/>
     </bean>
 
     <!-- 添加监听器 -->
     <redis:listener-container>
         <redis:listener ref="pushSensitiveListener"             method="pushSensitive"            serializer="jdkSerializer" topic="push_sensitive_queue"/>
         <redis:listener ref="saveWechatMessageListener"         method="saveWechatMessage"        serializer="jdkSerializer" topic="save_wechat_message_queue"/>
-        <redis:listener ref="synchronizeWechatMessageListener"  method="synchronizeWechatMessage" serializer="jdkSerializer" topic="synchronize_wechat_message_queue"/>
+        <redis:listener ref="saveWechatMessagesListener"        method="saveWechatMessages"       serializer="jdkSerializer" topic="save_wechat_messages_queue"/>
     </redis:listener-container>
 </beans>

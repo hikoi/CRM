@@ -15,5 +15,4 @@ public class JPushConfig{
     public static final String PLATFORM_ANDROID  = "android";
     public static final String PLATFORM_IOS      = "ios";
     public static final String PLATFORM_WINPHONE = "winphone";
-
 }

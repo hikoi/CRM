@@ -35,7 +35,8 @@ public class WechatMessageDao{
 
             if(StringUtils.isBlank(message.getId())){
                 Assert.hasText(message.getWxid(), "微信信息wxid不能为空");
-                Assert.hasText(message.getWechatId(), "微信ID不能为空");
+                Assert.hasText(message.getWxno(), "微信号不能为空");
+                Assert.notNull(message.getConversationTime(), "微信发送时间不能为空");
 
                 message.setId(IDGenerator.uuid32());
                 message.setExtract(WechatMessageUtils.extract(message));
@@ -56,9 +57,11 @@ public class WechatMessageDao{
             Assert.notEmpty(messages, "微信消息列表不能为空");
 
             final Date now = new Date();
+
             for(WechatMessage message : messages){
                 Assert.hasText(message.getWxid(), "微信信息wxid不能为空");
-                Assert.hasText(message.getWechatId(), "微信ID不能为空");
+                Assert.hasText(message.getWxno(), "微信号不能为空");
+                Assert.notNull(message.getConversationTime(), "微信发送时间不能为空");
 
                 message.setId(IDGenerator.uuid32());
                 message.setExtract(WechatMessageUtils.extract(message));
@@ -72,7 +75,7 @@ public class WechatMessageDao{
         }
     }
 
-    public Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wechatId,
+    public Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wxno,
                                     String wxid, WechatMessageType type, WechatMessageStatus status){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
@@ -84,8 +87,8 @@ public class WechatMessageDao{
             if(StringUtils.isNotBlank(accountId)){
                 criteria.and(Restrictions.eq("accountId", accountId));
             }
-            if(StringUtils.isNotBlank(wechatId)){
-                criteria.and(Restrictions.eq("wechatId", wechatId));
+            if(StringUtils.isNotBlank(wxno)){
+                criteria.and(Restrictions.eq("wxno", wxno));
             }
             if(StringUtils.isNotBlank(wxid)){
                 criteria.and(Restrictions.eq("wxid", wxid));

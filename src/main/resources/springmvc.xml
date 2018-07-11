@@ -54,7 +54,16 @@
         <!-- 权限验证 -->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean class="com.crm.commons.security.interceptor.PermissionInterceptor"/>
+            <bean class="com.crm.commons.security.interceptor.PermissionInterceptor">
+                <property name="excludes">
+                    <list>
+                        <value>/api/1.0/account/login</value>
+                        <value>/api/1.0/wechatFriend/synchronize/{wxno}</value>
+                        <value>/api/1.0/wechatMessage</value>
+                        <value>/api/1.0/wechatMessage/synchronize</value>
+                    </list>
+                </property>
+            </bean>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>

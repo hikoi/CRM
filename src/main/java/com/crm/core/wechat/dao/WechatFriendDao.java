@@ -34,6 +34,7 @@ public class WechatFriendDao{
             if(StringUtils.isBlank(friend.getId())){
                 Assert.hasText(friend.getWechatId(), "微信好友所属微信ID不能为空");
                 Assert.hasText(friend.getWxid(), "微信wxid不能为空");
+                Assert.notNull(friend.getType(), "微信好友类型不能为空");
 
                 friend.setId(IDGenerator.uuid32());
                 friend.setCreateTime(new Date());
@@ -53,9 +54,12 @@ public class WechatFriendDao{
             Assert.notEmpty(friends, "微信好友列表不能为空");
 
             final Date now = new Date();
+
             for(WechatFriend friend : friends){
+                Assert.notNull(friend, "微信好友信息不能为空");
                 Assert.hasText(friend.getWechatId(), "微信好友所属微信ID不能为空");
                 Assert.hasText(friend.getWxid(), "微信wxid不能为空");
+                Assert.notNull(friend.getType(), "微信好友类型不能为空");
 
                 friend.setId(IDGenerator.uuid32());
                 friend.setCreateTime(now);
@@ -73,8 +77,12 @@ public class WechatFriendDao{
             Assert.notEmpty(friends, "微信好友列表不能为空");
 
             final Date now = new Date();
+
             for(WechatFriend friend : friends){
-                Assert.hasText(friend.getId(), "微信好友ID不能为空");
+                Assert.notNull(friend, "微信好友信息不能为空");
+                Assert.hasText(friend.getWxid(), "微信好友wxid不能为空");
+                Assert.notNull(friend.getType(), "微信好友类型不能为空");
+                Assert.notNull(friend.getType(), "微信好友类型不能为空");
 
                 friend.setUpdateTime(now);
             }

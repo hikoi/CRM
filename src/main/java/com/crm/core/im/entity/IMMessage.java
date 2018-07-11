@@ -1,6 +1,7 @@
 package com.crm.core.im.entity;
 
 import com.crm.core.im.consts.IMUserType;
+import com.crm.core.wechat.consts.WechatMessageType;
 import lombok.Getter;
 import lombok.Setter;
 import org.wah.doraemon.domain.Createable;
@@ -11,14 +12,16 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class IMUser extends Entity implements Createable, Updateable{
+public class IMMessage extends Entity implements Createable, Updateable{
 
-    private String relationId;
-    private String name;
-    private String nickname;
-    private String headImgUrl;
-    private String sig;
-    private IMUserType type;
+    private String fromAccount;
+    private String toAccount;
+    private String wxid;
+
+    private IMUserType        senderType;
+    private WechatMessageType messageType;
+
+    private Date conversationTime;
     private Date createTime;
     private Date updateTime;
 }

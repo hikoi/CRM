@@ -391,7 +391,7 @@
             <target>WEB-INF</target>
           </webResources>
 
-          <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+          <!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
 
           <resourceEncoding>${project.build.encoding}</resourceEncoding>
 

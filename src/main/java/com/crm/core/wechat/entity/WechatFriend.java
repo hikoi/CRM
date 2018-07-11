@@ -1,5 +1,6 @@
 package com.crm.core.wechat.entity;
 
+import com.crm.core.wechat.consts.WechatFriendType;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -13,13 +14,15 @@ import java.util.Date;
 @Setter
 public class WechatFriend extends Entity implements Createable, Updateable{
 
-    private String wechatId;
-    private String wxid;
-    private String wxno;
-    private String nickname;
-    private String remarkname;
-    private Date   createTime;
-    private Date   updateTime;
+    private String           wechatId;
+    private String           wxid;
+    private String           wxno;
+    private String           nickname;
+    private String           remarkname;
+    private String           headImgUrl;
+    private WechatFriendType type;
+    private Date             createTime;
+    private Date             updateTime;
 
     @Override
     public boolean equals(Object object){
@@ -32,10 +35,12 @@ public class WechatFriend extends Entity implements Createable, Updateable{
 
             if(StringUtils.isNotBlank(this.getId()) && StringUtils.isNotBlank(entity.getId())){
                 return this.getId().equals(entity.getId());
+
             }else if(StringUtils.isNotBlank(this.wxid) &&
-                    StringUtils.isNotBlank(entity.wxid) &&
-                    StringUtils.isNotBlank(this.wechatId) &&
-                    StringUtils.isNotBlank(entity.wechatId)){
+                     StringUtils.isNotBlank(entity.wxid) &&
+                     StringUtils.isNotBlank(this.wechatId) &&
+                     StringUtils.isNotBlank(entity.wechatId)){
+
                 return this.wxid.equals(entity.wxid) && this.wechatId.equals(entity.wechatId);
             }
         }

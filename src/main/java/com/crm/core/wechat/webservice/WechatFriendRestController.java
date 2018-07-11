@@ -18,16 +18,16 @@ public class WechatFriendRestController{
     @Autowired
     private WechatFriendService wechatFriendService;
 
-    @RequestMapping(value = "/{wechatId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed save(@PathVariable("wechatId") String wechatId, @RequestBody WechatFriend friend){
-        wechatFriendService.save(wechatId, friend);
+    @RequestMapping(value = "/{wxno}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed save(@PathVariable("wxno") String wxno, @RequestBody WechatFriend friend){
+        wechatFriendService.save(wxno, friend);
 
         return new Responsed("保存成功");
     }
 
-    @RequestMapping(value = "/synchronize/{wechatId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed synchronize(@PathVariable("wechatId") String wechatId, @RequestBody List<WechatFriend> friends){
-        wechatFriendService.synchronize(wechatId, friends);
+    @RequestMapping(value = "/synchronize/{wxno}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed synchronize(@PathVariable("wxno") String wxno, @RequestBody List<WechatFriend> friends){
+        wechatFriendService.synchronize(wxno, friends);
 
         return new Responsed("同步成功");
     }

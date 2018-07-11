@@ -6,5 +6,5 @@ public interface QueueService{
 
     void saveWechatMessage(String messageString);
 
-    void synchronizeWechatMessage(String messagesString);
+    void saveWechatMessages(String messagesString);
 }

@@ -29,7 +29,8 @@ public class WechatMessageServiceImpl implements WechatMessageService{
     @Transactional(readOnly = false)
     public void save(WechatMessage message){
         Assert.notNull(message, "微信信息不能为空");
-        Assert.hasText(message.getWechatId(), "微信ID不能为空");
+        Assert.hasText(message.getWxno(), "微信号不能为空");
+        Assert.notNull(message.getConversationTime(), "微信发送时间不能为空");
 
         //消息队列处理
         redisTemplate.convertAndSend("save_wechat_message_queue", GsonUtils.serialize(message));
@@ -41,14 +42,14 @@ public class WechatMessageServiceImpl implements WechatMessageService{
         Assert.notEmpty(messages, "微信信息列表不能为空");
 
         //消息队列处理
-        redisTemplate.convertAndSend("synchronize_wechat_message_queue", GsonUtils.serialize(messages));
+        redisTemplate.convertAndSend("save_wechat_messages_queue", GsonUtils.serialize(messages));
     }
 
     @Override
-    public Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wechatId,
+    public Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wxno,
                                     String wxid, WechatMessageType type, WechatMessageStatus status){
         Assert.notNull(pageRequest, "分页信息不能为空");
 
-        return wechatMessageDao.page(pageRequest, accountId, wechatId, wxid, type, status);
+        return wechatMessageDao.page(pageRequest, accountId, wxno, wxid, type, status);
     }
 }

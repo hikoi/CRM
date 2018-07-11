@@ -8,6 +8,10 @@ public class CacheName{
 
     public static final String  PRIVATE_KEY        = "private_key";
 
+    public static final String  IM_PUBLIC_KEY      = "im_public_key";
+
+    public static final String  IM_PRIVATE_KEY     = "im_private_key";
+
     public static final Integer TICKET_EXPIRE      = 7200;
 
     public static final String  SERVICE_TICKET     = "service:ticket:";

@@ -27,6 +27,7 @@ import java.text.MessageFormat;
 import java.util.*;
 
 @Service
+@Transactional(readOnly = false)
 public class QueueServiceImpl implements QueueService{
 
     @Autowired
@@ -96,9 +97,6 @@ public class QueueServiceImpl implements QueueService{
         }
     }
 
-    /**
-     * 微信消息实时同步
-     */
     @Override
     @Transactional
     public void saveWechatMessage(String messageString){
@@ -108,7 +106,8 @@ public class QueueServiceImpl implements QueueService{
             WechatMessage message = GsonUtils.deserialize(messageString, WechatMessage.class);
 
             Assert.hasText(message.getWxid(), "微信信息wxid不能为空");
-            Assert.hasText(message.getWechatId(), "微信ID不能为空");
+            Assert.hasText(message.getWxno(), "微信号不能为空");
+            Assert.notNull(message.getConversationTime(), "微信发送时间不能为空");
 
             wechatMessageDao.saveOrUpdate(message);
         }catch(Exception e){
@@ -116,20 +115,18 @@ public class QueueServiceImpl implements QueueService{
         }
     }
 
-    /**
-     * 微信消息定时同步
-     */
+
     @Override
     @Transactional
-    public void synchronizeWechatMessage(String messagesString){
+    public void saveWechatMessages(String messagesString){
         try{
             Assert.hasText(messagesString, "微信消息内容不能为空");
 
             List<WechatMessage> messages = GsonUtils.deserialize(messagesString, new TypeToken<List<WechatMessage>>(){}.getType());
 
-            Assert.notEmpty(messages, "微信消息列表不能为空");
-
-            wechatMessageDao.saveList(messages);
+            if(messages != null && !messages.isEmpty()){
+                wechatMessageDao.saveList(messages);
+            }
         }catch(Exception e){
             throw new QueueServiceException(e.getMessage(), e);
         }

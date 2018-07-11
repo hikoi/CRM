@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface WechatFriendService{
 
-    void save(String wechatId, WechatFriend friend);
+    void save(String wxno, WechatFriend friend);
 
-    void synchronize(String wechatId, List<WechatFriend> friends);
+    void synchronize(String wxno, List<WechatFriend> friends);
 
     Page<WechatFriend> page(PageRequest pageRequest, String id, String wechatId, String wxid, String wxno, String nickname);
 }
