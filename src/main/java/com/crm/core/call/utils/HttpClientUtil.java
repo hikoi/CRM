@@ -54,6 +54,7 @@ public class HttpClientUtil {
         CloseableHttpResponse response = client.execute(httpPost);
         HttpEntity entity = response.getEntity();
         String result = EntityUtils.toString(entity, "UTF-8");
+        System.out.println("result: " + result);
         return result;
     }
 

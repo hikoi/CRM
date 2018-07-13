@@ -14,7 +14,8 @@ public class TencentCloud {
 //    正式
     public static String TEST_NUMBER = "02061090371";
     public static String APP_ID = "65665";
-    public static String TEST_IP = "http://sip.pstn.avc.qcloud.com:5089";
+//    public static String TEST_IP = "http://sip.pstn.avc.qcloud.com:5089";
+    public static String TEST_IP = "https://ccc.qcloud.com";
 //    正式
 
 //    发起呼叫
