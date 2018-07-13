@@ -1,5 +1,6 @@
 package com.crm.core.im.webservice;
 
+import com.crm.commons.consts.HeaderName;
 import com.crm.core.im.entity.IMUser;
 import com.crm.core.im.service.IMUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class IMUserRestController{
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Responsed<IMUser> getIMUserInfo(HttpServletRequest request){
-        String ticket = request.getHeader("ticket");
-        IMUser user = imUserService.getByTicket(ticket);
+        String ticket = request.getHeader(HeaderName.TICKET);
+        IMUser user   = imUserService.getByTicket(ticket);
 
         return new Responsed<IMUser>("查询成功", user);
     }

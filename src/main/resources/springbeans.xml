@@ -47,11 +47,11 @@
     <bean id="jdkSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
 
     <!-- 敏感词更新推送 -->
-    <bean id="pushSensitiveListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
-        <property name="delegate"              ref="queueServiceImpl"/>
-        <property name="serializer"            ref="jdkSerializer"/>
-        <property name="defaultListenerMethod" value="pushSensitive"/>
-    </bean>
+    <!--<bean id="pushSensitiveListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">-->
+        <!--<property name="delegate"              ref="queueServiceImpl"/>-->
+        <!--<property name="serializer"            ref="jdkSerializer"/>-->
+        <!--<property name="defaultListenerMethod" value="pushSensitive"/>-->
+    <!--</bean>-->
 
     <!-- 微信消息实时同步 -->
     <bean id="saveWechatMessageListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
@@ -69,7 +69,7 @@
 
     <!-- 添加监听器 -->
     <redis:listener-container>
-        <redis:listener ref="pushSensitiveListener"             method="pushSensitive"            serializer="jdkSerializer" topic="push_sensitive_queue"/>
+        <!--<redis:listener ref="pushSensitiveListener"             method="pushSensitive"            serializer="jdkSerializer" topic="push_sensitive_queue"/>-->
         <redis:listener ref="saveWechatMessageListener"         method="saveWechatMessage"        serializer="jdkSerializer" topic="save_wechat_message_queue"/>
         <redis:listener ref="saveWechatMessagesListener"        method="saveWechatMessages"       serializer="jdkSerializer" topic="save_wechat_messages_queue"/>
     </redis:listener-container>

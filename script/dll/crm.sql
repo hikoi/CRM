@@ -15,6 +15,7 @@ CREATE TABLE `wechat` (
 CREATE TABLE `wechat_friend` (
   `id` varchar(32) NOT NULL,
   `wechat_id` varchar(32) NOT NULL,
+  `sellerId` varchar(32) DEFAULT NULL,
   `wxid` varchar(50) DEFAULT NULL,
   `wxno` varchar(50) DEFAULT NULL,
   `nickname` varchar(50) DEFAULT NULL,
@@ -169,4 +170,26 @@ CREATE TABLE `account_permission` (
 CREATE TABLE `account_role` (
   `account_id` varchar(32) NOT NULL,
   `role_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `call_record` (
+  `call_id` varchar(64) NOT NULL,
+  `app_id` varchar(32) DEFAULT NULL,
+  `caller` varchar(11) DEFAULT NULL,
+  `caller_name` varchar(32) DEFAULT NULL,
+  `called` varchar(11) DEFAULT NULL,
+  `called_name` varchar(32) DEFAULT NULL,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `total_mins` bigint(20) DEFAULT NULL,
+  `record_url` varchar(512) DEFAULT NULL,
+  `call_type` varchar(20) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `dtmf_type` varchar(128) DEFAULT NULL,
+  `data` varchar(32) DEFAULT NULL,
+  `caller_id` varchar(32) DEFAULT NULL,
+  `called_id` varchar(32) DEFAULT NULL,
+  `tc_fail_code` varchar(32) DEFAULT NULL,
+  `dtmf_code` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`call_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

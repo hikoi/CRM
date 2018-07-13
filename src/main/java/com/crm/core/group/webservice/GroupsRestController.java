@@ -41,24 +41,10 @@ public class GroupsRestController{
     }
 
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Groups>> page(Long pageNum, Long pageSize, String id, String name, UsingState state){
+    public Responsed<Page<Groups>> page(Long pageNum, Long pageSize, String name, UsingState state){
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Groups> page = groupsService.page(pageRequest, id, name, state);
+        Page<Groups> page = groupsService.page(pageRequest, name, state);
 
         return new Responsed<Page<Groups>>("查询成功", page);
-    }
-
-    @RequestMapping(value = "/relation/group/{groupId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed updateRelationByGroupId(@PathVariable("groupId") String groupId, List<String> wechatIds){
-        groupsService.updateRelationByGroupId(groupId, wechatIds);
-
-        return new Responsed("更新成功");
-    }
-
-    @RequestMapping(value = "/relation/wechat/{wechatId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed updateRelationByWechatId(@PathVariable("wechatId") String wechatId, List<String> groupIds){
-        groupsService.updateRelationByWechatId(wechatId, groupIds);
-
-        return new Responsed("更新成功");
     }
 }

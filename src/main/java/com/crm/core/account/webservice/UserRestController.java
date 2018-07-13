@@ -1,5 +1,6 @@
 package com.crm.core.account.webservice;
 
+import com.crm.commons.consts.HeaderName;
 import com.crm.core.account.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,8 +33,8 @@ public class UserRestController{
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Responsed<User> getUserInfo(HttpServletRequest request){
-        String ticket = request.getHeader("ticket");
-        User user = userService.getByTicket(ticket);
+        String ticket = request.getHeader(HeaderName.TICKET);
+        User   user   = userService.getByTicket(ticket);
 
         return new Responsed<User>("查询成功", user);
     }

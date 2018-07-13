@@ -1,5 +1,12 @@
 package com.crm.core.wechat.service;
 
+import com.crm.commons.consts.CacheName;
+import com.crm.commons.consts.IMConfig;
+import com.crm.core.authentication.entity.ServiceTicket;
+import com.crm.core.im.consts.IMMessageType;
+import com.crm.core.im.entity.IMMessage;
+import com.crm.core.im.utils.IMMessageUtils;
+import com.crm.core.im.utils.IMUtils;
 import com.crm.core.wechat.consts.WechatFriendType;
 import com.crm.core.wechat.dao.WechatDao;
 import com.crm.core.wechat.dao.WechatFriendDao;
@@ -12,7 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
+import org.wah.doraemon.utils.GsonUtils;
+import org.wah.doraemon.utils.RedisUtils;
+import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +38,9 @@ public class WechatFriendServiceImpl implements WechatFriendService{
 
     @Autowired
     private WechatDao wechatDao;
+
+    @Autowired
+    private ShardedJedisPool pool;
 
     @Override
     @Transactional(readOnly = false)
@@ -117,9 +132,53 @@ public class WechatFriendServiceImpl implements WechatFriendService{
     }
 
     @Override
-    public Page<WechatFriend> page(PageRequest pageRequest, String id, String wechatId, String wxid, String wxno, String nickname){
+    public Page<WechatFriend> page(PageRequest pageRequest, String sellerId, String wechatId, String wxid, String wxno,
+                                   String nickname){
         Assert.notNull(pageRequest, "分页信息不能为空");
 
-        return wechatFriendDao.page(pageRequest, id, wechatId, wxid, wxno, nickname);
+        return wechatFriendDao.page(pageRequest, sellerId, wechatId, wxid, wxno, nickname);
+    }
+
+    @Override
+    public Page<WechatFriend> pageByTicket(PageRequest pageRequest, String ticket, String wechatId, String wxid, String wxno,
+                                           String nickname){
+        Assert.hasText(ticket, "登录票据不能为空");
+
+        try(ShardedJedis jedis = pool.getResource()){
+            ServiceTicket st = RedisUtils.get(jedis, CacheName.SERVICE_TICKET + ticket, ServiceTicket.class);
+
+            return wechatFriendDao.page(pageRequest, st.getAccountId(), wechatId, wxid, wxno, nickname);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void redistribution(String id, String toAccount){
+        Assert.hasText(id, "微信好友ID不能为空");
+        Assert.hasText(toAccount, "分配的销售ID不能为空");
+
+        WechatFriend friend = wechatFriendDao.getById(id);
+        friend.setSellerId(StringUtils.isBlank(toAccount) ? "" : toAccount);
+
+        String fromAccount = friend.getSellerId();
+
+        //发送通知
+        IMMessage deleteAdvice = IMMessageUtils.createCustomMsg(null, fromAccount, IMMessageType.TIM_DELETE_FRIEND_ELEM,
+                                                      "好友移除通知", friend.getId(),
+                                                                MessageFormat.format("好友[{0}(1)]已从你的列表中移除",
+                                                                                     friend.getNickname(),
+                                                                                     friend.getRemarkname()));
+
+        IMUtils.sendMsg(IMConfig.SDK_APPID, IMConfig.ADMINISTRATOR, IMConfig.ADMINISTRATOR_SIG, deleteAdvice);
+
+        if(StringUtils.isNotBlank(toAccount)){
+            IMMessage addAdvice = IMMessageUtils.createCustomMsg(null, toAccount, IMMessageType.TIM_ADD_FRIEND_ELEM,
+                                                                 "好友新增通知", GsonUtils.serialize(friend),
+                                                                 MessageFormat.format("好友[{0}(1)]已添加到你的列表中",
+                                                                                      friend.getNickname(),
+                                                                                      friend.getRemarkname()));
+
+            IMUtils.sendMsg(IMConfig.SDK_APPID, IMConfig.ADMINISTRATOR, IMConfig.ADMINISTRATOR_SIG, addAdvice);
+        }
     }
 }

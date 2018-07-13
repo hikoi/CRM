@@ -30,13 +30,6 @@ public class WechatRestController{
         return new Responsed<Wechat>("更新成功", wechat);
     }
 
-    @RequestMapping(value = "/{wxno}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Wechat> getByWxno(@PathVariable("wxno") String wxno, String registrationId){
-        Wechat wechat = wechatService.getByWxno(wxno, registrationId);
-
-        return new Responsed<Wechat>("查询成功", wechat);
-    }
-
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Responsed<Page<Wechat>> page(Long pageNum, Long pageSize, String accountId, String wxno, String nickname){
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);

@@ -68,10 +68,7 @@ public class IMUserServiceImpl implements IMUserService{
                 imUserDao.saveOrUpdate(imUser);
 
                 //注册IM
-                IMUtils.accountImport(IMConfig.SDK_APPID,
-                                      IMConfig.ADMINISTRATOR,
-                                      SignatureUtils.get(IMConfig.SDK_APPID, IMConfig.ADMINISTRATOR, imPrivateKey),
-                                      imUser);
+                IMUtils.accountImport(IMConfig.SDK_APPID, IMConfig.ADMINISTRATOR, IMConfig.ADMINISTRATOR_SIG, imUser);
             }
 
             return imUser;

@@ -1,7 +1,6 @@
 package com.crm.core.im.entity;
 
-import com.crm.core.im.consts.IMUserType;
-import com.crm.core.wechat.consts.WechatMessageType;
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 import org.wah.doraemon.domain.Createable;
@@ -9,19 +8,36 @@ import org.wah.doraemon.domain.Entity;
 import org.wah.doraemon.domain.Updateable;
 
 import java.util.Date;
+import java.util.List;
 
+/**
+ * @link https://cloud.tencent.com/document/product/269/2282
+ */
 @Getter
 @Setter
 public class IMMessage extends Entity implements Createable, Updateable{
 
+    @SerializedName("SyncOtherMachine")
+    private Integer syncOtherMachine;
+
+    @SerializedName("From_Account")
     private String fromAccount;
+
+    @SerializedName("To_Account")
     private String toAccount;
-    private String wxid;
 
-    private IMUserType        senderType;
-    private WechatMessageType messageType;
+    @SerializedName("MsgLifeTime")
+    private Integer msgLifeTime;
 
-    private Date conversationTime;
+    @SerializedName("MsgRandom")
+    private Long msgRandom;
+
+    @SerializedName("MsgTimeStamp")
+    private Long msgTimeStamp;
+
+    @SerializedName("IMMsgBody")
+    private List<IMMsgBody> msgBody;
+
     private Date createTime;
     private Date updateTime;
 }

@@ -59,7 +59,7 @@ public class GroupsDao{
         }
     }
 
-    public Page<Groups> page(PageRequest pageRequest, String id, String name, UsingState state){
+    public Page<Groups> page(PageRequest pageRequest, String name, UsingState state){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -67,9 +67,6 @@ public class GroupsDao{
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
             criteria.sort(Restrictions.desc("createTime"));
 
-            if(StringUtils.isNotBlank(id)){
-                criteria.and(Restrictions.eq("id", id));
-            }
             if(StringUtils.isNotBlank(name)){
                 criteria.and(Restrictions.like("name", name));
             }
@@ -102,51 +99,6 @@ public class GroupsDao{
             }
 
             return mapper.find(criteria);
-        }catch(Exception e){
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    public void updateRelationByGroupId(String groupId, List<String> wechatIds){
-        try{
-            Assert.hasText(groupId, "分组ID不能为空");
-
-            //删除原有关系
-            mapper.dissolveRelationByGroupId(groupId);
-
-            //保存新关系
-            if(wechatIds != null && !wechatIds.isEmpty()){
-                mapper.establishRelationByGroupId(groupId, wechatIds);
-            }
-        }catch(Exception e){
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    public void updateRelationByWechatId(String wechatId, List<String> groupIds){
-        try{
-            Assert.hasText(wechatId, "微信ID不能为空");
-
-            //删除原有关系
-            mapper.dissolveRelationByWechatId(wechatId);
-
-            //保存新关系
-            if(groupIds != null && !groupIds.isEmpty()){
-                mapper.establishRelationByWechatId(wechatId, groupIds);
-            }
-        }catch(Exception e){
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    public List<String> findWxnoByGroupId(String groupId){
-        try{
-            Assert.hasText(groupId, "分组ID不能为空");
-
-            return mapper.findWxnoByGroupId(groupId);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

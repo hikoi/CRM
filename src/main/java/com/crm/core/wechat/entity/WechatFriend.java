@@ -15,6 +15,7 @@ import java.util.Date;
 public class WechatFriend extends Entity implements Createable, Updateable{
 
     private String           wechatId;
+    private String           sellerId;
     private String           wxid;
     private String           wxno;
     private String           nickname;

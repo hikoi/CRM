@@ -55,9 +55,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getByTicket(String ticket){
-        try(ShardedJedis jedis = pool.getResource()){
-            Assert.hasText(ticket, "票据不能为空");
+        Assert.hasText(ticket, "票据不能为空");
 
+        try(ShardedJedis jedis = pool.getResource()){
             ServiceTicket st = RedisUtils.get(jedis, CacheName.SERVICE_TICKET + ticket, ServiceTicket.class);
 
             return userDao.getWithAccountByAccountId(st.getAccountId());

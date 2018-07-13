@@ -15,9 +15,5 @@ public interface GroupsService{
 
     Groups getById(String id);
 
-    Page<Groups> page(PageRequest pageRequest, String id, String name, UsingState state);
-
-    void updateRelationByGroupId(String groupId, List<String> wechatIds);
-
-    void updateRelationByWechatId(String wechatId, List<String> groupIds);
+    Page<Groups> page(PageRequest pageRequest, String name, UsingState state);
 }

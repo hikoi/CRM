@@ -1,7 +1,5 @@
 package com.crm.core.wechat.service;
 
-import com.crm.core.jpush.dao.JPushDao;
-import com.crm.core.jpush.entity.JPush;
 import com.crm.core.permission.consts.ResourceType;
 import com.crm.core.permission.dao.PermissionDao;
 import com.crm.core.wechat.dao.WechatDao;
@@ -24,9 +22,6 @@ public class WechatServiceImpl implements WechatService{
 
     @Autowired
     private WechatDao wechatDao;
-
-    @Autowired
-    private JPushDao jPushDao;
 
     @Autowired
     private PermissionDao permissionDao;
@@ -56,24 +51,6 @@ public class WechatServiceImpl implements WechatService{
         }
 
         wechatDao.saveOrUpdate(wechat);
-    }
-
-    @Override
-    public Wechat getByWxno(String wxno, String registrationId){
-        Assert.hasText(wxno, "微信号不能为空");
-        Assert.hasText(registrationId, "极光推送账号ID不能为空");
-
-        //保存极光账号
-        JPush jPush = jPushDao.getByRegistrationId(registrationId);
-        if(jPush == null){
-            jPush = new JPush();
-            jPush.setRegistrationId(registrationId);
-        }
-        jPush.setWxno(wxno);
-        jPushDao.saveOrUpdate(jPush);
-
-        //查询微信
-        return wechatDao.getByWxno(wxno);
     }
 
     @Override

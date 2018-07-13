@@ -151,6 +151,7 @@
     <resultMap id="friend" type="com.crm.core.wechat.entity.WechatFriend">
         <id     column="id"           property="id"         javaType="java.lang.String"/>
         <result column="wechat_id"    property="wechatId"   javaType="java.lang.String"/>
+        <result column="seller_id"    property="sellerId"   javaType="java.lang.String"/>
         <result column="wxid"         property="wxid"       javaType="java.lang.String"/>
         <result column="wxno"         property="wxno"       javaType="java.lang.String"/>
         <result column="nickname"     property="nickname"   javaType="java.lang.String"/>
@@ -166,6 +167,7 @@
         INTO wechat_friend (
              id,
              wechat_id,
+             seller_id,
              wxid,
              wxno,
              nickname,
@@ -176,6 +178,7 @@
         ) VALUE (
              #{id,         jdbcType=VARCHAR},
              #{wechatId,   jdbcType=VARCHAR},
+             #{sellerId,   jdbcType=VARCHAR},
              #{wxid,       jdbcType=VARCHAR},
              #{wxno,       jdbcType=VARCHAR},
              #{nickname,   jdbcType=VARCHAR},
@@ -191,6 +194,7 @@
         INTO wechat_friend (
              id,
              wechat_id,
+             seller_id,
              wxid,
              wxno,
              nickname,
@@ -203,6 +207,7 @@
         (
              #{friend.id,         jdbcType=VARCHAR},
              #{friend.wechatId,   jdbcType=VARCHAR},
+             #{friend.sellerId,   jdbcType=VARCHAR},
              #{friend.wxid,       jdbcType=VARCHAR},
              #{friend.wxno,       jdbcType=VARCHAR},
              #{friend.nickname,   jdbcType=VARCHAR},
@@ -217,6 +222,9 @@
     <update id="update">
       UPDATE wechat_frined
        <set>
+          <if test="sellerId != null">
+            seller_id = #{sellerId, jdbcType=VARCHAR},
+          </if>
           <if test="wxno != null and wxno != ''">
             wxno = #{wxno, jdbcType=VARCHAR},
           </if>
@@ -240,6 +248,9 @@
       <foreach collection="friends" item="friend" separator=";">
         UPDATE wechat_friend
          <set>
+            <if test="friend.sellerId != null">
+              seller_id = #{friend.sellerId, jdbcType=VARCHAR},
+            </if>
             <if test="friend.wxno != null and friend.wxno != ''">
               wxno = #{friend.wxno, jdbcType=VARCHAR},
             </if>

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import org.wah.doraemon.domain.Createable;
 import org.wah.doraemon.security.exception.DataAccessException;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
@@ -94,14 +95,29 @@ public class WechatFriendDao{
         }
     }
 
-    public List<WechatFriend> find(String id, String wechatId, String wxid, String wxno, String nickname){
+    public WechatFriend getById(String id){
+        try{
+            Assert.hasText(id, "微信好友ID不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("id", id));
+
+            return mapper.get(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<WechatFriend> find(String sellerId, String wechatId, String wxid, String wxno, String nickname){
         try{
             Criteria criteria = new Criteria();
             criteria.sort(Restrictions.desc("createTime"));
 
-            if(StringUtils.isNotBlank(id)){
-                criteria.and(Restrictions.eq("id", id));
+            if(StringUtils.isNotBlank(sellerId)){
+                criteria.and(Restrictions.eq("sellerId", sellerId));
             }
+
             if(StringUtils.isNotBlank(wechatId)){
                 criteria.and(Restrictions.eq("wechatId", wechatId));
             }
@@ -122,22 +138,7 @@ public class WechatFriendDao{
         }
     }
 
-    public List<WechatFriend> findByWechatId(String wechatId){
-        try{
-            Assert.hasText(wechatId, "微信好友所属微信ID不能为空");
-
-            Criteria criteria = new Criteria();
-            criteria.sort(Restrictions.desc("createTime"));
-            criteria.and(Restrictions.eq("wechatId", wechatId));
-
-            return mapper.find(criteria);
-        }catch(Exception e){
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    public Page<WechatFriend> page(PageRequest pageRequest, String id, String wechatId, String wxid, String wxno, String nickname){
+    public Page<WechatFriend> page(PageRequest pageRequest, String sellerId, String wechatId, String wxid, String wxno, String nickname){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -145,8 +146,8 @@ public class WechatFriendDao{
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
             criteria.sort(Restrictions.desc("createTime"));
 
-            if(StringUtils.isNotBlank(id)){
-                criteria.and(Restrictions.eq("id", id));
+            if(StringUtils.isNotBlank(sellerId)){
+                criteria.and(Restrictions.eq("sellerId", sellerId));
             }
             if(StringUtils.isNotBlank(wechatId)){
                 criteria.and(Restrictions.eq("wechatId", wechatId));
@@ -165,6 +166,21 @@ public class WechatFriendDao{
             Long total = mapper.count(criteria);
 
             return new Page<WechatFriend>(list, total, pageRequest);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<WechatFriend> findByWechatId(String wechatId){
+        try{
+            Assert.hasText(wechatId, "微信好友所属微信ID不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.sort(Restrictions.desc("createTime"));
+            criteria.and(Restrictions.eq("wechatId", wechatId));
+
+            return mapper.find(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

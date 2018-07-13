@@ -12,5 +12,9 @@ public interface WechatFriendService{
 
     void synchronize(String wxno, List<WechatFriend> friends);
 
-    Page<WechatFriend> page(PageRequest pageRequest, String id, String wechatId, String wxid, String wxno, String nickname);
+    Page<WechatFriend> page(PageRequest pageRequest, String sellerId, String wechatId, String wxid, String wxno, String nickname);
+
+    Page<WechatFriend> pageByTicket(PageRequest pageRequest, String ticket, String wechatId, String wxid, String wxno, String nickname);
+
+    void redistribution(String id, String toAccount);
 }

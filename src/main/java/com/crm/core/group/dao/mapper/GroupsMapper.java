@@ -14,19 +14,9 @@ public interface GroupsMapper{
 
     void update(Groups group);
 
-    void dissolveRelationByGroupId(String groupId);
-
-    void dissolveRelationByWechatId(String wechatId);
-
-    void establishRelationByGroupId(@Param("groupId") String groupId, @Param("wechatIds") List<String> wechatIds);
-
-    void establishRelationByWechatId(@Param("wechatId") String wechatId, @Param("groupIds") List<String> groupIds);
-
     Groups get(@Param("params") Criteria criteria);
 
     List<Groups> find(@Param("params") Criteria criteria);
 
     Long count(@Param("params") Criteria criteria);
-
-    List<String> findWxnoByGroupId(String groupId);
 }
