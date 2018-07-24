@@ -155,6 +155,7 @@
         <result column="nickname"     property="nickname"   javaType="java.lang.String"/>
         <result column="head_img_url" property="headImgUrl" javaType="java.lang.String"/>
         <result column="sig"          property="sig"        javaType="java.lang.String"/>
+        <result column="sdk_app_id"   property="sdkAppId"   javaType="java.lang.String"/>
         <result column="type"         property="type"       typeHandler="IMUserTypeHandler"/>
         <result column="create_time"  property="createTime" javaType="java.util.Date"/>
         <result column="update_time"  property="updateTime" javaType="java.util.Date"/>
@@ -169,6 +170,7 @@
                nickname,
                head_img_url,
                sig,
+               sdk_app_id,
                type,
                create_time
           ) VALUE (
@@ -178,6 +180,7 @@
                #{nickname,   jdbcType=VARCHAR},
                #{headImgUrl, jdbcType=VARCHAR},
                #{sig,        jdbcType=VARCHAR},
+               #{sdkAppId,   jdbcType=VARCHAR},
                #{type,       typeHandler=IMUserTypeHandler},
                #{createTime, jdbcType=TIMESTAMP}
           )
@@ -194,6 +197,9 @@
              </if>
              <if test="headImgUrl != null and headImgUrl != ''">
                  head_img_url = #{headImgUrl, jdbcType=VARCHAR},
+             </if>
+             <if test="sdkAppId != null">
+                 sdk_app_id = #{skdAppId, jdbcType=VARCHAR},
              </if>
              <if test="sig != null and sig != ''">
                  sig = #{sig, jdbcType=VARCHAR},

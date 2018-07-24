@@ -20,7 +20,7 @@ public class WechatFriendTypeHandler extends BaseTypeHandler<WechatFriendType> i
         return WechatFriendType.getById(rs.getInt(columnName));
     }
 
-    public WechatFriendType getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+    public WechatFriendType getNullableResult(ResultSet rs, int columnIndex) throws SQLException{
         return WechatFriendType.getById(rs.getInt(columnIndex));
     }
 

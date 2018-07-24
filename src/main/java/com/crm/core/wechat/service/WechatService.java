@@ -9,6 +9,4 @@ public interface WechatService{
     void save(Wechat wechat);
 
     void update(Wechat wechat);
-
-    Page<Wechat> page(PageRequest pageRequest, String accountId, String wxno, String nickname);
 }

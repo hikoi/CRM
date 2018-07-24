@@ -1,5 +1,6 @@
 package com.crm.core.wechat.dao;
 
+import com.crm.core.wechat.consts.PurposeType;
 import com.crm.core.wechat.dao.mapper.WechatMapper;
 import com.crm.core.wechat.entity.Wechat;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,7 @@ public class WechatDao{
             if(StringUtils.isBlank(wechat.getId())){
                 Assert.hasText(wechat.getCompanyId(), "公司ID不能为空");
                 Assert.hasText(wechat.getWxno(), "微信号不能为空");
+                Assert.notNull(wechat.getType(), "微信用途类型不能为空");
 
                 wechat.setId(IDGenerator.uuid32());
                 wechat.setCreateTime(new Date());
@@ -89,7 +91,7 @@ public class WechatDao{
         }
     }
 
-    public Page<Wechat> page(PageRequest pageRequest, String wxno, String nickname, List<String> ids){
+    public Page<Wechat> page(PageRequest pageRequest, String wxno, String nickname, PurposeType type, List<String> ids){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -102,6 +104,9 @@ public class WechatDao{
             }
             if(StringUtils.isNotBlank(nickname)){
                 criteria.and(Restrictions.like("nickname", nickname));
+            }
+            if(type != null){
+                criteria.and(Restrictions.eq("type", type.getId()));
             }
             if(ids != null && !ids.isEmpty()){
                 criteria.and(Restrictions.in("id", ids));

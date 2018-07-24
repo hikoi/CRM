@@ -1,7 +1,5 @@
 package com.crm.core.wechat.service;
 
-import com.crm.core.permission.consts.ResourceType;
-import com.crm.core.permission.dao.PermissionDao;
 import com.crm.core.wechat.dao.WechatDao;
 import com.crm.core.wechat.entity.Wechat;
 import org.apache.commons.lang3.StringUtils;
@@ -10,11 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.wah.doraemon.security.exception.DuplicateException;
-import org.wah.doraemon.security.request.Page;
-import org.wah.doraemon.security.request.PageRequest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,9 +15,6 @@ public class WechatServiceImpl implements WechatService{
 
     @Autowired
     private WechatDao wechatDao;
-
-    @Autowired
-    private PermissionDao permissionDao;
 
     @Override
     @Transactional(readOnly = false)
@@ -51,19 +41,5 @@ public class WechatServiceImpl implements WechatService{
         }
 
         wechatDao.saveOrUpdate(wechat);
-    }
-
-    @Override
-    public Page<Wechat> page(PageRequest pageRequest, String accountId, String wxno, String nickname){
-        Assert.notNull(pageRequest, "分页信息不能为空");
-
-        //微信ID
-        List<String> ids = new ArrayList<String>();
-        //查询
-        if(StringUtils.isNotBlank(accountId)){
-            ids.addAll(permissionDao.findResourceIdsByAccountId(accountId, ResourceType.WECHAT));
-        }
-
-        return wechatDao.page(pageRequest, wxno, nickname, ids);
     }
 }

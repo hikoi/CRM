@@ -19,10 +19,17 @@ public class IMUserRestController{
     @Autowired
     private IMUserService imUserService;
 
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<IMUser> getIMUserInfo(HttpServletRequest request){
+    @RequestMapping(value = "/ticket", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<IMUser> getByTicket(HttpServletRequest request){
         String ticket = request.getHeader(HeaderName.TICKET);
         IMUser user   = imUserService.getByTicket(ticket);
+
+        return new Responsed<IMUser>("查询成功", user);
+    }
+
+    @RequestMapping(value = "/wxno", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<IMUser> getByWxno(String wxno){
+        IMUser user = imUserService.getByWxno(wxno);
 
         return new Responsed<IMUser>("查询成功", user);
     }

@@ -18,6 +18,7 @@ public class IMUser extends Entity implements Createable, Updateable{
     private String nickname;
     private String headImgUrl;
     private String sig;
+    private String sdkAppId;
     private IMUserType type;
     private Date createTime;
     private Date updateTime;

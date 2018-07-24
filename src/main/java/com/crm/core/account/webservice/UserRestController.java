@@ -31,8 +31,8 @@ public class UserRestController{
         return new Responsed<Page<User>>("查询成功", page);
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<User> getUserInfo(HttpServletRequest request){
+    @RequestMapping(value = "/ticket", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<User> getByTicket(HttpServletRequest request){
         String ticket = request.getHeader(HeaderName.TICKET);
         User   user   = userService.getByTicket(ticket);
 

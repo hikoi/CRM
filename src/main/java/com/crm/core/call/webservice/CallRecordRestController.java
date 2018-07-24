@@ -371,7 +371,7 @@ public class CallRecordRestController {
 //            callRecord.setStartTime(new Date());
 //            callRecord.setStatus("status2");
 //            callRecord.setTotalMins(Integer.parseInt("1112"));
-//            callRecordService.update(callRecord);
+//            callRecordService.save(callRecord);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

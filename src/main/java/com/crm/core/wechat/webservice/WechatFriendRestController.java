@@ -1,6 +1,5 @@
 package com.crm.core.wechat.webservice;
 
-import com.crm.commons.consts.HeaderName;
 import com.crm.core.wechat.entity.WechatFriend;
 import com.crm.core.wechat.service.WechatFriendService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -39,17 +37,6 @@ public class WechatFriendRestController{
                                               String wxno, String nickname){
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
         Page<WechatFriend> page = wechatFriendService.page(pageRequest, sellerId, wechatId, wxid, wxno, nickname);
-
-        return new Responsed<Page<WechatFriend>>("查询成功", page);
-    }
-
-    @RequestMapping(value = "/page/ticket", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<WechatFriend>> pageByTicket(HttpServletRequest request, Long pageNum, Long pageSize, String wechatId,
-                                                      String wxid, String wxno, String nickname){
-
-        String ticket           = request.getHeader(HeaderName.TICKET);
-        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<WechatFriend> page = wechatFriendService.pageByTicket(pageRequest, ticket, wechatId, wxid, wxno, nickname);
 
         return new Responsed<Page<WechatFriend>>("查询成功", page);
     }

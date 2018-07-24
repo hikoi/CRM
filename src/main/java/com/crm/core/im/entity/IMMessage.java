@@ -1,5 +1,6 @@
 package com.crm.core.im.entity;
 
+import com.crm.core.im.consts.IMMessageType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,8 +36,11 @@ public class IMMessage extends Entity implements Createable, Updateable{
     @SerializedName("MsgTimeStamp")
     private Long msgTimeStamp;
 
-    @SerializedName("IMMsgBody")
+    @SerializedName("MsgBody")
     private List<IMMsgBody> msgBody;
+
+    @SerializedName("MsgType")
+    private IMMessageType type;
 
     private Date createTime;
     private Date updateTime;

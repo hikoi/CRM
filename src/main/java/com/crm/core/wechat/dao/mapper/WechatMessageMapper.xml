@@ -150,8 +150,8 @@
 
     <resultMap id="message" type="com.crm.core.wechat.entity.WechatMessage">
         <id     column="id"                property="id"               javaType="java.lang.String"/>
-        <result column="account_id"        property="accountId"        javaType="java.lang.String"/>
-        <result column="wxno"              property="wxno"             javaType="java.lang.String"/>
+        <result column="seller_id"         property="sellerId"         javaType="java.lang.String"/>
+        <result column="wechat_id"         property="wechatId"         javaType="java.lang.String"/>
         <result column="wxid"              property="wxid"             javaType="java.lang.String"/>
         <result column="content"           property="content"          javaType="java.lang.String"/>
         <result column="type"              property="type"             typeHandler="WechatMessageTypeHandler"/>
@@ -166,8 +166,9 @@
       INSERT
         INTO wechat_message (
              id,
-             wxno,
+             wechat_id,
              wxid,
+             seller_id,
              content,
              type,
              status,
@@ -176,8 +177,9 @@
              create_time
         ) VALUE (
              #{id,               jdbcType=VARCHAR},
-             #{wxno,             jdbcType=VARCHAR},
+             #{wechatId,         jdbcType=VARCHAR},
              #{wxid,             jdbcType=VARCHAR},
+             #{sellerId,         jdbcType=VARCHAR},
              #{content,          jdbcType=VARCHAR},
              #{type,             typeHandler=WechatMessageTypeHandler},
              #{status,           typeHandler=WechatMessageStatusHandler},
@@ -191,8 +193,9 @@
       INSERT
         INTO wechat_message (
              id,
-             wxno,
+             wechat_id,
              wxid,
+             seller_id,
              content,
              type,
              status,
@@ -203,8 +206,9 @@
       <foreach collection="messages" item="message" separator=",">
         (
               #{message.id,               jdbcType=VARCHAR},
-              #{message.wxno,             jdbcType=VARCHAR},
+              #{message.wechatId,         jdbcType=VARCHAR},
               #{message.wxid,             jdbcType=VARCHAR},
+              #{message.sellerId,         jdbcType=VARCHAR},
               #{message.content,          jdbcType=VARCHAR},
               #{message.type,             typeHandler=WechatMessageTypeHandler},
               #{message.status,           typeHandler=WechatMessageStatusHandler},
@@ -218,6 +222,9 @@
     <update id="update">
       UPDAET wechat_message
        <set>
+          <if test="sellerId != null">
+            seller_id = #{sellerId, jdbcType=VARCHAR},
+          </if>
           <if test="content != null">
             content = #{content, jdbcType=VARCHAR},
           </if>
@@ -231,7 +238,7 @@
             extract = #{extract, jdbcType=VARCHAR},
           </if>
           <if test="conversationTime != null">
-              conversation_time = #{conversationTime, jdbcType=TIMESTAMP},
+            conversation_time = #{conversationTime, jdbcType=TIMESTAMP},
           </if>
           <if test="updateTime != null">
             update_time = #{updateTime, jdbcType=TIMESTAMP},

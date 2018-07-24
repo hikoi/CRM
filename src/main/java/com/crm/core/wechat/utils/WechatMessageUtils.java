@@ -88,11 +88,18 @@ public class WechatMessageUtils{
             //截取内容
             content = des.getTextTrim();
 
-            Pattern pattern = Pattern.compile("收到转账([1-9]\\d*|0)(\\.\\d{1,2})?元。");
+            //转账备注
+            Element wcpayinfo = appmsg.element("wcpayinfo");
+            //正文
+            Element paymemo = wcpayinfo.element("pay_memo");
+            //截取备注
+            String memo = paymemo.getTextTrim();
+
+            Pattern pattern = Pattern.compile("收到转账([1-9]\\d*|0)(\\.\\d{1,2})?元");
             Matcher matcher = pattern.matcher(content);
 
             if(matcher.find()){
-                return matcher.group();
+                return MessageFormat.format("{0}[{1}]", matcher.group(), memo);
             }
 
             return content;
@@ -130,18 +137,29 @@ public class WechatMessageUtils{
         }
 
         try{
-            //非好友消息
+            //非好友
             Pattern pattern = Pattern.compile("[\\s\\S]*开启了朋友验证，你还不是他（她）朋友。请先发送朋友验证请求，对方验证通过后，才能聊天。");
             Matcher matcher = pattern.matcher(content);
             if(matcher.find()){
                 return matcher.group();
             }
 
-            //好友添加消息
+            //好友添加
             pattern = Pattern.compile("你已添加了[\\s\\S]*，现在可以开始聊天了。");
             matcher = pattern.matcher(content);
             if(matcher.find()){
                 return matcher.group();
+            }
+
+            //领取红包
+            pattern = Pattern.compile("<img src=\"SystemMessages_HongbaoIcon.png\"/>  你领取了[\\s\\S]*的[\\s\\S]*红包</_wc_custom_link_>");
+            matcher = pattern.matcher(content);
+            if(matcher.matches()){
+                pattern = Pattern.compile("你领取了[\\s\\S]*的");
+                matcher = pattern.matcher(content);
+                if(matcher.find()){
+                    return matcher.group() + "红包";
+                }
             }
 
             return content;

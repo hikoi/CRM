@@ -149,13 +149,14 @@
     </sql>
 
     <resultMap id="wechat" type="com.crm.core.wechat.entity.Wechat">
-        <id     column="id"          property="id"         javaType="java.lang.String"/>
-        <result column="company_id"  property="companyId"  javaType="java.lang.String"/>
-        <result column="device_id"   property="deviceId"   javaType="java.lang.String"/>
-        <result column="wxno"        property="wxno"       javaType="java.lang.String"/>
-        <result column="nickname"    property="nickname"   javaType="java.lang.String"/>
-        <result column="create_time" property="createTime" javaType="java.util.Date"/>
-        <result column="update_time" property="updateTime" javaType="java.util.Date"/>
+        <id     column="id"           property="id"          javaType="java.lang.String"/>
+        <result column="company_id"   property="companyId"   javaType="java.lang.String"/>
+        <result column="device_id"    property="deviceId"    javaType="java.lang.String"/>
+        <result column="wxno"         property="wxno"        javaType="java.lang.String"/>
+        <result column="nickname"     property="nickname"    javaType="java.lang.String"/>
+        <result column="type"         property="type" typeHandler="PurposeTypeHandler"/>
+        <result column="create_time"  property="createTime"  javaType="java.util.Date"/>
+        <result column="update_time"  property="updateTime"  javaType="java.util.Date"/>
     </resultMap>
 
     <insert id="save">
@@ -166,14 +167,16 @@
              device_id,
              wxno,
              nickname,
+             type,
              create_time
         ) VALUE (
-             #{id,         jdbcType=VARCHAR},
-             #{companyId,  jdbcType=VARCHAR},
-             #{deviceId,   jdbcType=VARCHAR},
-             #{wxno,       jdbcType=VARCHAR},
-             #{nickname,   jdbcType=VARCHAR},
-             #{createTime, jdbcType=TIMESTAMP}
+             #{id,          jdbcType=VARCHAR},
+             #{companyId,   jdbcType=VARCHAR},
+             #{deviceId,    jdbcType=VARCHAR},
+             #{wxno,        jdbcType=VARCHAR},
+             #{nickname,    jdbcType=VARCHAR},
+             #{type,        typeHandler=PurposeTypeHandler},
+             #{createTime,  jdbcType=TIMESTAMP}
         )
     </insert>
 
@@ -188,6 +191,9 @@
           </if>
           <if test="nickname != null">
             nickname = #{nickname, jdbcType=VARCHAR},
+          </if>
+          <if test="type != null">
+            type = #{type, typeHandler=PurposeTypeHandler},
           </if>
           <if test="updateTime != null">
             update_time = #{updateTime, jdbcType=TIMESTAMP},

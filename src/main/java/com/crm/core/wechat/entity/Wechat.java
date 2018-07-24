@@ -1,5 +1,6 @@
 package com.crm.core.wechat.entity;
 
+import com.crm.core.wechat.consts.PurposeType;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -14,12 +15,13 @@ import java.util.List;
 @Setter
 public class Wechat extends Entity implements Createable, Updateable{
 
-    private String  companyId;
-    private String  deviceId;
-    private String  wxno;
-    private String  nickname;
-    private Date    createTime;
-    private Date    updateTime;
+    private String      companyId;
+    private String      deviceId;
+    private String      wxno;
+    private String      nickname;
+    private PurposeType type;
+    private Date        createTime;
+    private Date        updateTime;
 
     private List<WechatFriend> friends;
 }

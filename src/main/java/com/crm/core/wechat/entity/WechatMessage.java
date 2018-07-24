@@ -15,12 +15,15 @@ import java.util.Date;
 @Setter
 public class WechatMessage extends Entity implements Createable, Updateable{
 
-    private String              wxno;
-    private String              accountId;
+    @SerializedName(value = "wechatId", alternate = "token")
+    private String              wechatId;
+    @SerializedName(value = "wxid", alternate = "username")
     private String              wxid;
+    @SerializedName(value = "type", alternate = "msgType")
+    private WechatMessageType   type;
+    private String              sellerId;
     private String              content;
     private String              extract;
-    private WechatMessageType   type;
     private WechatMessageStatus status;
     private Date                conversationTime;
     private Date                createTime;

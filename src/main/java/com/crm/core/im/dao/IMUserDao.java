@@ -32,6 +32,7 @@ public class IMUserDao{
                 Assert.hasText(user.getRelationId(), "IM用户关联ID不能为空");
                 Assert.notNull(user.getType(), "IM用户类型不能为空");
                 Assert.hasText(user.getSig(), "IM用户签名不能为空");
+                Assert.hasText(user.getSdkAppId(), "IM用户AppId不能为空");
 
                 user.setId(IDGenerator.uuid32());
                 user.setCreateTime(new Date());

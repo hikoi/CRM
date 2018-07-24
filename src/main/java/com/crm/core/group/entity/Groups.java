@@ -1,5 +1,6 @@
 package com.crm.core.group.entity;
 
+import com.crm.core.group.consts.GroupType;
 import lombok.Getter;
 import lombok.Setter;
 import org.wah.doraemon.domain.Createable;
@@ -13,8 +14,11 @@ import java.util.Date;
 @Setter
 public class Groups extends Entity implements Createable, Updateable{
 
-    private String          name;
-    private UsingState      state;
-    private Date            createTime;
-    private Date            updateTime;
+    private String     name;
+    private UsingState state;
+    private String     companyId;
+    private Boolean    isDefault;
+    private GroupType  type;
+    private Date       createTime;
+    private Date       updateTime;
 }

@@ -1,5 +1,6 @@
 package com.crm.core.group.dao;
 
+import com.crm.core.group.consts.GroupType;
 import com.crm.core.group.dao.mapper.GroupsMapper;
 import com.crm.core.group.entity.Groups;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +33,10 @@ public class GroupsDao{
             Assert.notNull(group, "分组信息不能为空");
 
             if(StringUtils.isBlank(group.getId())){
+                Assert.notNull(group.getType(), "分组类型不能为空");
+
                 group.setId(IDGenerator.uuid32());
+                group.setState(UsingState.USABLE);
                 group.setCreateTime(new Date());
                 mapper.save(group);
             }else{
@@ -59,7 +63,7 @@ public class GroupsDao{
         }
     }
 
-    public Page<Groups> page(PageRequest pageRequest, String name, UsingState state){
+    public Page<Groups> page(PageRequest pageRequest, String companyId, String name, GroupType type, UsingState state){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -67,11 +71,17 @@ public class GroupsDao{
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
             criteria.sort(Restrictions.desc("createTime"));
 
+            if(StringUtils.isNotBlank(companyId)){
+                criteria.and(Restrictions.eq("companyId", companyId));
+            }
             if(StringUtils.isNotBlank(name)){
                 criteria.and(Restrictions.like("name", name));
             }
             if(state != null){
                 criteria.and(Restrictions.eq("state", state.getId()));
+            }
+            if(type != null){
+                criteria.and(Restrictions.eq("type", type.getId()));
             }
 
             List<Groups> list = mapper.find(criteria);
@@ -84,18 +94,24 @@ public class GroupsDao{
         }
     }
 
-    public List<Groups> find(List<String> ids, String name, UsingState state){
+    public List<Groups> find(List<String> ids, String companyId, String name, GroupType type, UsingState state){
         try{
             Criteria criteria = new Criteria();
 
             if(ids != null && !ids.isEmpty()){
                 criteria.and(Restrictions.in("id", ids));
             }
+            if(StringUtils.isNotBlank(companyId)){
+                criteria.and(Restrictions.eq("companyId", companyId));
+            }
             if(StringUtils.isNotBlank(name)){
                 criteria.and(Restrictions.like("name", name));
             }
             if(state != null){
                 criteria.and(Restrictions.eq("state", state.getId()));
+            }
+            if(type != null){
+                criteria.and(Restrictions.eq("type", type.getId()));
             }
 
             return mapper.find(criteria);

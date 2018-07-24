@@ -1,5 +1,6 @@
 package com.crm.core.group.service;
 
+import com.crm.core.group.consts.GroupType;
 import com.crm.core.group.entity.Groups;
 import org.wah.doraemon.entity.consts.UsingState;
 import org.wah.doraemon.security.request.Page;
@@ -15,5 +16,5 @@ public interface GroupsService{
 
     Groups getById(String id);
 
-    Page<Groups> page(PageRequest pageRequest, String name, UsingState state);
+    Page<Groups> page(PageRequest pageRequest, String companyId, String name, GroupType type, UsingState state);
 }

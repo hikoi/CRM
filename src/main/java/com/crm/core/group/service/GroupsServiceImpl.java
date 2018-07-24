@@ -1,10 +1,9 @@
 package com.crm.core.group.service;
 
+import com.crm.core.group.consts.GroupType;
 import com.crm.core.group.dao.GroupsDao;
 import com.crm.core.group.entity.Groups;
-import com.crm.core.wechat.dao.WechatDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -18,12 +17,6 @@ public class GroupsServiceImpl implements GroupsService{
 
     @Autowired
     private GroupsDao groupsDao;
-
-    @Autowired
-    private WechatDao wechatDao;
-
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     @Override
     @Transactional
@@ -50,9 +43,9 @@ public class GroupsServiceImpl implements GroupsService{
     }
 
     @Override
-    public Page<Groups> page(PageRequest pageRequest, String name, UsingState state){
+    public Page<Groups> page(PageRequest pageRequest, String companyId, String name, GroupType type, UsingState state){
         Assert.notNull(pageRequest, "分组信息不能为空");
 
-        return groupsDao.page(pageRequest, name, state);
+        return groupsDao.page(pageRequest, companyId, name, type, state);
     }
 }

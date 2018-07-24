@@ -151,6 +151,9 @@
     <resultMap id="group" type="com.crm.core.group.entity.Groups">
         <id     column="id"          property="id"         javaType="java.lang.String"/>
         <result column="name"        property="name"       javaType="java.lang.String"/>
+        <result column="company_id"  property="companyId"  javaType="java.lang.String"/>
+        <result column="is_default"  property="isDefault"  javaType="java.lang.Boolean"/>
+        <result column="type"        property="type"       typeHandler="GroupTypeHandler"/>
         <result column="state"       property="state"      typeHandler="UsingStateHandler"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTime" javaType="java.util.Date"/>
@@ -161,11 +164,17 @@
         INTO groups (
              id,
              name,
+             company_id,
+             is_default,
+             type,
              state,
              create_time
         ) VALUE (
              #{id,         jdbcType=VARCHAR},
              #{name,       jdbcType=VARCHAR},
+             #{companyId,  jdbcType=VARCHAR},
+             #{isDefault,  jdbcType=BOOLEAN},
+             #{type,       typeHandler=GroupTypeHandler},
              #{state,      typeHandler=UsingStateHandler},
              #{createTime, jdbcType=VARCHAR}
         )
@@ -176,6 +185,15 @@
        <set>
           <if test="name != null">
             name = #{name, jdbcType=VARCHAR},
+          </if>
+          <if test="isDefault != null">
+            is_default = #{isDefault, jdbcType=BOOLEAN},
+          </if>
+          <if test="companyId != null and companyId != ''">
+            company_id = #{companyId, jdbcType=VARCHAR},
+          </if>
+          <if test="type != null">
+            type = #{type, typeHandler=GroupTypeHandler},
           </if>
           <if test="state != null">
             state = #{state, typeHandler=UsingStateHandler},

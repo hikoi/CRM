@@ -33,7 +33,7 @@ public class WechatFriendDao{
             Assert.notNull(friend, "微信好友信息不能为空");
 
             if(StringUtils.isBlank(friend.getId())){
-                Assert.hasText(friend.getWechatId(), "微信好友所属微信ID不能为空");
+                Assert.hasText(friend.getWechatId(), "所属微信ID不能为空");
                 Assert.hasText(friend.getWxid(), "微信wxid不能为空");
                 Assert.notNull(friend.getType(), "微信好友类型不能为空");
 
@@ -58,7 +58,7 @@ public class WechatFriendDao{
 
             for(WechatFriend friend : friends){
                 Assert.notNull(friend, "微信好友信息不能为空");
-                Assert.hasText(friend.getWechatId(), "微信好友所属微信ID不能为空");
+                Assert.hasText(friend.getWechatId(), "所属微信ID不能为空");
                 Assert.hasText(friend.getWxid(), "微信wxid不能为空");
                 Assert.notNull(friend.getType(), "微信好友类型不能为空");
 
@@ -174,7 +174,7 @@ public class WechatFriendDao{
 
     public List<WechatFriend> findByWechatId(String wechatId){
         try{
-            Assert.hasText(wechatId, "微信好友所属微信ID不能为空");
+            Assert.hasText(wechatId, "所属微信ID不能为空");
 
             Criteria criteria = new Criteria();
             criteria.sort(Restrictions.desc("createTime"));
@@ -189,7 +189,7 @@ public class WechatFriendDao{
 
     public boolean exist(String wechatId, String wxid){
         try{
-            Assert.hasText(wechatId, "微信好友所属微信ID不能为空");
+            Assert.hasText(wechatId, "所属微信ID不能为空");
             Assert.hasText(wxid, "微信好友wxid不能为空");
 
             Criteria criteria = new Criteria();
@@ -197,6 +197,22 @@ public class WechatFriendDao{
             criteria.and(Restrictions.eq("wxid", wxid));
 
             return (mapper.count(criteria) > 0);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public WechatFriend getByWechatIdAndWxid(String wechatId, String wxid){
+        try{
+            Assert.hasText(wechatId, "所属微信ID不能为空");
+            Assert.hasText(wxid, "微信好友wxid不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("wechatId", wechatId));
+            criteria.and(Restrictions.eq("wxid", wxid));
+
+            return mapper.get(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

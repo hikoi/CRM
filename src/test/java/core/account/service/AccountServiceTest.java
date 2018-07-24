@@ -27,10 +27,11 @@ public class AccountServiceTest{
         String companyId    = "93dc01bcd9474f71a57bfffb25d9b2cb";
         String departmentId = "0008f7903b4443239223666f3c66a379";
         String positionId   = "c5635b42e3e04f1a82a289f13d604838";
-        String username     = "13246308797";
+//        String username     = "13246308797";
+        String username     = "13750565823";
         String password     = RSAUtils.encryptyPublicKey("moneycat888888", pemDao.getPublicKey());
-        String nickname     = "LyhHoiRab";
-        String name         = "黎海桦";
+        String nickname     = "LnnWonXin";
+        String name         = "林文欣";
         Sex    sex          = Sex.MALE;
 
         accountService.save(username, password, nickname, name, sex, companyId, departmentId, positionId);

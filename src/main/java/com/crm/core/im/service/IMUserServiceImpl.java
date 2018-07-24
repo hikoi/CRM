@@ -11,6 +11,8 @@ import com.crm.core.im.entity.IMUser;
 import com.crm.core.im.utils.IMUtils;
 import com.crm.core.im.utils.SignatureUtils;
 import com.crm.core.pem.dao.PemDao;
+import com.crm.core.wechat.dao.WechatDao;
+import com.crm.core.wechat.entity.Wechat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,9 @@ public class IMUserServiceImpl implements IMUserService{
     private UserDao userDao;
 
     @Autowired
+    private WechatDao wechatDao;
+
+    @Autowired
     private PemDao pemDao;
 
     @Autowired
@@ -49,6 +54,7 @@ public class IMUserServiceImpl implements IMUserService{
             ServiceTicket st = RedisUtils.get(jedis, CacheName.SERVICE_TICKET + ticket, ServiceTicket.class);
             User user = userDao.getWithAccountByAccountId(st.getAccountId());
 
+            //查询IM用户
             IMUser imUser = imUserDao.getByRelationIdAndType(user.getAccountId(), IMUserType.SELLER);
 
             if(imUser == null){
@@ -61,6 +67,7 @@ public class IMUserServiceImpl implements IMUserService{
                 imUser = new IMUser();
                 imUser.setRelationId(user.getAccountId());
                 imUser.setSig(sig);
+                imUser.setSdkAppId(IMConfig.SDK_APPID);
                 imUser.setName(user.getName());
                 imUser.setNickname(user.getNickname());
                 imUser.setHeadImgUrl(user.getHeadImgUrl());
@@ -73,5 +80,39 @@ public class IMUserServiceImpl implements IMUserService{
 
             return imUser;
         }
+    }
+
+    @Override
+    @Transactional
+    public IMUser getByWxno(String wxno){
+        Assert.hasText(wxno, "微信号不能为空");
+
+        //查询微信
+        Wechat wechat = wechatDao.getByWxno(wxno);
+
+        //查询IM用户
+        IMUser imUser = imUserDao.getByRelationIdAndType(wechat.getId(), IMUserType.WECHAT);
+
+        if(imUser == null){
+            //私钥
+            String imPrivateKey = pemDao.getIMPrivateKey();
+            //获取签名
+            String sig = SignatureUtils.get(IMConfig.SDK_APPID, wechat.getId(), imPrivateKey);
+
+            //创建IM用户
+            imUser = new IMUser();
+            imUser.setRelationId(wechat.getId());
+            imUser.setSig(sig);
+            imUser.setSdkAppId(IMConfig.SDK_APPID);
+            imUser.setName(wechat.getWxno());
+            imUser.setNickname(wechat.getNickname());
+            imUser.setType(IMUserType.WECHAT);
+            imUserDao.saveOrUpdate(imUser);
+
+            //注册IM
+            IMUtils.accountImport(IMConfig.SDK_APPID, IMConfig.ADMINISTRATOR, IMConfig.ADMINISTRATOR_SIG, imUser);
+        }
+
+        return imUser;
     }
 }

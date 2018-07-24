@@ -29,12 +29,4 @@ public class WechatRestController{
 
         return new Responsed<Wechat>("更新成功", wechat);
     }
-
-    @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Wechat>> page(Long pageNum, Long pageSize, String accountId, String wxno, String nickname){
-        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Wechat> page = wechatService.page(pageRequest, accountId, wxno, nickname);
-
-        return new Responsed<Page<Wechat>>("查询成功", page);
-    }
 }

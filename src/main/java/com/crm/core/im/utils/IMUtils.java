@@ -40,15 +40,15 @@ public class IMUtils{
         if(StringUtils.isBlank(administrator)){
             throw new UtilsException("IM应用管理员不能为空");
         }
-        if(user == null || StringUtils.isBlank(user.getName())){
-            throw new UtilsException("IM用户信息不能为空");
+        if(user == null || StringUtils.isBlank(user.getRelationId())){
+            throw new UtilsException("IM用户登录账号不能为空");
         }
 
         //API
         String url = MessageFormat.format(ACCOUNT_IMPORT, sig, administrator, sdkAppId);
         //参数
         Map<String, String> params = new HashMap<String, String>();
-        params.put("Identifier", user.getName());
+        params.put("Identifier", user.getRelationId());
         params.put("Nick", user.getName());
         params.put("FaceUrl", user.getHeadImgUrl());
 

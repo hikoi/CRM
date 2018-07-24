@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crm.core.group.dao.mapper.GroupsWechatFriendMapper">
+
+    <sql id="WHERE_SQL">
+        <where>
+            <if test="params.andCriterions != null and params.andCriterions.size > 0">
+                <foreach collection="params.andCriterions" item="criterion">
+                    <trim prefix="AND (" suffix=")">
+                        <choose>
+                            <when test="criterion.noValue">
+                                ${criterion.property} ${criterion.operator}
+                            </when>
+                            <when test="criterion.singleValue">
+                                ${criterion.property} ${criterion.operator} #{criterion.value}
+                            </when>
+                            <when test="criterion.betweenValue">
+                                ${criterion.property} ${criterion.operator} #{criterion.value} AND #{criterion.secondValue}
+                            </when>
+                            <when test="criterion.listValue">
+                                ${criterion.property} ${criterion.operator}
+                                <foreach collection="criterion.value" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </when>
+                            <when test="criterion.andCriterionValue">
+                                <foreach collection="criterion.value" item="item" open="(" close=")" separator="AND">
+                                    <trim prefix="(" suffix=")">
+                                        <choose>
+                                            <when test="item.noValue">
+                                                ${item.property} ${item.operator}
+                                            </when>
+                                            <when test="item.singleValue">
+                                                ${item.property} ${item.operator} #{item.value}
+                                            </when>
+                                            <when test="item.betweenValue">
+                                                ${item.property} ${item.operator} #{item.value} AND #{item.secondValue}
+                                            </when>
+                                            <when test="item.listValue">
+                                                ${item.property} ${item.operator}
+                                                <foreach collection="item.value" item="itemValue" open="(" close=")" separator=",">
+                                                    #{itemValue}
+                                                </foreach>
+                                            </when>
+                                        </choose>
+                                    </trim>
+                                </foreach>
+                            </when>
+                            <when test="criterion.orCriterionValue">
+                                <foreach collection="criterion.value" item="item" open="(" close=")" separator="OR">
+                                    <trim prefix="(" suffix=")">
+                                        <choose>
+                                            <when test="item.noValue">
+                                                ${item.property} ${item.operator}
+                                            </when>
+                                            <when test="item.singleValue">
+                                                ${item.property} ${item.operator} #{item.value}
+                                            </when>
+                                            <when test="item.betweenValue">
+                                                ${item.property} ${item.operator} #{item.value} AND #{item.secondValue}
+                                            </when>
+                                            <when test="item.listValue">
+                                                ${item.property} ${item.operator}
+                                                <foreach collection="item.value" item="itemValue" open="(" close=")" separator=",">
+                                                    #{itemValue}
+                                                </foreach>
+                                            </when>
+                                        </choose>
+                                    </trim>
+                                </foreach>
+                            </when>
+                        </choose>
+                    </trim>
+                </foreach>
+            </if>
+
+            <if test="params.orCriterions != null and params.orCriterions.size > 0">
+                <foreach collection="params.orCriterions" item="criterion">
+                    <trim prefix="OR (" suffix=")">
+                        <choose>
+                            <when test="criterion.noValue">
+                                ${criterion.property} ${criterion.operator}
+                            </when>
+                            <when test="criterion.singleValue">
+                                ${criterion.property} ${criterion.operator} #{criterion.value}
+                            </when>
+                            <when test="criterion.betweenValue">
+                                ${criterion.property} ${criterion.operator} #{criterion.value} AND #{criterion.secondValue}
+                            </when>
+                            <when test="criterion.listValue">
+                                ${criterion.property} ${criterion.operator}
+                                <foreach collection="criterion.value" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </when>
+                            <when test="criterion.andCriterionValue">
+                                <foreach collection="criterion.value" item="item" open="(" close=")" separator="AND">
+                                    <trim prefix="(" suffix=")">
+                                        <choose>
+                                            <when test="item.noValue">
+                                                ${item.property} ${item.operator}
+                                            </when>
+                                            <when test="item.singleValue">
+                                                ${item.property} ${item.operator} #{item.value}
+                                            </when>
+                                            <when test="item.betweenValue">
+                                                ${item.property} ${item.operator} #{item.value} AND #{item.secondValue}
+                                            </when>
+                                            <when test="item.listValue">
+                                                ${item.property} ${item.operator}
+                                                <foreach collection="item.value" item="itemValue" open="(" close=")" separator=",">
+                                                    #{itemValue}
+                                                </foreach>
+                                            </when>
+                                        </choose>
+                                    </trim>
+                                </foreach>
+                            </when>
+                            <when test="criterion.orCriterionValue">
+                                <foreach collection="criterion.value" item="item" open="(" close=")" separator="OR">
+                                    <trim prefix="(" suffix=")">
+                                        <choose>
+                                            <when test="item.noValue">
+                                                ${item.property} ${item.operator}
+                                            </when>
+                                            <when test="item.singleValue">
+                                                ${item.property} ${item.operator} #{item.value}
+                                            </when>
+                                            <when test="item.betweenValue">
+                                                ${item.property} ${item.operator} #{item.value} AND #{item.secondValue}
+                                            </when>
+                                            <when test="item.listValue">
+                                                ${item.property} ${item.operator}
+                                                <foreach collection="item.value" item="itemValue" open="(" close=")" separator=",">
+                                                    #{itemValue}
+                                                </foreach>
+                                            </when>
+                                        </choose>
+                                    </trim>
+                                </foreach>
+                            </when>
+                        </choose>
+                    </trim>
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <resultMap id="groupsWechatFriend" type="com.crm.core.group.entity.GroupsWechatFriend">
+        <id     column="groups_id"   property="groupsId"   javaType="java.lang.String"/>
+        <result column="groups_name" property="groupsName" javaType="java.lang.String"/>
+        <collection  property="friends" resultMap="friends" columnPrefix="f_"/>
+    </resultMap>
+
+    <resultMap id="friends" type="com.crm.core.wechat.entity.WechatFriend">
+        <id     column="id"           property="id"         javaType="java.lang.String"/>
+        <result column="wechat_id"    property="wechatId"   javaType="java.lang.String"/>
+        <result column="wxid"         property="wxid"       javaType="java.lang.String"/>
+        <result column="wxno"         property="wxno"       javaType="java.lang.String"/>
+        <result column="nickname"     property="nickname"   javaType="java.lang.String"/>
+        <result column="remarkname"   property="remarkname" javaType="java.lang.String"/>
+        <result column="head_img_url" property="headImgUrl" javaType="java.lang.String"/>
+    </resultMap>
+
+    <insert id="save">
+        INSERT
+          INTO groups_wechat_frined (
+               groups_id,
+               friend_id
+          ) VALUE (
+               #{groupsId, jdbcType=VARCHAR},
+               #{friendId, jdbcType=VARCHAR}
+          )
+    </insert>
+
+    <insert id="saveList">
+        INSERT
+          INTO groups_wechat_friend (
+               groups_id,
+               friend_id
+          ) VALUES
+        <foreach collection="friendIds" item="friendId" separator=",">
+          (
+               #{groupsId, jdbcType=VARCHAR},
+               #{friendId, jdbcType=VARCHAR}
+          )
+        </foreach>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+          FROM groups_wechat_friend
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
+    </delete>
+
+    <select id="get" resultMap="groupsWechatFriend">
+        SELECT gf.groups_id,
+               g.name         AS groups_name,
+               f.id           As f_id,
+               f.wechat_id    AS f_wechat_id,
+               f.wxid         AS f_wxid,
+               f.wxno         AS f_wxno,
+               f.nickname     AS f_nickname,
+               f.remarkname   AS f_remarkname,
+               f.head_img_url AS f_head_img_url
+          FROM groups_wechat_friend gf
+     LEFT JOIN groups g
+            ON g.id = gf.groups_id
+     LEFT JOIN wechat_friend f
+            ON f.id = gf.friend_id
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
+    </select>
+
+    <select id="find" resultMap="groupsWechatFriend">
+        SELECT gf.groups_id,
+               g.name         AS groups_name,
+               f.id           As f_id,
+               f.wechat_id    AS f_wechat_id,
+               f.wxid         AS f_wxid,
+               f.wxno         AS f_wxno,
+               f.nickname     AS f_nickname,
+               f.remarkname   AS f_remarkname,
+               f.head_img_url AS f_head_img_url
+          FROM groups_wechat_friend gf
+     LEFT JOIN groups g
+            ON g.id = gf.groups_id
+     LEFT JOIN wechat_friend f
+            ON f.id = gf.friend_id
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+
+            <if test="params.sorts != null and params.sorts.size > 0">
+                ORDER BY
+                <foreach collection="params.sorts" item="sort" separator=",">
+                    ${sort.property} ${sort.operator}
+                </foreach>
+            </if>
+
+            <if test="params.limit != null">
+                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            </if>
+        </if>
+    </select>
+</mapper>

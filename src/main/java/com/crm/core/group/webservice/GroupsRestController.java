@@ -1,5 +1,6 @@
 package com.crm.core.group.webservice;
 
+import com.crm.core.group.consts.GroupType;
 import com.crm.core.group.entity.Groups;
 import com.crm.core.group.service.GroupsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,9 @@ public class GroupsRestController{
     }
 
     @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Groups>> page(Long pageNum, Long pageSize, String name, UsingState state){
+    public Responsed<Page<Groups>> page(Long pageNum, Long pageSize, String companyId, String name, GroupType type, UsingState state){
         PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Groups> page = groupsService.page(pageRequest, name, state);
+        Page<Groups> page = groupsService.page(pageRequest, companyId, name, type, state);
 
         return new Responsed<Page<Groups>>("查询成功", page);
     }

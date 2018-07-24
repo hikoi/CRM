@@ -17,11 +17,14 @@
         <typeAlias type="org.wah.doraemon.utils.mybatis.handler.AccountStateHandler"   alias="AccountStateHandler"/>
         <typeAlias type="org.wah.doraemon.utils.mybatis.handler.SexHandler"            alias="SexHandler"/>
         <typeAlias type="org.wah.doraemon.utils.mybatis.handler.UsingStateHandler"     alias="UsingStateHandler"/>
+        <typeAlias type="com.crm.core.wechat.utils.handler.PurposeTypeHandler"         alias="PurposeTypeHandler"/>
         <typeAlias type="com.crm.core.wechat.utils.handler.WechatMessageTypeHandler"   alias="WechatMessageTypeHandler"/>
         <typeAlias type="com.crm.core.wechat.utils.handler.WechatMessageStatusHandler" alias="WechatMessageStatusHandler"/>
         <typeAlias type="com.crm.core.wechat.utils.handler.WechatFriendTypeHandler"    alias="WechatFriendTypeHandler"/>
         <typeAlias type="com.crm.core.device.utils.handler.DeviceTypeHandler"          alias="DeviceTypeHandler"/>
         <typeAlias type="com.crm.core.permission.utils.handler.ResourceTypeHandler"    alias="ResourceTypeHandler"/>
         <typeAlias type="com.crm.core.im.utils.handler.IMUserTypeHandler"              alias="IMUserTypeHandler"/>
+        <typeAlias type="com.crm.core.group.utils.handler.GroupTypeHandler"            alias="GroupTypeHandler"/>
+        <typeAlias type="com.crm.core.group.utils.handler.AllocationTypeHandler"       alias="AllocationTypeHandler"/>
     </typeAliases>
 </configuration>

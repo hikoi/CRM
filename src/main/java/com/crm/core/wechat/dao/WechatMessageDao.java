@@ -35,7 +35,7 @@ public class WechatMessageDao{
 
             if(StringUtils.isBlank(message.getId())){
                 Assert.hasText(message.getWxid(), "微信信息wxid不能为空");
-                Assert.hasText(message.getWxno(), "微信号不能为空");
+                Assert.hasText(message.getWechatId(), "所属微信ID不能为空");
                 Assert.notNull(message.getConversationTime(), "微信发送时间不能为空");
 
                 message.setId(IDGenerator.uuid32());
@@ -60,7 +60,7 @@ public class WechatMessageDao{
 
             for(WechatMessage message : messages){
                 Assert.hasText(message.getWxid(), "微信信息wxid不能为空");
-                Assert.hasText(message.getWxno(), "微信号不能为空");
+                Assert.hasText(message.getWechatId(), "所属微信ID不能为空");
                 Assert.notNull(message.getConversationTime(), "微信发送时间不能为空");
 
                 message.setId(IDGenerator.uuid32());
@@ -75,7 +75,7 @@ public class WechatMessageDao{
         }
     }
 
-    public Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wxno,
+    public Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wechatId,
                                     String wxid, WechatMessageType type, WechatMessageStatus status){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
@@ -87,8 +87,8 @@ public class WechatMessageDao{
             if(StringUtils.isNotBlank(accountId)){
                 criteria.and(Restrictions.eq("accountId", accountId));
             }
-            if(StringUtils.isNotBlank(wxno)){
-                criteria.and(Restrictions.eq("wxno", wxno));
+            if(StringUtils.isNotBlank(wechatId)){
+                criteria.and(Restrictions.eq("wechatId", wechatId));
             }
             if(StringUtils.isNotBlank(wxid)){
                 criteria.and(Restrictions.eq("wxid", wxid));

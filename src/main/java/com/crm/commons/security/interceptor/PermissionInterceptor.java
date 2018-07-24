@@ -36,8 +36,6 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter{
             String        url    = request.getRequestURI().substring(request.getContextPath().length());
             RequestMethod method = RequestMethod.valueOf(request.getMethod().toUpperCase());
 
-            System.out.println(url);
-
             if(excludes != null && !excludes.isEmpty()){
                 for(String exclude : excludes){
                     if(matcher.match(exclude, url)){

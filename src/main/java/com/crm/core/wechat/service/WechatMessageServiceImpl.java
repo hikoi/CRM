@@ -29,7 +29,7 @@ public class WechatMessageServiceImpl implements WechatMessageService{
     @Transactional(readOnly = false)
     public void save(WechatMessage message){
         Assert.notNull(message, "微信信息不能为空");
-        Assert.hasText(message.getWxno(), "微信号不能为空");
+        Assert.hasText(message.getWechatId(), "所属微信ID不能为空");
         Assert.notNull(message.getConversationTime(), "微信发送时间不能为空");
 
         //消息队列处理
@@ -46,10 +46,10 @@ public class WechatMessageServiceImpl implements WechatMessageService{
     }
 
     @Override
-    public Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wxno,
+    public Page<WechatMessage> page(PageRequest pageRequest, String accountId, String wechatId,
                                     String wxid, WechatMessageType type, WechatMessageStatus status){
         Assert.notNull(pageRequest, "分页信息不能为空");
 
-        return wechatMessageDao.page(pageRequest, accountId, wxno, wxid, type, status);
+        return wechatMessageDao.page(pageRequest, accountId, wechatId, wxid, type, status);
     }
 }

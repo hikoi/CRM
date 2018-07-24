@@ -38,12 +38,16 @@ public class IMMessageUtils{
             bodys.add(body);
         }
 
+        //时间戳
+        Long timestamp = DateUtils.timestamp(true);
+
         IMMessage message = new IMMessage();
         message.setFromAccount(fromAccount);
         message.setToAccount(toAccount);
         message.setSyncOtherMachine(1);
-        message.setMsgRandom(DateUtils.timestamp(false));
-        message.setMsgTimeStamp(DateUtils.timestamp(true));
+        message.setMsgRandom(timestamp);
+        message.setMsgTimeStamp(timestamp);
+        message.setType(IMMessageType.TIM_TEXT_ELEM);
         message.setMsgBody(bodys);
 
         return message;
@@ -82,13 +86,17 @@ public class IMMessageUtils{
         body.setMsgContent(msgContent);
         bodys.add(body);
 
+        //时间戳
+        Long timestamp = DateUtils.timestamp(true);
+
         //创建消息体
         IMMessage message = new IMMessage();
         message.setFromAccount(fromAccount);
         message.setToAccount(toAccount);
         message.setSyncOtherMachine(1);
-        message.setMsgRandom(DateUtils.timestamp(false));
-        message.setMsgTimeStamp(DateUtils.timestamp(true));
+        message.setMsgRandom(timestamp);
+        message.setMsgTimeStamp(timestamp);
+        message.setType(IMMessageType.TIM_CUSTOM_ELEM);
         message.setMsgBody(bodys);
 
         return message;

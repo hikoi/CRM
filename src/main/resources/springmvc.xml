@@ -61,6 +61,8 @@
                         <value>/api/1.0/wechatFriend/synchronize/{wxno}</value>
                         <value>/api/1.0/wechatMessage</value>
                         <value>/api/1.0/wechatMessage/synchronize</value>
+                        <value>/api/1.0/pem/publicKey</value>
+                        <value>/api/1.0/im/wxno</value>
                     </list>
                 </property>
             </bean>

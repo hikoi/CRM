@@ -6,7 +6,7 @@ CREATE TABLE `wechat` (
   `nickname` varchar(100) NOT NULL,
   `company_id` varchar(32) NOT NULL,
   `device_id` varchar(32) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL,
+  `type` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -15,7 +15,7 @@ CREATE TABLE `wechat` (
 CREATE TABLE `wechat_friend` (
   `id` varchar(32) NOT NULL,
   `wechat_id` varchar(32) NOT NULL,
-  `sellerId` varchar(32) DEFAULT NULL,
+  `seller_id` varchar(32) DEFAULT NULL,
   `wxid` varchar(50) DEFAULT NULL,
   `wxno` varchar(50) DEFAULT NULL,
   `nickname` varchar(50) DEFAULT NULL,
@@ -29,8 +29,8 @@ CREATE TABLE `wechat_friend` (
 
 CREATE TABLE `wechat_message` (
   `id` varchar(32) NOT NULL,
-  `account_id` varchar(32) DEFAULT NULL,
-  `wxno` varchar(32) NOT NULL,
+  `seller_id` varchar(32) DEFAULT NULL,
+  `wechat_id` varchar(32) NOT NULL,
   `wxid` varchar(50) DEFAULT NULL,
   `content` text,
   `extract` text,
@@ -82,6 +82,7 @@ CREATE TABLE `im_user` (
   `nickname` varchar(12) NOT NULL,
   `head_img_url` varchar(255) DEFAULT NULL,
   `sig` text NOT NULL,
+  `sdk_app_id` varchar(30) NOT NULL,
   `type` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
@@ -192,4 +193,48 @@ CREATE TABLE `call_record` (
   `tc_fail_code` varchar(32) DEFAULT NULL,
   `dtmf_code` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`call_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+CREATE TABLE `groups` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(32) DEFAULT NULL,
+  `state` tinyint(1) NOT NULL,
+  `type` tinyint(1) NOT NULL,
+  `company_id` varchar(32) DEFAULT NULL,
+  `is_default` tinyint(1) DEFAULT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups_wechat_friend` (
+  `groups_id` varchar(32) NOT NULL,
+  `friend_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups_seller` (
+  `groups_id` varchar(32) NOT NULL,
+  `seller_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups_wechat` (
+  `groups_id` varchar(32) NOT NULL,
+  `wechat_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `allocation_rule` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(30) DEFAULT NULL,
+  `state` tinyint(1) NOT NULL,
+  `type` tinyint(1) NOT NULL,
+  `online_only` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `allocation_groups_wechat` (
+  `rule_id` varchar(32) NOT NULL,
+  `groups_wechat_id` varchar(32) NOT NULL,
+  `region_id` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

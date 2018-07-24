@@ -220,7 +220,7 @@
     </insert>
 
     <update id="update">
-      UPDATE wechat_frined
+      UPDATE wechat_friend
        <set>
           <if test="sellerId != null">
             seller_id = #{sellerId, jdbcType=VARCHAR},
