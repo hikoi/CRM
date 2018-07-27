@@ -1,6 +1,7 @@
-package core.groups.service;
+package core.word.service;
 
-import com.crm.core.group.service.GroupsWechatService;
+import com.crm.core.words.entity.Word;
+import com.crm.core.words.service.WordService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +12,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring.xml", "classpath:springbeans.xml"})
 @ActiveProfiles(value = "test")
-public class GroupsWechatTest{
+public class WordServiceTest{
 
     @Autowired
-    private GroupsWechatService groupsWechatService;
+    private WordService wordService;
 
     @Test
     public void save(){
-        String wechatId = "70faf75c6b174d32ba258686dfd8ffb7";
-        String groupsId = "6e1ea310b32f48f89bfea1835a6fc126";
+        Word word = new Word();
+        word.setContent("你妈逼");
 
-        groupsWechatService.save(groupsId, wechatId);
+        wordService.save(word);
     }
 }

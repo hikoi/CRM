@@ -54,7 +54,7 @@ public class AllocationRuleServiceImpl implements AllocationRuleService{
     }
 
     @Override
-    public List<AllocationRule> find(UsingState state, AllocationType type, String wechatGroupsId){
-        return allocationRuleDao.find(state, type, wechatGroupsId);
+    public List<AllocationRule> find(UsingState state, AllocationType type, List<String> wechatGroupsIds){
+        return allocationRuleDao.find(state, type, wechatGroupsIds);
     }
 }

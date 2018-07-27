@@ -156,8 +156,17 @@
         <result column="online_only" property="onlineOnly" javaType="java.lang.Boolean"/>
         <result column="create_time" property="createTime" javaType="java.util.Date"/>
         <result column="update_time" property="updateTie"  javaType="java.util.Date"/>
-        <collection property="regions"       javaType="java.lang.String"/>
-        <collection property="wechat_groups" javaType="java.lang.String"/>
+        <collection property="regions"      resultMap="regions"/>
+        <collection property="wechatGroups" resultMap="wechatGroups"/>
+
+    </resultMap>
+
+    <resultMap id="regions" type="java.lang.String">
+        <result column="regions"/>
+    </resultMap>
+
+    <resultMap id="wechatGroups" type="java.lang.String">
+        <result column="wechat_groups"/>
     </resultMap>
 
     <insert id="save">

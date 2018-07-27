@@ -12,5 +12,5 @@ public interface AllocationRuleService{
 
     void update(AllocationRule rule);
 
-    List<AllocationRule> find(UsingState state, AllocationType type, String wechatGroupsId);
+    List<AllocationRule> find(UsingState state, AllocationType type, List<String> wechatGroupsIds);
 }

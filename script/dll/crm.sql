@@ -238,3 +238,17 @@ CREATE TABLE `allocation_groups_wechat` (
   `groups_wechat_id` varchar(32) NOT NULL,
   `region_id` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `word` (
+  `id` varchar(32) NOT NULL,
+  `content` varchar(30) NOT NULL,
+  `state` tinyint(1) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups_word` (
+  `groups_id` varchar(32) NOT NULL,
+  `word_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

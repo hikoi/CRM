@@ -90,7 +90,7 @@ public class AllocationRuleDao{
         }
     }
 
-    public List<AllocationRule> find(UsingState state, AllocationType type, String wechatGroupsId){
+    public List<AllocationRule> find(UsingState state, AllocationType type, List<String> wechatGroupsIds){
         try{
             Criteria criteria = new Criteria();
 
@@ -100,8 +100,8 @@ public class AllocationRuleDao{
             if(type != null){
                 criteria.and(Restrictions.eq("a.type", type));
             }
-            if(StringUtils.isNotBlank(wechatGroupsId)){
-                criteria.and(Restrictions.eq("ag.groups_wechat_id", wechatGroupsId));
+            if(wechatGroupsIds != null && !wechatGroupsIds.isEmpty()){
+                criteria.and(Restrictions.in("ag.groupsWechatId", wechatGroupsIds));
             }
 
             return mapper.find(criteria);

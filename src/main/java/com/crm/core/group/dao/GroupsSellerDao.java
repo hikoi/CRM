@@ -92,11 +92,11 @@ public class GroupsSellerDao{
         }
     }
 
-    public List<GroupsSeller> find(String companyId, String sellerId, String groupsId, String groupsName,
+    public List<GroupsSeller> find(String companyId, String sellerId, List<String> groupsIds, String groupsName,
                                    UsingState groupsState, String nickname, String name, String username){
         try{
             Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("g.type", GroupType.SELLER));
+            criteria.and(Restrictions.eq("g.type", GroupType.SELLER.getId()));
 
             if(StringUtils.isNotBlank(companyId)){
                 criteria.and(Restrictions.eq("g.companyId", companyId));
@@ -104,8 +104,8 @@ public class GroupsSellerDao{
             if(StringUtils.isNotBlank(sellerId)){
                 criteria.and(Restrictions.eq("s.accountId", sellerId));
             }
-            if(StringUtils.isNotBlank(groupsId)){
-                criteria.and(Restrictions.eq("gs.groupsId", groupsId));
+            if(groupsIds != null && !groupsIds.isEmpty()){
+                criteria.and(Restrictions.in("gs.groupsId", groupsIds));
             }
             if(StringUtils.isNotBlank(groupsName)){
                 criteria.and(Restrictions.like("g.name", groupsName));

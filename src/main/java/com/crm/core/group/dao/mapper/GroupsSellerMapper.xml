@@ -202,7 +202,7 @@
     </delete>
 
     <select id="get" resultMap="groupsSeller">
-        SELECt gs.groups_id,
+        SELECT gs.groups_id,
                g.name         AS groups_name,
                s.id           AS s_id,
                s.account_id   AS s_account_id,
@@ -213,8 +213,8 @@
           FROM groups_seller gs
      LEFT JOIN groups g
             ON g.id = gs.groups_id
-     LEFT JOIN user u
-            ON u.account_id = gs.seller_id
+     LEFT JOIN user s
+            ON s.account_id = gs.seller_id
      LEFT JOIN account a
             ON a.id = gs.seller_id
         <if test="params != null">
@@ -223,7 +223,7 @@
     </select>
 
     <select id="find" resultMap="groupsSeller">
-        SELECt gs.groups_id,
+        SELECT gs.groups_id,
                g.name         AS groups_name,
                s.id           AS s_id,
                s.account_id   AS s_account_id,
@@ -234,8 +234,8 @@
           FROM groups_seller gs
      LEFT JOIN groups g
             ON g.id = gs.groups_id
-     LEFT JOIN user u
-            ON u.account_id = gs.seller_id
+     LEFT JOIN user s
+            ON s.account_id = gs.seller_id
      LEFT JOIN account a
             ON a.id = gs.seller_id
         <if test="params != null">

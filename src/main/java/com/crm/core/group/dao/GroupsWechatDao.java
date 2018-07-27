@@ -93,20 +93,20 @@ public class GroupsWechatDao{
         }
     }
 
-    public List<GroupsWechat> find(String companyId, String sellerId, String groupsId, String groupsName,
+    public List<GroupsWechat> find(String companyId, String wechatId, String groupsId, String groupsName,
                                    UsingState groupsState, PurposeType purposeType){
         try{
             Criteria criteria = new Criteria();
-            criteria.and(Restrictions.eq("g.type", GroupType.WECHAT));
+            criteria.and(Restrictions.eq("g.type", GroupType.WECHAT.getId()));
 
             if(StringUtils.isNotBlank(companyId)){
                 criteria.and(Restrictions.eq("g.companyId", companyId));
             }
-            if(StringUtils.isNotBlank(sellerId)){
-                criteria.and(Restrictions.eq("f.sellerId", sellerId));
+            if(StringUtils.isNotBlank(wechatId)){
+                criteria.and(Restrictions.eq("gw.wechatId", wechatId));
             }
             if(StringUtils.isNotBlank(groupsId)){
-                criteria.and(Restrictions.eq("gf.groupsId", groupsId));
+                criteria.and(Restrictions.eq("gw.groupsId", groupsId));
             }
             if(StringUtils.isNotBlank(groupsName)){
                 criteria.and(Restrictions.like("g.name", groupsName));

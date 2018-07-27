@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.crm.core.wechat.dao.mapper.WechatMapper">
+<mapper namespace="com.crm.core.words.dao.mapper.WordMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,92 +148,77 @@
         </where>
     </sql>
 
-    <resultMap id="wechat" type="com.crm.core.wechat.entity.Wechat">
-        <id     column="id"           property="id"          javaType="java.lang.String"/>
-        <result column="company_id"   property="companyId"   javaType="java.lang.String"/>
-        <result column="device_id"    property="deviceId"    javaType="java.lang.String"/>
-        <result column="wxno"         property="wxno"        javaType="java.lang.String"/>
-        <result column="nickname"     property="nickname"    javaType="java.lang.String"/>
-        <result column="type"         property="type"        typeHandler="PurposeTypeHandler"/>
-        <result column="create_time"  property="createTime"  javaType="java.util.Date"/>
-        <result column="update_time"  property="updateTime"  javaType="java.util.Date"/>
+    <resultMap id="word" type="com.crm.core.words.entity.Word">
+        <id     column="id"          property="id"         javaType="java.lang.String"/>
+        <result column="content"     property="content"    javaType="java.lang.String"/>
+        <result column="state"       property="state"      typeHandler="UsingStateHandler"/>
+        <result column="create_time" property="createTime" javaType="java.util.Date"/>
+        <result column="update_time" property="updateTime" javaType="java.util.Date"/>
     </resultMap>
 
     <insert id="save">
-      INSERT
-        INTO wechat (
-             id,
-             company_id,
-             device_id,
-             wxno,
-             nickname,
-             type,
-             create_time
-        ) VALUE (
-             #{id,          jdbcType=VARCHAR},
-             #{companyId,   jdbcType=VARCHAR},
-             #{deviceId,    jdbcType=VARCHAR},
-             #{wxno,        jdbcType=VARCHAR},
-             #{nickname,    jdbcType=VARCHAR},
-             #{type,        typeHandler=PurposeTypeHandler},
-             #{createTime,  jdbcType=TIMESTAMP}
-        )
+        INSERT
+          INTO word (
+               id,
+               content,
+               state,
+               create_time
+          ) VALUE (
+               #{id,         jdbcType=VARCHAR},
+               #{content,    jdbcType=VARCHAR},
+               #{state,      typeHandler=UsingStateHandler},
+               #{createTime, jdbcType=TIMESTAMP}
+          )
     </insert>
 
     <update id="update">
-      UPDATE wechat
-       <set>
-          <if test="deviceId != null">
-            device_id = #{deviceId, jdbcType=VARCHAR},
-          </if>
-          <if test="wxno != null and wxno != ''">
-            wxno = #{wxno, jdbcType=VARCHAR},
-          </if>
-          <if test="nickname != null">
-            nickname = #{nickname, jdbcType=VARCHAR},
-          </if>
-          <if test="type != null">
-            type = #{type, typeHandler=PurposeTypeHandler},
-          </if>
-          <if test="updateTime != null">
-            update_time = #{updateTime, jdbcType=TIMESTAMP},
-          </if>
-       </set>
-        WHERE id = #{id}
+        UPDATE word
+         <set>
+             <if test="content != null and content != ''">
+                 content = #{content, jdbcType=VARCHAR},
+             </if>
+             <if test="state != null">
+                 state = #{state, typeHandler=UsingStateHandler},
+             </if>
+             <if test="updateTime != null">
+                 update_time = #{updateTime, jdbcType=TIMESTAMP},
+             </if>
+         </set>
+          WHERE id = #{id}
     </update>
 
-    <select id="get" resultMap="wechat">
-      SELECT *
-        FROM wechat
-      <if test="params != null">
-        <include refid="WHERE_SQL"/>
-      </if>
+    <select id="get" resultMap="word">
+        SELECT *
+          FROM word
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
     </select>
 
-    <select id="find" resultMap="wechat">
-      SELECT *
-        FROM wechat
-      <if test="params != null">
-        <include refid="WHERE_SQL"/>
+    <select id="find" resultMap="word">
+        SELECT *
+          FROM word
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
 
-        <if test="params.sorts != null and params.sorts.size > 0">
-          ORDER BY
-          <foreach collection="params.sorts" item="sort" separator=",">
-            ${sort.property} ${sort.operator}
-          </foreach>
-        </if>
+            <if test="params.sorts != null and params.sorts.size > 0">
+                ORDER BY
+                <foreach collection="params.sorts" item="sort" separator=",">
+                    ${sort.property} ${sort.operator}
+                </foreach>
+            </if>
 
-        <if test="params.limit != null">
-          ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            <if test="params.limit != null">
+                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            </if>
         </if>
-      </if>
     </select>
 
     <select id="count" resultType="java.lang.Long">
-      SELECT COUNT(*)
-        FROM wechat
-      <if test="params != null">
-        <include refid="WHERE_SQL"/>
-      </if>
+        SELECT COUNT(*)
+          FROM word
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
     </select>
 </mapper>
