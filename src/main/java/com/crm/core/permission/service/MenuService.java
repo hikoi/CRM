@@ -4,13 +4,19 @@ import com.crm.core.permission.entity.Menu;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 
+import java.util.List;
+
 public interface MenuService{
 
-    void save(Menu menu);
+    void save(String groupsId, Menu menu);
+
+    void saveList(String groupsId, List<Menu> menus);
 
     void update(Menu menu);
 
     Menu getById(String id);
 
-    Page<Menu> page(PageRequest pageRequest, String id, String name, String url, String parentId, Boolean isParent);
+    List<Menu> findByAccountId(String accountId);
+
+    List<String> findByTicket(String ticket);
 }

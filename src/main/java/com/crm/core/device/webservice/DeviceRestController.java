@@ -1,13 +1,10 @@
 package com.crm.core.device.webservice;
 
-import com.crm.core.device.consts.DeviceType;
 import com.crm.core.device.entity.Device;
 import com.crm.core.device.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.wah.doraemon.security.request.Page;
-import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
 @RestController
@@ -36,21 +33,5 @@ public class DeviceRestController{
         Device device = deviceService.getById(id);
 
         return new Responsed<Device>("查询成功", device);
-    }
-
-    @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Device>> page(Long pageNum, Long pageSize, String companyId, String phone, String imei, String meid, DeviceType type, String accountId){
-        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Device> page = deviceService.page(pageRequest, companyId, phone, imei, meid, type, accountId);
-
-        return new Responsed<Page<Device>>("查询成功", page);
-    }
-
-    @RequestMapping(value = "/page/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Device>> pageByAccountId(Long pageNum, Long pageSize, @PathVariable("accountId") String accountId, String companyId, String phone, String imei, String meid, DeviceType type){
-        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Device> page = deviceService.page(pageRequest, companyId, phone, imei, meid, type, accountId);
-
-        return new Responsed<Page<Device>>("查询成功", page);
     }
 }

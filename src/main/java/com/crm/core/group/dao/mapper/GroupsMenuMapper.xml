@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.crm.core.account.dao.mapper.AccountMapper">
+<mapper namespace="com.crm.core.group.dao.mapper.GroupsMenuMapper">
 
     <sql id="WHERE_SQL">
         <where>
@@ -148,91 +148,78 @@
         </where>
     </sql>
 
-    <resultMap id="account" type="org.wah.doraemon.entity.Account">
+    <resultMap id="groupsMenu" type="com.crm.core.group.entity.GroupsMenu">
+        <id     column="groups_id"   property="groupsId"   javaType="java.lang.String"/>
+        <result column="groups_name" property="groupsName" javaType="java.lang.String"/>
+        <collection property="menus" resultMap="menu" columnPrefix="m_"/>
+    </resultMap>
+
+    <resultMap id="menu" type="com.crm.core.permission.entity.Menu">
         <id     column="id"          property="id"         javaType="java.lang.String"/>
-        <result column="username"    property="username"   javaType="java.lang.String"/>
-        <result column="phone"       property="phone"      javaType="java.lang.String"/>
-        <result column="email"       property="email"      javaType="java.lang.String"/>
-        <result column="password"    property="password"   javaType="java.lang.String"/>
-        <result column="state"       property="state"      typeHandler="AccountStateHandler"/>
-        <result column="is_delete"   property="isDelete"   javaType="java.lang.Boolean"/>
-        <result column="create_time" property="createTime" javaType="java.util.Date"/>
-        <result column="update_time" property="updateTime" javaType="java.util.Date"/>
-        <result column="delete_time" property="deleteTime" javaType="java.util.Date"/>
+        <result column="name"        property="name"       javaType="java.lang.String"/>
+        <result column="url"         property="url"        javaType="java.lang.String"/>
     </resultMap>
 
     <insert id="save">
         INSERT
-          INTO account (
-               id,
-               username,
-               phone,
-               email,
-               password,
-               state,
-               is_delete,
-               create_time
+          INTO groups_menu (
+               groups_id,
+               menu_id
           ) VALUE (
-               #{id,         jdbcType=VARCHAR},
-               #{username,   jdbcType=VARCHAR},
-               #{phone,      jdbcType=VARCHAR},
-               #{email,      jdbcType=VARCHAR},
-               #{password,   jdbcType=VARCHAR},
-               #{state,      typeHandler=AccountStateHandler},
-               #{isDelete,   jdbcType=BOOLEAN},
-               #{createTime, jdbcType=TIMESTAMP}
+               #{groupsId, jdbcType=VARCHAR},
+               #{menuId,   jdbcType=VARCHAR}
           )
     </insert>
 
-    <update id="update">
-        UPDATE account
-         <set>
-             <if test="password != null and password != ''">
-                 password = #{password, jdbcType=VARCHAR},
-             </if>
-             <if test="state != null">
-                 state = #{state, typeHandler=AccountStateHandler},
-             </if>
-             <if test="isDelete != null">
-                 is_delete = #{isDelete, jdbcType=BOOLEAN},
-             </if>
-             <if test="updateTime != null">
-                 update_time = #{updateTime, jdbcType=TIMESTAMP},
-             </if>
-         </set>
-          WHERE id = #{id}
-    </update>
+    <insert id="saveList">
+        INSERT
+          INTO groups_menu (
+               groups_id,
+               menu_id
+          ) VALUES
+        <foreach collection="menuIds" item="menuId" separator=",">
+          (
+               #{groupsId, jdbcType=VARCHAR},
+               #{menuId,   jdbcType=VARCHAR}
+          )
+        </foreach>
+    </insert>
 
-    <select id="get" resultMap="account">
-        SELECT *
-          FROM account
+    <delete id="delete">
+        DELETE
+          FROM groups_menu
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
+    </delete>
+
+    <select id="get" resultMap="groupsMenu">
+        SELECT gs.groups_id,
+               g.name         AS groups_name,
+               m.id           AS m_id,
+               m.name         AS m_name,
+               m.url          AS m_url
+          FROM groups_menu gm
+     LEFT JOIN groups g
+            ON g.id = gm.groups_id
+     LEFT JOIN menu m
+            ON m.id = gm.menu_id
         <if test="params != null">
             <include refid="WHERE_SQL"/>
         </if>
     </select>
 
-    <select id="find" resultMap="account">
-        SELECT *
-          FROM account
-        <if test="params != null">
-            <include refid="WHERE_SQL"/>
-
-            <if test="params.sorts != null and params.sorts.size > 0">
-                ORDER BY
-                <foreach collection="params.sorts" item="sort" separator=",">
-                    ${sort.property} ${sort.operator}
-                </foreach>
-            </if>
-
-            <if test="params.limit != null">
-                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
-            </if>
-        </if>
-    </select>
-
-    <select id="count" resultType="java.lang.Long">
-        SELECT COUNT(*)
-          FROM account
+    <select id="find" resultMap="groupsMenu">
+        SELECT gs.groups_id,
+               g.name         AS groups_name,
+               m.id           AS m_id,
+               m.name         AS m_name,
+               m.url          AS m_url
+          FROM groups_menu gm
+     LEFT JOIN groups g
+            ON g.id = gm.groups_id
+     LEFT JOIN menu m
+            ON m.id = gm.menu_id
         <if test="params != null">
             <include refid="WHERE_SQL"/>
         </if>

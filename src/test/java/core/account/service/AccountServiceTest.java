@@ -24,17 +24,25 @@ public class AccountServiceTest{
 
     @Test
     public void save(){
-        String companyId    = "93dc01bcd9474f71a57bfffb25d9b2cb";
-        String departmentId = "0008f7903b4443239223666f3c66a379";
-        String positionId   = "c5635b42e3e04f1a82a289f13d604838";
+//        String companyId    = "93dc01bcd9474f71a57bfffb25d9b2cb";
+//        String departmentId = "0008f7903b4443239223666f3c66a379";
+//        String positionId   = "c5635b42e3e04f1a82a289f13d604838";
 //        String username     = "13246308797";
-        String username     = "13750565823";
-        String password     = RSAUtils.encryptyPublicKey("moneycat888888", pemDao.getPublicKey());
-        String nickname     = "LnnWonXin";
-        String name         = "林文欣";
-        Sex    sex          = Sex.MALE;
+//        String username     = "13750565823";
+//        String password     = RSAUtils.encryptyPublicKey("moneycat888888", pemDao.getPublicKey());
+//        String nickname     = "LnnWonXin";
+//        String name         = "林文欣";
+//        Sex    sex          = Sex.MALE;
 
-        accountService.save(username, password, nickname, name, sex, companyId, departmentId, positionId);
+//        accountService.save(username, password, nickname, name, sex, companyId, departmentId, positionId);
+
+        String username = "root";
+        String password = RSAUtils.encryptyPublicKey("moneycat2018", pemDao.getPublicKey());
+        String nickname = "Administrator";
+        String name     = "超级管理员";
+        Sex    sex      = Sex.MALE;
+
+        accountService.save(username, password, nickname, name, sex, null, null, null);
     }
 
     @Test

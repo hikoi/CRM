@@ -18,7 +18,10 @@ public enum GroupType implements EnumType{
     WECHAT(1, "微信分组"),
 
     @SerializedName("2")
-    SELLER(2, "销售分组");
+    SELLER(2, "销售分组"),
+
+    @SerializedName("3")
+    MENU(3, "菜单分组");
 
     private int id;
     private String description;

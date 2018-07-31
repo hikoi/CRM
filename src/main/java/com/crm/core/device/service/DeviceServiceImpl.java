@@ -50,19 +50,4 @@ public class DeviceServiceImpl implements DeviceService{
 
         return deviceDao.getById(id);
     }
-
-    @Override
-    public Page<Device> page(PageRequest pageRequest, String companyId, String phone, String imei, String meid, DeviceType type, String accountId){
-        Assert.notNull(pageRequest, "分页信息不能为空");
-
-        //设备ID列表
-        List<String> ids = new ArrayList<String>();
-
-        //查询资源
-        if(StringUtils.isNotBlank(accountId)){
-            ids.addAll(permissionDao.findResourceIdsByAccountId(accountId, ResourceType.DEVICE));
-        }
-
-        return deviceDao.page(pageRequest, companyId, phone, imei, meid, type, ids);
-    }
 }

@@ -15,10 +15,6 @@ public class Menu extends Entity implements Createable, Updateable{
 
     private String  name;
     private String  url;
-    private String  parentId;
-    private Boolean isParent;
     private Date    createTime;
     private Date    updateTime;
-
-    private List<Menu> children;
 }

@@ -15,7 +15,7 @@ public class Role extends Entity implements Createable, Updateable{
 
     private String     name;
     private UsingState state;
-    private Boolean    isAdmin;
+    private String     companyId;
     private Date       createTime;
     private Date       updateTime;
 }

@@ -89,7 +89,7 @@ public class CompanyDao{
         }
     }
 
-    public Page<Company> page(PageRequest pageRequest, String id, String name, String address, String phone, List<String> ids){
+    public Page<Company> page(PageRequest pageRequest, String name, String address, String phone, List<String> ids){
         try{
             Assert.notNull(pageRequest, "分页信息不能为空");
 
@@ -97,9 +97,6 @@ public class CompanyDao{
             criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
             criteria.sort(Restrictions.desc("createTime"));
 
-            if(StringUtils.isNotBlank(id)){
-                criteria.and(Restrictions.eq("id", id));
-            }
             if(StringUtils.isNotBlank(name)){
                 criteria.and(Restrictions.like("name", name));
             }

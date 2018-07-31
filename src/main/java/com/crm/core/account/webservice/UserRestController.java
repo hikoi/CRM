@@ -21,16 +21,6 @@ public class UserRestController{
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<User>> page(Long pageNum, Long pageSize, String username, String name, String companyId,
-                                      String departmentId, String positionId){
-
-        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<User> page = userService.page(pageRequest, username, name, companyId, departmentId, positionId);
-
-        return new Responsed<Page<User>>("查询成功", page);
-    }
-
     @RequestMapping(value = "/ticket", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Responsed<User> getByTicket(HttpServletRequest request){
         String ticket = request.getHeader(HeaderName.TICKET);

@@ -14,15 +14,9 @@ public interface RoleMapper{
 
     void update(Role role);
 
-    void saveRelationsToAccount(@Param("roleIds") List<String> roleIds, @Param("accountId") String accountId);
-
-    void deleteRelationsToAccount(String accountId);
-
     Role get(@Param("params") Criteria criteria);
 
     List<Role> find(@Param("params") Criteria criteria);
 
     Long count(@Param("params") Criteria criteria);
-
-    List<Role> findByAccountId(String accountId);
 }

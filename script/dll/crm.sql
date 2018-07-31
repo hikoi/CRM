@@ -49,8 +49,7 @@ CREATE TABLE `account` (
   `email` varchar(100) DEFAULT NULL,
   `password` varchar(256) NOT NULL,
   `state` tinyint(1) NOT NULL,
-  `is_internal` tinyint(1) NOT NULL,
-  `is_delete` tinyint(1) NOT NULL DEFAULT '0',
+  `is_delete` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   `delete_time` datetime DEFAULT NULL,
@@ -63,7 +62,7 @@ CREATE TABLE `account` (
 CREATE TABLE `user` (
   `id` varchar(32) NOT NULL,
   `account_id` varchar(32) NOT NULL,
-  `nickname` varchar(12) DEFAULT NULL,
+  `nickname` varchar(30) DEFAULT NULL,
   `name` varchar(30) DEFAULT NULL,
   `head_img_url` varchar(255) DEFAULT NULL,
   `age` tinyint(1) DEFAULT NULL,
@@ -93,7 +92,7 @@ CREATE TABLE `role` (
   `id` varchar(32) NOT NULL,
   `name` varchar(60) DEFAULT NULL,
   `state` tinyint(1) NOT NULL,
-  `is_admin` tinyint(1) default '0' not null,
+  `company_id` varchar(32) DEFAULT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -112,8 +111,6 @@ CREATE TABLE `menu` (
   `id` varchar(32) NOT NULL,
   `name` varchar(60) DEFAULT NULL,
   `url` varchar(256) DEFAULT NULL,
-  `parent_id` varchar(32) DEFAULT NULL,
-  `is_parent` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -207,21 +204,6 @@ CREATE TABLE `groups` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `groups_wechat_friend` (
-  `groups_id` varchar(32) NOT NULL,
-  `friend_id` varchar(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE `groups_seller` (
-  `groups_id` varchar(32) NOT NULL,
-  `seller_id` varchar(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE `groups_wechat` (
-  `groups_id` varchar(32) NOT NULL,
-  `wechat_id` varchar(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE `allocation_rule` (
   `id` varchar(32) NOT NULL,
   `name` varchar(30) DEFAULT NULL,
@@ -251,4 +233,24 @@ CREATE TABLE `word` (
 CREATE TABLE `groups_word` (
   `groups_id` varchar(32) NOT NULL,
   `word_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups_menu` (
+  `groups_id` varchar(32) NOT NULL,
+  `menu_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups_seller` (
+  `groups_id` varchar(32) NOT NULL,
+  `seller_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups_wechat` (
+  `groups_id` varchar(32) NOT NULL,
+  `wechat_id` varchar(32) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups_wechat_friend` (
+  `groups_id` varchar(32) NOT NULL,
+  `friend_id` varchar(32) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

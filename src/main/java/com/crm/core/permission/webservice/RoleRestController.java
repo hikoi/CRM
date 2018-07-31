@@ -37,20 +37,4 @@ public class RoleRestController{
 
         return new Responsed<Role>("查询成功", function);
     }
-
-    @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Role>> page(Long pageNum, Long pageSize, String id, String name, UsingState state, Boolean isAdmin, String accountId){
-        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Role> page = roleService.page(pageRequest, id, name, state, isAdmin, accountId);
-
-        return new Responsed<Page<Role>>("查询成功", page);
-    }
-
-    @RequestMapping(value = "/page/{accountId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Role>> pageByAccountId(Long pageNum, Long pageSize, @PathVariable("accountId") String accountId, String id, String name, UsingState state, Boolean isAdmin){
-        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Role> page = roleService.page(pageRequest, id, name, state, isAdmin, accountId);
-
-        return new Responsed<Page<Role>>("查询成功", page);
-    }
 }
