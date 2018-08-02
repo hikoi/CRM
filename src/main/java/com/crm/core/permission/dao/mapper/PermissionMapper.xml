@@ -189,11 +189,30 @@
         </foreach>
     </insert>
 
+    <select id="get" resultMap="permission">
+        SELECT *
+          FROM permission
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+        </if>
+    </select>
+
     <select id="find" resultMap="permission">
         SELECT *
           FROM permission
         <if test="params != null">
             <include refid="WHERE_SQL"/>
+
+            <if test="params.sorts != null and params.sorts.size > 0">
+                ORDER BY
+                <foreach collection="params.sorts" item="sort" separator=",">
+                    ${sort.property} ${sort.operator}
+                </foreach>
+            </if>
+
+            <if test="params.limit != null">
+                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            </if>
         </if>
     </select>
 </mapper>

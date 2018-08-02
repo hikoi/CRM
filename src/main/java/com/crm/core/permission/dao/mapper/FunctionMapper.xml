@@ -202,6 +202,9 @@
     <update id="update">
         UPDATE function
          <set>
+            <if test="url != null and url != ''">
+                url = #{url, jdbcType=VARCHAR},
+            </if>
             <if test="method != null">
                 method = #{method, typeHandler=EnumTypeHandler},
             </if>
@@ -222,6 +225,9 @@
         <foreach collection="functions" item="function" separator=";">
             UPDATE function
              <set>
+                <if test="function.url != null and function.url != ''">
+                    url = #{function.url, jdbcType=VARCHAR},
+                </if>
                 <if test="function.method != null">
                     method = #{function.method, typeHandler=EnumTypeHandler},
                 </if>

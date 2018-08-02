@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import org.wah.doraemon.security.consts.ResponseCode;
 import org.wah.doraemon.security.exception.*;
 import org.wah.doraemon.security.response.Responsed;
@@ -42,7 +41,7 @@ public class ExceptionAdvice{
     public Responsed dataAccess(DataAccessException e){
         logger.error(e.getMessage(), e);
 
-        return new Responsed(e.getMessage(), ResponseCode.INTERNAL_SERVER_ERROR, false);
+        return new Responsed("数据库出错", ResponseCode.INTERNAL_SERVER_ERROR, false);
     }
 
     /**

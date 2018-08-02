@@ -20,7 +20,7 @@ public class RoleServiceTest{
     @Test
     public void save(){
         Role role = new Role();
-        role.setName("超级管理员");
+        role.setName("企业管理员");
 
         roleService.save(role);
     }

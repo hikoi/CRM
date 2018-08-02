@@ -119,4 +119,25 @@ public class CompanyDao{
             throw new DataAccessException(e.getMessage(), e);
         }
     }
+
+    public List<Company> findOrganizations(List<String> companyIds, String departmentId, String positionId){
+        try{
+            Criteria criteria = new Criteria();
+
+            if(companyIds != null && !companyIds.isEmpty()){
+                criteria.and(Restrictions.in("c.id", companyIds));
+            }
+            if(StringUtils.isNotBlank(departmentId)){
+                criteria.and(Restrictions.eq("d.id", departmentId));
+            }
+            if(StringUtils.isNotBlank(positionId)){
+                criteria.and(Restrictions.eq("p.id", positionId));
+            }
+
+            return mapper.findOrganizations(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
 }

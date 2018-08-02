@@ -30,9 +30,6 @@ public class RolePermissionServiceImpl implements RolePermissionService{
         Assert.hasText(roleId, "角色ID不能为空");
         Assert.notEmpty(permissionIds, "权限ID列表不能为空");
 
-        //删除旧权限
-        rolePermissionDao.deleteByRoleId(roleId);
-        //保存新权限
         rolePermissionDao.saveList(roleId, permissionIds);
     }
 }

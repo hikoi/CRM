@@ -19,4 +19,6 @@ public interface CompanyMapper{
     List<Company> find(@Param("params") Criteria criteria);
 
     Long count(@Param("params") Criteria criteria);
+
+    List<Company> findOrganizations(@Param("params") Criteria criteria);
 }

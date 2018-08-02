@@ -120,7 +120,7 @@ CREATE TABLE `function` (
   `id` varchar(32) NOT NULL,
   `url` varchar(256) NOT NULL,
   `description` varchar(60) DEFAULT NULL,
-  `need_allot` tinyint(4) NOT NULL,
+  `need_allot` tinyint(1) NOT NULL DEFAULT '1',
   `method` varchar(10) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
@@ -150,6 +150,27 @@ CREATE TABLE `position` (
   `id` varchar(32) NOT NULL,
   `department_id` varchar(32) NOT NULL,
   `name` varchar(60) DEFAULT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `groups` (
+  `id` varchar(32) NOT NULL,
+  `name` varchar(32) DEFAULT NULL,
+  `state` tinyint(1) NOT NULL,
+  `type` tinyint(1) NOT NULL,
+  `company_id` varchar(32) DEFAULT NULL,
+  `is_default` tinyint(1) DEFAULT NULL,
+  `create_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `word` (
+  `id` varchar(32) NOT NULL,
+  `content` varchar(30) NOT NULL,
+  `state` tinyint(1) NOT NULL,
   `create_time` datetime NOT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -192,18 +213,6 @@ CREATE TABLE `call_record` (
   PRIMARY KEY (`call_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 
-CREATE TABLE `groups` (
-  `id` varchar(32) NOT NULL,
-  `name` varchar(32) DEFAULT NULL,
-  `state` tinyint(1) NOT NULL,
-  `type` tinyint(1) NOT NULL,
-  `company_id` varchar(32) DEFAULT NULL,
-  `is_default` tinyint(1) DEFAULT NULL,
-  `create_time` datetime NOT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE `allocation_rule` (
   `id` varchar(32) NOT NULL,
   `name` varchar(30) DEFAULT NULL,
@@ -219,15 +228,6 @@ CREATE TABLE `allocation_groups_wechat` (
   `rule_id` varchar(32) NOT NULL,
   `groups_wechat_id` varchar(32) NOT NULL,
   `region_id` varchar(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE `word` (
-  `id` varchar(32) NOT NULL,
-  `content` varchar(30) NOT NULL,
-  `state` tinyint(1) NOT NULL,
-  `create_time` datetime NOT NULL,
-  `update_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `groups_word` (

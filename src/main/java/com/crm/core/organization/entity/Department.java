@@ -7,6 +7,7 @@ import org.wah.doraemon.domain.Entity;
 import org.wah.doraemon.domain.Updateable;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,4 +17,6 @@ public class Department extends Entity implements Createable, Updateable{
     private String name;
     private Date   createTime;
     private Date   updateTime;
+
+    private List<Position> positions;
 }

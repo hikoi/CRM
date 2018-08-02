@@ -18,8 +18,8 @@ public class AccountRoleDaoTest{
 
     @Test
     public void save(){
-        String accountId = "0e9eb5cc9d254c0ba6689f8c20b432e5";
-        String roleId    = "8b5838b2c794449483146df0d5884056";
+        String accountId = "4d4b0daf4def4daa820c3dabcd0fe507";
+        String roleId    = "b984e1d67d744602b8db0eaf4bd5f9be";
 
         accountRoleDao.save(accountId, roleId);
     }

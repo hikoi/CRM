@@ -143,7 +143,6 @@ public class MenuServiceImpl implements MenuService{
             List<Permission> permissions = accountPermissionDao.find(Arrays.asList(accountId), ResourceType.MENU);
             //查询账户角色
             List<Role> roles = accountRoleDao.findRoles(Arrays.asList(accountId), UsingState.USABLE);
-            //查询角色菜单权限
             if(roles != null && !roles.isEmpty()){
                 permissions.addAll(rolePermissionDao.find(ObjectUtils.ids(roles), ResourceType.MENU, UsingState.USABLE));
             }

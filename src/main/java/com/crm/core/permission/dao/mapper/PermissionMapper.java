@@ -15,4 +15,6 @@ public interface PermissionMapper{
     void saveList(@Param("permissions") List<Permission> permissions);
 
     Permission get(@Param("params") Criteria criteria);
+
+    List<Permission> find(@Param("params") Criteria criteria);
 }

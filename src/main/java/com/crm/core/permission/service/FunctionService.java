@@ -7,15 +7,15 @@ import org.wah.doraemon.security.request.PageRequest;
 
 import java.util.List;
 
-public interface FunctionService {
+public interface FunctionService{
 
     void save(Function function);
 
     void update(Function function);
 
-    List<Function> find(String url, RequestMethod method, Boolean needAllot);
+    void saveList(List<Function> functions);
 
     Function getById(String id);
 
-    Page<Function> page(PageRequest pageRequest, String id, String url, String description, Boolean needAllot, RequestMethod method);
+    List<Function> find(String url, String description, Boolean needAllot, RequestMethod method);
 }

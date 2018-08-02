@@ -48,11 +48,11 @@ public class AccountServiceTest{
     @Test
     public void login(){
         String username = "13246308797";
-        String password = RSAUtils.encryptyPublicKey("moneycat888888", pemDao.getPublicKey());
+        String password = RSAUtils.encryptyPublicKey("moneycat2018", pemDao.getPublicKey());
 
         System.out.println(password);
-
-        String ticket = accountService.login(username, password);
-        System.out.println("=> " + ticket + " <=");
+//
+//        String ticket = accountService.login(username, password);
+//        System.out.println("=> " + ticket + " <=");
     }
 }

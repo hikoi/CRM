@@ -423,10 +423,5 @@ public class CallRecordRestController {
 //        System.out.println("CorsInterceptor: " + ip);
 //        String address = AddressUtils.getaddress(ip);
 //        return new Responsed<String>("你的外网IP: " + ip + " 定位是：" + address);
-//    }
-
-
-    public static void main(String[] args) {
-
-    }
+//
 }

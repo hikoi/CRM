@@ -23,7 +23,7 @@ public class MenuServiceTest{
     @Test
     public void saveList(){
         //微信管理
-        String wechatGroupsId = "61dbc5ee5aac48e4a965efb14f409e86";
+        String wechatGroupsId = "1961f22f69644c06a29b94c6c7dff710";
 
         Menu menu1 = new Menu();
         menu1.setName("微信列表");
@@ -36,7 +36,7 @@ public class MenuServiceTest{
         menuService.saveList(wechatGroupsId, Arrays.asList(menu1, menu2));
 
         //客服管理
-        String serviceGroupsId = "f95048c03c6f40bf97b6cbf5dccaccd8";
+        String serviceGroupsId = "006793c5d37449bfa4c2e0caf752d0a8";
 
         Menu menu3 = new Menu();
         menu3.setName("好友列表");
@@ -57,7 +57,7 @@ public class MenuServiceTest{
         menuService.saveList(serviceGroupsId, Arrays.asList(menu3, menu4, menu5, menu6));
 
         //设备管理
-        String deviceGroupsId = "bd12b01c64d647228ba8c90da1287797";
+        String deviceGroupsId = "d57e8222138e4ced8f00fcd222a8d64f";
 
         Menu menu7 = new Menu();
         menu7.setName("设备列表");
@@ -70,7 +70,7 @@ public class MenuServiceTest{
         menuService.saveList(deviceGroupsId, Arrays.asList(menu7, menu8));
 
         //微信风控
-        String wechatRiskGroupsId = "66e0c795e94c4c6d9663bc48980b9ec7";
+        String wechatRiskGroupsId = "fe67e36358924821a8ed61030bc07df3";
 
         Menu menu9 = new Menu();
         menu9.setName("敏感词设置");
@@ -91,7 +91,7 @@ public class MenuServiceTest{
         menuService.saveList(wechatRiskGroupsId, Arrays.asList(menu9, menu10, menu11, menu12));
 
         //用户管理
-        String userGroupsId = "7adc7249478f414ca96045dd58a87341";
+        String userGroupsId = "dab75db0adab4dc1b66b70e191c746b0";
 
         Menu menu13 = new Menu();
         menu13.setName("部门管理");
@@ -104,7 +104,7 @@ public class MenuServiceTest{
         menuService.saveList(userGroupsId, Arrays.asList(menu13, menu14));
 
         //辅助营销
-        String sellWayGroupsId = "19bce493ebaf49769bd12dc11b822956";
+        String sellWayGroupsId = "bb181b81ae824d38af0faf4068545c7f";
 
         Menu menu15 = new Menu();
         menu15.setName("发朋友圈");
@@ -121,7 +121,7 @@ public class MenuServiceTest{
         menuService.saveList(sellWayGroupsId, Arrays.asList(menu15, menu16, menu17));
 
         //其他设置
-        String orderSettingGroupsId = "1ac4d2d991b34db1afa52652c59c4c77";
+        String orderSettingGroupsId = "23d2c7d3f33743d2bc828ffd734fa889";
 
         Menu menu18 = new Menu();
         menu18.setName("更新日志");

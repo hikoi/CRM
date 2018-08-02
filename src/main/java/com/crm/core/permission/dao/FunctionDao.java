@@ -33,6 +33,7 @@ public class FunctionDao{
 
             if(StringUtils.isBlank(function.getId())){
                 Assert.hasText(function.getUrl(), "功能路径不能为空");
+                Assert.notNull(function.getMethod(), "功能请求类型不能为空");
 
                 function.setId(IDGenerator.uuid32());
                 function.setNeedAllot(true);
@@ -53,10 +54,12 @@ public class FunctionDao{
             Assert.notEmpty(functions, "功能列表不能为空");
 
             final Date now = new Date();
-            for(Function function : functions){
-                Assert.hasText(function.getId(), "功能ID不能为空");
-                Assert.hasText(function.getUrl(), "功能路径不能为空");
 
+            for(Function function : functions){
+                Assert.hasText(function.getUrl(), "功能路径不能为空");
+                Assert.notNull(function.getMethod(), "功能请求类型不能为空");
+
+                function.setId(IDGenerator.uuid32());
                 function.setNeedAllot(true);
                 function.setCreateTime(now);
             }
@@ -73,6 +76,7 @@ public class FunctionDao{
             Assert.notEmpty(functions, "功能列表不能为空");
 
             final Date now = new Date();
+
             for(Function function : functions){
                 Assert.hasText(function.getId(), "功能ID不能为空");
 
@@ -86,13 +90,16 @@ public class FunctionDao{
         }
     }
 
-    public List<Function> find(String url, RequestMethod method, Boolean needAllot, List<String> ids){
+    public List<Function> find(String url, String description, RequestMethod method, Boolean needAllot, List<String> ids){
         try{
             Criteria criteria = new Criteria();
             criteria.sort(Restrictions.asc("url"));
 
             if(StringUtils.isNotBlank(url)){
                 criteria.and(Restrictions.like("url", url));
+            }
+            if(StringUtils.isNotBlank(description)){
+                criteria.and(Restrictions.like("description", description));
             }
             if(method != null){
                 criteria.and(Restrictions.eq("method", method.name()));
@@ -111,6 +118,20 @@ public class FunctionDao{
         }
     }
 
+    public List<Function> findByNeedAllot(Boolean needAllot){
+        try{
+            Assert.notNull(needAllot, "功能是否需要授权标示不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("needAllot", needAllot));
+
+            return mapper.find(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
     public Function getById(String id){
         try{
             Assert.hasText(id, "功能ID不能为空");
@@ -119,40 +140,6 @@ public class FunctionDao{
             criteria.and(Restrictions.eq("id", id));
 
             return mapper.get(criteria);
-        }catch(Exception e){
-            logger.error(e.getMessage(), e);
-            throw new DataAccessException(e.getMessage(), e);
-        }
-    }
-
-    public Page<Function> page(PageRequest pageRequest, String id, String url, String description, Boolean needAllot, RequestMethod method){
-        try{
-            Assert.notNull(pageRequest, "分页信息不能为空");
-
-            Criteria criteria = new Criteria();
-            criteria.limit(Restrictions.limit(pageRequest.getOffset(), pageRequest.getPageSize()));
-            criteria.sort(Restrictions.desc("createTime"));
-
-            if(StringUtils.isNotBlank(id)){
-                criteria.and(Restrictions.eq("id", id));
-            }
-            if(StringUtils.isNotBlank(url)){
-                criteria.and(Restrictions.like("url", url));
-            }
-            if(StringUtils.isNotBlank(description)){
-                criteria.and(Restrictions.like("description", description));
-            }
-            if(needAllot != null){
-                criteria.and(Restrictions.eq("needAllot", needAllot));
-            }
-            if(method != null){
-                criteria.and(Restrictions.eq("method", method));
-            }
-
-            List<Function> list  = mapper.find(criteria);
-            Long           total = mapper.count(criteria);
-
-            return new Page<Function>(list, total, pageRequest);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

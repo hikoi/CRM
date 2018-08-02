@@ -1,5 +1,6 @@
 package com.crm.core.organization.webservice;
 
+import com.crm.commons.consts.HeaderName;
 import com.crm.core.organization.entity.Company;
 import com.crm.core.organization.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
+import redis.clients.jedis.ShardedJedisPool;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -17,6 +20,9 @@ public class CompanyRestController{
 
     @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    private ShardedJedisPool pool;
 
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Responsed save(@RequestBody Company company){
@@ -37,5 +43,13 @@ public class CompanyRestController{
         Company company = companyService.getById(id);
 
         return new Responsed<Company>("查询成功", company);
+    }
+
+    @RequestMapping(value = "/organization/ticket", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Responsed<List<Company>> findOrganizationsByTicket(HttpServletRequest request){
+        String ticket = request.getHeader(HeaderName.TICKET);
+        List<Company> list = companyService.findOrganizationsByTicket(ticket);
+
+        return new Responsed<List<Company>>("查询成功", list);
     }
 }

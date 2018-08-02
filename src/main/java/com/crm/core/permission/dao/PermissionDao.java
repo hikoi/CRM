@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import org.wah.doraemon.security.exception.DataAccessException;
 import org.wah.doraemon.utils.IDGenerator;
+import org.wah.doraemon.utils.ObjectUtils;
 import org.wah.doraemon.utils.mybatis.Criteria;
 import org.wah.doraemon.utils.mybatis.Restrictions;
 
@@ -71,6 +72,34 @@ public class PermissionDao{
             criteria.and(Restrictions.eq("type", type.getId()));
 
             return mapper.get(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<Permission> findByType(ResourceType type){
+        try{
+            Assert.notNull(type, "权限类型不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.eq("type", type.getId()));
+
+            return mapper.find(criteria);
+        }catch(Exception e){
+            logger.error(e.getMessage(), e);
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+
+    public List<Permission> findByTypes(List<ResourceType> types){
+        try{
+            Assert.notEmpty(types, "权限类型列表不能为空");
+
+            Criteria criteria = new Criteria();
+            criteria.and(Restrictions.in("type", ObjectUtils.properties(types, "id", Integer.class)));
+
+            return mapper.find(criteria);
         }catch(Exception e){
             logger.error(e.getMessage(), e);
             throw new DataAccessException(e.getMessage(), e);

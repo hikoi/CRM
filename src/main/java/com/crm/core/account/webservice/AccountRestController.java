@@ -18,7 +18,7 @@ public class AccountRestController{
 
     @RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Responsed save(String username, String password, String nickname, String name, Sex sex, String companyId,
-                              String departmentId, String positionId){
+                          String departmentId, String positionId){
 
         accountService.save(username, password, nickname, name, sex, companyId, departmentId, positionId);
 

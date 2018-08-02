@@ -9,6 +9,8 @@ import org.wah.doraemon.security.request.Page;
 import org.wah.doraemon.security.request.PageRequest;
 import org.wah.doraemon.security.response.Responsed;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/api/1.0/function")
 public class FunctionRestController{
@@ -35,13 +37,5 @@ public class FunctionRestController{
         Function function = functionService.getById(id);
 
         return new Responsed<Function>("查询成功", function);
-    }
-
-    @RequestMapping(value = "/page", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Responsed<Page<Function>> page(Long pageNum, Long pageSize, String id, String url, String description, Boolean needAllot, RequestMethod method){
-        PageRequest pageRequest = new PageRequest(pageNum, pageSize);
-        Page<Function> page = functionService.page(pageRequest, id, url, description, needAllot, method);
-
-        return new Responsed<Page<Function>>("查询成功", page);
     }
 }

@@ -1,14 +1,17 @@
 package com.crm.core.account.service;
 
+import com.crm.commons.consts.CacheName;
 import com.crm.core.account.dao.AccountDao;
 import com.crm.core.account.dao.UserDao;
 import com.crm.core.authentication.dao.ServiceTicketDao;
 import com.crm.core.authentication.entity.ServiceTicket;
 import com.crm.core.pem.dao.PemDao;
 import com.crm.core.permission.consts.ResourceType;
-import com.crm.core.permission.dao.AccountPermissionDao;
-import com.crm.core.permission.dao.PermissionDao;
+import com.crm.core.permission.dao.*;
+import com.crm.core.permission.entity.Function;
+import com.crm.core.permission.entity.Menu;
 import com.crm.core.permission.entity.Permission;
+import com.crm.core.permission.entity.Role;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +21,17 @@ import org.wah.doraemon.entity.Account;
 import org.wah.doraemon.entity.User;
 import org.wah.doraemon.entity.consts.AccountState;
 import org.wah.doraemon.entity.consts.Sex;
+import org.wah.doraemon.entity.consts.UsingState;
 import org.wah.doraemon.security.exception.AuthenticationException;
 import org.wah.doraemon.security.exception.DuplicateException;
+import org.wah.doraemon.utils.ObjectUtils;
 import org.wah.doraemon.utils.RSAUtils;
+import org.wah.doraemon.utils.RedisUtils;
+import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -45,6 +54,18 @@ public class AccountServiceImpl implements AccountService{
 
     @Autowired
     private ServiceTicketDao serviceTicketDao;
+
+    @Autowired
+    private AccountRoleDao accountRoleDao;
+
+    @Autowired
+    private RolePermissionDao rolePermissionDao;
+
+    @Autowired
+    private FunctionDao functionDao;
+
+    @Autowired
+    private ShardedJedisPool pool;
 
     @Transactional
     @Override
@@ -74,7 +95,7 @@ public class AccountServiceImpl implements AccountService{
         user.setSex(sex);
         userDao.saveOrUpdate(user);
 
-        //添加权限
+        //添加组织机构
         if(StringUtils.isNotBlank(companyId)){
             Permission permission = permissionDao.getByResourceIdAndType(companyId, ResourceType.COMPANY);
             accountPermissionDao.save(account.getId(), permission.getId());
@@ -106,11 +127,24 @@ public class AccountServiceImpl implements AccountService{
             throw new AuthenticationException("账户或密码不正确");
         }
 
-        //查询资源
-        //api权限
-        //菜单
-        //组织架构
-        //设备
+        //账户ID
+        String accountId = account.getId();
+        //查询功能权限
+        //查询账户功能权限
+        List<Permission> permissions = accountPermissionDao.find(Arrays.asList(), ResourceType.FUNCTION);
+        //查询账户角色
+        List<Role> roles = accountRoleDao.findRoles(Arrays.asList(accountId), UsingState.USABLE);
+        if(roles != null && !roles.isEmpty()){
+            permissions.addAll(rolePermissionDao.find(ObjectUtils.ids(roles), ResourceType.FUNCTION, UsingState.USABLE));
+        }
+
+        if(permissions != null && !permissions.isEmpty()){
+            List<Function> list = functionDao.find(null, null, null, null, ObjectUtils.properties(permissions, "resourceId", String.class));
+
+            try(ShardedJedis jedis = pool.getResource()){
+                RedisUtils.save(jedis, CacheName.USER_FUNCTION + accountId, list, CacheName.TICKET_EXPIRE);
+            }
+        }
 
         //创建Ticket
         return serviceTicketDao.create(account.getId());

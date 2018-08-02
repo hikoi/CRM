@@ -155,6 +155,20 @@
         <result column="phone"       property="phone"       javaType="java.lang.String"/>
         <result column="create_time" property="createTime"  javaType="java.util.Date"/>
         <result column="update_time" property="updateTime"  javaType="java.util.Date"/>
+        <collection property="departments" resultMap="department" columnPrefix="d_"/>
+    </resultMap>
+
+    <resultMap id="department" type="com.crm.core.organization.entity.Department">
+        <id     column="id"          property="id"          javaType="java.lang.String"/>
+        <result column="company_id"  property="companyId"   javaType="java.lang.String"/>
+        <result column="name"        property="name"        javaType="java.lang.String"/>
+        <collection property="positions" resultMap="position" columnPrefix="p_"/>
+    </resultMap>
+
+    <resultMap id="position" type="com.crm.core.organization.entity.Position">
+        <id     column="id"            property="id"           javaType="java.lang.String"/>
+        <result column="name"          property="name"         javaType="java.lang.String"/>
+        <result column="department_id" property="departmentId" javaType="java.lang.String"/>
     </resultMap>
 
     <insert id="save">
@@ -225,6 +239,35 @@
           FROM company
         <if test="params != null">
             <include refid="WHERE_SQL"/>
+        </if>
+    </select>
+
+    <select id="findOrganizations" resultMap="company">
+        SELECT c.*,
+               d.id            AS d_id,
+               d.company_id    AS d_company_id,
+               d.name          AS d_name,
+               p.id            AS d_p_id,
+               p.name          AS d_p_name,
+               p.department_id AS d_p_department_id
+          FROM company c
+     LEFT JOIN department d
+            ON d.company_id = c.id
+     LEFT JOIN position p
+            ON p.department_id = d.id
+        <if test="params != null">
+            <include refid="WHERE_SQL"/>
+
+            <if test="params.sorts != null and params.sorts.size > 0">
+                ORDER BY
+                <foreach collection="params.sorts" item="sort" separator=",">
+                    ${sort.property} ${sort.operator}
+                </foreach>
+            </if>
+
+            <if test="params.limit != null">
+                ${params.limit.operator} ${params.limit.value}, ${params.limit.secondValue}
+            </if>
         </if>
     </select>
 </mapper>

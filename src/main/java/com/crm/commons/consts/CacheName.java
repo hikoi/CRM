@@ -15,4 +15,8 @@ public class CacheName{
     public static final Integer TICKET_EXPIRE      = 7200;
 
     public static final String  SERVICE_TICKET     = "service:ticket:";
+
+    public static final String  SERVICE_FUNCTION   = "service:function";
+
+    public static final String  USER_FUNCTION      = "function:";
 }

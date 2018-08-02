@@ -13,4 +13,6 @@ public interface CompanyService{
     void update(Company company);
 
     Company getById(String id);
+
+    List<Company> findOrganizationsByTicket(String ticket);
 }
