@@ -1,5 +1,6 @@
 CREATE DATABASE `crm` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';
 
+use crm;
 CREATE TABLE `wechat` (
   `id` varchar(32) NOT NULL,
   `wxno` varchar(45) NOT NULL,
@@ -211,7 +212,7 @@ CREATE TABLE `call_record` (
   `tc_fail_code` varchar(32) DEFAULT NULL,
   `dtmf_code` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`call_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `allocation_rule` (
   `id` varchar(32) NOT NULL,
